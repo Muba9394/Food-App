@@ -75,11 +75,11 @@ display:none;
   <div class="myloader"></div>
 </ons-modal>
 
-<ons-modal var="loaderSearch">
+<ons-modal var="loaderSearch" class="none">
   <div class="myloader"></div>  
 </ons-modal>
 
-<ons-modal var="loaderLang">
+<ons-modal var="loaderLang" class="none">
   <div class="myloader"></div>    
 </ons-modal>
 
@@ -398,8 +398,8 @@ display:none;
      
      <div class="right">     
          <ons-toolbar-button onclick="showCart();" >         
-           <div class="notification cart-num cartcount animate" >0</div>
-           <ons-icon icon="fa-shopping-cart" class="cart carticon animate">
+           <div class="notification cart-num cartcount " >0</div>
+           <ons-icon icon="fa-shopping-cart" class="cart carticon ">
          </ons-toolbar-button>
          
          <ons-toolbar-button onclick="showMenu(this);">
@@ -458,8 +458,8 @@ display:none;
      
      <div class="right">       
         <ons-toolbar-button>
-        <span class="notification cart-num cartcount animate" onclick="showCart();" >0</span>
-        <ons-icon icon="fa-shopping-cart" onclick="showCart();" class="cart carticon animate"></ons-toolbar-button>
+        <span class="notification cart-num cartcount " onclick="showCart();" >0</span>
+        <ons-icon icon="fa-shopping-cart" onclick="showCart();" class="cart carticon "></ons-toolbar-button>
         
         <ons-toolbar-button onclick="showEasyCategory(this);">
            <ons-icon icon="ion-ios-list" size="30px"></ons-icon>
@@ -3181,8 +3181,8 @@ display:none;
 
 
 
-<ons-toolbar id="flash_msg" class="navigation-bar" style="position: absolute; z-index: 10000; left: 0px; right: 0px; top: 0px; display:none;">
-<div class="center push-title navigation-bar__title navigation-bar__center button green-btn">Food Item Added to Cart</div></ons-toolbar>
+<ons-toolbar id="flash_msg" class="navigation-bar" style="position: absolute; z-index: 10000; left: 0px; right: 0px; top: 30px; display:none;">
+<div class="center push-title navigation-bar__title navigation-bar__center button green-btn"><span class="cart-circle2"><ons-icon icon="fa-shopping-cart" class="cart carticon animate"></ons-icon></span> <span class="cart-content">Food loaded to cart</span></div></ons-toolbar></ons-toolbar>
 </body>
 
 <script src="https://getaddress.io/js/jquery.getAddress-2.0.0.min.js"></script>

@@ -151,7 +151,7 @@ ons.ready(function() {
 	}
 				
 	//getLanguageSettings();
-	setTimeout('getLanguageSettings()', 1100);
+	//setTimeout('getLanguageSettings()', 1100);
 	
 	$( document ).on( "click", "#s", function() {    	     	    	   
 	   $("#s").val('');
