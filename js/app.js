@@ -151,7 +151,7 @@ ons.ready(function() {
 	}
 				
 	//getLanguageSettings();
-	//setTimeout('getLanguageSettings()', 1100);
+	setTimeout('getLanguageSettings()', 1100);
 	
 	$( document ).on( "click", "#s", function() {    	     	    	   
 	   $("#s").val('');
@@ -4990,16 +4990,14 @@ function submitBooking()
 			{
 				var params = $( "#frm-booking").serialize();	      
 				params+="&merchant_id=" +  merchant_id ;
-				callAjax("bookATableNewconcept",params);	
-				dialogBooking.hide();	
+				callAjax("bookATableNewconcept",params);	       
 				return false;
 			}
 			else
 			{
 				var params = $( "#frm-booking").serialize();	      
 				params+="&merchant_id=" +  merchant_id +"&client_id="+getStorage("client_id");
-				callAjax("bookATableNewconcept",params);	 
-				dialogBooking.hide();	
+				callAjax("bookATableNewconcept",params);	       
 				return false;
 			}
 	    }  
