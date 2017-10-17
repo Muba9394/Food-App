@@ -2042,7 +2042,7 @@ function displayRestaurantResults(data , target_id , display_type )
 		    	            	{ 
 									var btn_txt = 'Book a Table';
 									if($("#search-text").text() == "Take Away")  btn_txt = 'Take Away';
-									htm+='<div class="booking-btn" onclick="table_booking_optn('+val.merchant_id+','+rest_logo+','+rest_name+')" > '+btn_txt+' </div>';   			
+									htm+='<div class="booking-btn" onclick="popUpTableBooking('+val.merchant_id+','+rest_logo+','+rest_name+')" > '+btn_txt+' </div>';   			
 						   		}
 					    	}
 	    	           
@@ -2344,7 +2344,7 @@ function menuCategoryResult(data)
 	$("#menucategory-page .logo-wrap").html('<img src="'+data.logo+'" />');
 	if(data.enabled_table_booking==2)
 	{
-		$("#menucategory-page .tbl-book").html('<button id="tbl-booking" class="white-btn" onclick="table_booking_optn('+data.merchant_id+',\''+data.logo+'\',\''+data.restaurant_name+'\')" > Book a Table </button>');
+		$("#menucategory-page .tbl-book").html('<button id="tbl-booking" class="white-btn" onclick="popUpTableBooking('+data.merchant_id+',\''+data.logo+'\',\''+data.restaurant_name+'\')" > Book a Table </button>');
 	}	
 	if ( data.open){
 		$("#merchant_open").val(2);
@@ -2515,7 +2515,7 @@ function menuCategoryResult(data)
 	$("#menucategory-page .logo-wrap").html('<img src="'+data.logo+'" />');
 	if(data.enabled_table_booking==2)
 	{
-		$("#menucategory-page .tbl-book").html('<button id="tbl-booking" class="white-btn" onclick="table_booking_optn('+data.merchant_id+',\''+data.logo+'\',\''+data.restaurant_name+'\')" > Book a Table </button>');
+		$("#menucategory-page .tbl-book").html('<button id="tbl-booking" class="white-btn" onclick="popUpTableBooking('+data.merchant_id+',\''+data.logo+'\',\''+data.restaurant_name+'\')" > Book a Table </button>');
 	}	
 	if ( data.open){
 		$("#merchant_open").val(2);
