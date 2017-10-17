@@ -151,7 +151,7 @@ ons.ready(function() {
 	}
 				
 	//getLanguageSettings();
-	setTimeout('getLanguageSettings()', 1100);
+	//setTimeout('getLanguageSettings()', 1100);
 	
 	$( document ).on( "click", "#s", function() {    	     	    	   
 	   $("#s").val('');
@@ -2093,7 +2093,8 @@ function initRating()
 
 function loadRestaurantCategory(mtid)
 {	
-	
+	setStorage('merchant_id',mtid);
+	alert(getStorage('merchant_id'));
   var d = new Date();
     var weekday = new Array(7);
     weekday[0] = "Sunday";
@@ -4885,6 +4886,7 @@ function loadBookingForm()
 
 function table_booking_optn(merchant_id,logo,restaurant_name)
 {	    	
+	setStorage('merchant_id',merchant_id);
 	var options = {
       animation: 'slide',
       onTransitionEnd: function() { 	
