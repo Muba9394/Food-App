@@ -1300,7 +1300,7 @@ display:none;
   
 
 
-<!--<script type="text/ons-template" id="booking.html"> 
+<script type="text/ons-template" id="booking.html"> 
 <ons-page id="page-booking" class="onsen-display">
    <ons-toolbar>        
      <div class="left"><ons-back-button></ons-back-button></div> 
@@ -1364,7 +1364,7 @@ display:none;
   </div> 
      
    </form>-->
-	<!--<form id="frm-booking" class="frm-booking" method="post" >
+	<form id="frm-booking" class="frm-booking" method="post" >
    <div class="wrapper">                 
 
    <div id="top_end_table_booking"> 
@@ -1373,7 +1373,7 @@ display:none;
         <!-- <input type="number" name="number_guest"  class="validation number_guest numeric_only text-input text-input--underbar has_validation" 
         placeholder="Number Of Guests" value="" data-validation="number"  data-validation-allowing="range[1;1000]" data-validation-error-msg="The input value was not a correct number" > -->
 
-   <!--     <select class="form-control text-input text-input--underbar has_validation" name="no_of_guests" id="no_of_guests">
+        <select class="form-control text-input text-input--underbar has_validation" name="no_of_guests" id="no_of_guests">
                           <option value="" disabled selected>Number of Guests</option>
 						  <option value="1">1 Person </option>
                           <option value="2">2 Person </option>
@@ -1406,17 +1406,17 @@ display:none;
 
        <div class="field-wrapper">
           <select name="booking_time" id="booking_time" class="booking_time text-input text-input--underbar has_validation" 
-           data-validation="required" data-validation-error-msg="this field is mandatory!" >
+           data-validation="required" data-validation-error-msg="this field is mandatory!" onchange="search_table_timing();">
            </select>
        </div> 
       
             <section id="diplay_timing_slots" >                 
                                  
             </section>       
-       <button class="button green-btn button--large trn search_table_timing" onclick="search_table_timing();" data-trn-key="search">
+      <!-- <button class="button green-btn button--large trn search_table_timing" onclick="search_table_timing();" data-trn-key="search">
       Search 
       <div class="search-btn"><ons-icon icon="fa-chevron-right"></ons-icon></div>
-       </button>
+       </button>-->
   </div>     
   <div id="hide_book_a_table" style="display:none;">
 
@@ -1466,7 +1466,7 @@ display:none;
    </form>
 </ons-page>
 </script>  
--->
+
 <script type="text/ons-template" id="bookingTY.html"> 
 <ons-page id="page-booking-ty" class="onsen-display">
    <ons-toolbar>             
