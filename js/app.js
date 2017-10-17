@@ -4657,7 +4657,7 @@ function search_table_timing()
               return ;
             }
             var base_url     = ajax_url; 
-            var merchant_id  = $('#hidden_merchant_id').val();  
+            var merchant_id  = getStorage('merchant_id');    
 			
             var url  = "https://www.cuisine.je/mobileapp/api/check_seat_availability"; 
             $('#timing_slots').html('');
