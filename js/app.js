@@ -151,7 +151,7 @@ ons.ready(function() {
 	}
 				
 	//getLanguageSettings();
-	setTimeout('getLanguageSettings()', 1100);
+	//setTimeout('getLanguageSettings()', 1100);
 	
 	$( document ).on( "click", "#s", function() {    	     	    	   
 	   $("#s").val('');
@@ -419,6 +419,7 @@ document.addEventListener("pageinit", function(e) {
 		  callAjax('getProfile',
 		  "client_token="+getStorage("client_token")
 		  );
+		  $("#page-profile .profile-pic-wrap").show();
 		  translatePage();
 		  translateValidationForm();
 		  
@@ -3649,18 +3650,22 @@ function showCart()
 
 function showCartNosOrder()
 {
+	$(".cart-num, .carticon").removeClass('animate');
 	dump('showCartNosOrder');
 	dump(  cart.length );
 	if ( cart.length>0 ){		
 		//$(".cart-num").show();	    
 		$(".cart-num").css({ "display":"inline-block","position":"absolute","margin-left":"-10px" });
 		$(".cart-num").text(cart.length);
+		setTimeout(function(){$(".cart-num, .carticon").addClass('animate');	},100);
 	} else {
 		$(".cart-num").hide();
 	}
 	//onsenAlert("Food Item Added to Cart");
 	$("#flash_msg").show();
-	setTimeout(function(){$("#flash_msg").hide();},2000);
+	setTimeout(function(){$(".cart-num, .carticon").removeClass('animate');	},500);
+	setTimeout(function(){$(".cart-num, .carticon").removeClass('animate');	},1000);
+	setTimeout(function(){$("#flash_msg").hide();$(".cart-num, .carticon").addClass('animate');	},2000);	
 	
 }
 
@@ -4656,7 +4661,7 @@ function search_table_timing()
               return ;
             }
             var base_url     = ajax_url; 
-            var merchant_id  = getStorage('merchant_id');             
+            var merchant_id  = $("#page-booking #hidden_merchant_id").val();             
             var url  = "https://www.cuisine.je/mobileapp/api/check_seat_availability"; 
             $('#timing_slots').html('');
             $('#booking_details_div').css('display','none');
@@ -4805,6 +4810,7 @@ function showMerchantInfo(data)
 	{		 
 		// alert("else");
 		$('#book-table').show();	
+		$("#page-merchantinfo #info-book").attr('onclick','popUpTableBooking('+getStorage('merchant_id','hide')+');');
 	}
 	$("#page-merchantinfo h3").html(data.merchant_info.restaurant_name);
 	$("#page-merchantinfo h5").html(data.merchant_info.cuisine);
