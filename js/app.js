@@ -151,7 +151,7 @@ ons.ready(function() {
 	}
 				
 	//getLanguageSettings();
-	//setTimeout('getLanguageSettings()', 1100);
+	setTimeout('getLanguageSettings()', 1100);
 	
 	$( document ).on( "click", "#s", function() {    	     	    	   
 	   $("#s").val('');
@@ -2091,10 +2091,9 @@ function initRating()
     translatePage();
 }
 
-function loadRestaurantCategory(mtid,logo,name)
+function loadRestaurantCategory(mtid)
 {	
-	 setStorage("merc_logo",logo);
-	 setStorage("merc_name",name);	
+	
   var d = new Date();
     var weekday = new Array(7);
     weekday[0] = "Sunday";
@@ -4806,7 +4805,6 @@ function showMerchantInfo(data)
 	{		 
 		// alert("else");
 		$('#book-table').show();	
-		$("#page-merchantinfo #info-book").attr('onclick','table_booking_optn('+getStorage('merchant_id','hide')+');');
 	}
 	$("#page-merchantinfo h3").html(data.merchant_info.restaurant_name);
 	$("#page-merchantinfo h5").html(data.merchant_info.cuisine);
@@ -4885,67 +4883,8 @@ function loadBookingForm()
     sNavigator.pushPage("booking.html", options);		 
 }
 
-
-function popUpTableBooking(merchant_id,logo,restaurant_name,hide)
-{					
-		if(hide =="hide")
-		{
-			merhantPopOverMenu.hide();
-		}
-		
-		    if (typeof dialogBooking === "undefined" || dialogBooking==null || dialogBooking=="" ) { 	
-				ons.createDialog('bookingDialog.html').then(function(dialog) {				
-				dialog.show();
-				translatePage();
-				initMobileScroller();			
-				
-		  $(".number_guest").attr("placeholder", getTrans('Number Of Guests','number_of_guest') );
-      	  $(".date_booking").attr("placeholder", getTrans('Date Of Booking','date_of_booking') );
-      	  $(".booking_time").attr("placeholder", getTrans('Time Of Booking','time_of_booking') );
-      	  $(".booking_name").attr("placeholder", getTrans('Name','name') );
-      	  $(".email").attr("placeholder", getTrans('Email Address','email_address') );
-      	  $(".mobile").attr("placeholder", getTrans('Mobile Number','mobile_number') );
-		  $('#page-booking .hidden_merchant_id').val(merchant_id);
-      	  $(".booking_notes").attr("placeholder", getTrans('Your Instructions','your_instructions') );
-      	  translateValidationForm();
-      	  if(getStorage('client_id')=="" || getStorage('client_id')==null){
-		  }
-		  else{
-		  callAjax('getProfile',"client_token="+getStorage("client_token"));  
-		  }
-	    });			
-			} else {					
-				$("#page-booking #no_of_guests").val('');
-				$("#page-booking #booking_time").val('');
-				$("#page-booking #date_booking").val('');
-				$("#page-booking #user_selected_time").val('');
-				$('#page-booking .hidden_merchant_id').val(merchant_id);				
-				$("#no_of_guests").prop("disabled", false);
-				$("#date_booking").prop("disabled", false);
-				$("#booking_time").prop("disabled", false);
-				$('#page-booking #diplay_timing_slots').html(''); 
-				$(".search_table_timing").prop("disabled", false);
-				
-				$("#page-booking #top_end_table_booking").show();
-				$("#page-booking #hide_book_a_table").hide();
-				translatePage();
-				if(getStorage('client_id')=="" || getStorage('client_id')==null){
-				}
-				else{
-				callAjax('getProfile',"client_token="+getStorage("client_token"));  
-				}
-				dialogBooking.show();
-				
-			}
-		$('#page-booking .hidden_merchant_id').val(merchant_id);			
-}
-
-function table_booking_optn(merchant_id,logo,restaurant_name,hide)
+function table_booking_optn(merchant_id,logo,restaurant_name)
 {	    	
-	if(hide =="hide")		
-			{		
-				merhantPopOverMenu.hide();		
-		}	
 	var options = {
       animation: 'slide',
       onTransitionEnd: function() { 	
@@ -6973,9 +6912,6 @@ function showMenu(element)
 		   enabled_table_booking = getStorage('enabled_table_booking');	    
 		    if(enabled_table_booking==2){
 		    	$(".book_table_menu").show();
-				$("#merchnt-pop-menu #bookid-mer").attr('onclick','table_booking_optn('+getStorage('merchant_id')+',\''+getStorage('merc_logo')+'\',\''+getStorage('merc_name')+'\',"hide");');
-				//$("#menucategory-page .tbl-book").html('<button id="tbl-booking" class="white-btn" onclick="table_booking_optn('+data.merchant_id+',\''+data.logo+'\',\''+data.restaurant_name+'\')" > Book a Table </button>');
-				
 		    } else $(".book_table_menu").hide();
 		    
 		    translatePage();
