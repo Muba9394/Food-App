@@ -3649,18 +3649,22 @@ function showCart()
 
 function showCartNosOrder()
 {
+	$(".cart-num, .carticon").removeClass('animate');
 	dump('showCartNosOrder');
 	dump(  cart.length );
 	if ( cart.length>0 ){		
 		//$(".cart-num").show();	    
 		$(".cart-num").css({ "display":"inline-block","position":"absolute","margin-left":"-10px" });
 		$(".cart-num").text(cart.length);
+		setTimeout(function(){$(".cart-num, .carticon").addClass('animate');	},100);
 	} else {
 		$(".cart-num").hide();
 	}
 	//onsenAlert("Food Item Added to Cart");
 	$("#flash_msg").show();
-	setTimeout(function(){$("#flash_msg").hide();},2000);
+	setTimeout(function(){$(".cart-num, .carticon").removeClass('animate');	},500);
+	setTimeout(function(){$(".cart-num, .carticon").removeClass('animate');	},1000);				
+	setTimeout(function(){$("#flash_msg").hide();$(".cart-num, .carticon").addClass('animate');	},2000);	
 	
 }
 
@@ -4638,7 +4642,7 @@ function initMobileScroller()
 		          {
 		          	html += '<option value="">'+php_script_response.msg+'</option>';
 		          } */
-		          $('#booking_time').html(php_script_response);
+		          $('#page-booking #booking_time').html(php_script_response);
 		          
 		        }
 		      }); 
@@ -4647,19 +4651,19 @@ function initMobileScroller()
 
 function search_table_timing()
       {     
-      		$('#diplay_timing_slots').html('');    		
-            var no_of_guests = $.trim($('#no_of_guests option:selected').val());
-            var date_booking = $('#date_booking').val();  
-            var time_slot    = $.trim($('#booking_time option:selected').val());
+      		$('#page-booking #diplay_timing_slots').html('');    		
+            var no_of_guests = $.trim($('#page-booking #no_of_guests option:selected').val());
+            var date_booking = $('#page-booking #date_booking').val();  
+            var time_slot    = $.trim($('#page-booking #booking_time option:selected').val());
             if(time_slot=='')
             {              
               return ;
             }
             var base_url     = ajax_url; 
-            var merchant_id  = getStorage('merchant_id');             
+            var merchant_id  = $("#page-booking #hidden_merchant_id").val();  
             var url  = "https://www.cuisine.je/mobileapp/api/check_seat_availability"; 
-            $('#timing_slots').html('');
-            $('#booking_details_div').css('display','none');
+            //$('#timing_slots').html('');
+            //$('#booking_details_div').css('display','none');
             $.ajax({
                     type:'POST',
                     url : url , 
@@ -4670,7 +4674,7 @@ function search_table_timing()
                     {
                         if($.trim(response)!='')
                         {                          	
-                          $('#timing_slots').css('display','block');		
+                         // $('#timing_slots').css('display','block');		
                           var timing_html = '';
                           // alert(response.toSource);
 
@@ -4693,12 +4697,10 @@ function search_table_timing()
                                      	disabled_type = 'disabled';
                                      }
                             
-                            timing_html += '<div class="mobile_time_slots"> <ons-button class="ng-isolate-scope button effect-button slide-left" value="'+value.slot_starting+'" onclick="select_booking_time(\''+key+'\',\''+value.seating_capacity+'\',\''+no_of_guests+'\')" '+disabled_type+' >'+value.slot_starting+'</ons-button> <span class="available_seats_span">'+seats_available+'</span></div>' ;           
-                            // timing_html +='<div class="col-lg-2">  <input value="'+value.slot_starting+'" class="btn btn-primary btn-block" onclick="select_booking_time(\''+key+'\',\''+value.seating_capacity+'\',\''+no_of_guests+'\')" type="button" '+disabled_type+' >  <span class="available_seats_span">'+seats_available+'</span>  </div>';
-
+									timing_html += '<div class="mobile_time_slots"> <ons-button class="ng-isolate-scope button effect-button slide-left" value="'+value.slot_starting+'" onclick="select_booking_time(\''+key+'\',\''+value.seating_capacity+'\',\''+no_of_guests+'\')" '+disabled_type+' >'+value.slot_starting+'</ons-button> <span class="available_seats_span">'+seats_available+'</span></div>' ;
                             });
 
-                            $('#diplay_timing_slots').append(timing_html);
+                            $('#page-booking #diplay_timing_slots').append(timing_html);
                           /*   <div class="col-lg-2">
                                    <input value="Search" class="btn btn-primary btn-block search_table_booking" type="button">
                               </div> */
@@ -4714,11 +4716,11 @@ function search_table_timing()
             })   
       }
 
-function select_booking_time(timings='',seat_available='',no_of_guests='')
+function select_booking_time(timings,seat_available,no_of_guests)
 {
    
   //	  $('#top_end_table_booking').css('display','none');	
-  $('.booking_error_message').html("");
+  $('#page-booking .booking_error_message').html("");
 
   var display_time =  timings.split('-');
   var display_hours = '';
@@ -4735,7 +4737,7 @@ function select_booking_time(timings='',seat_available='',no_of_guests='')
   
   var ampm = hours >= 12 ? 'pm' : 'am'; 
 
-  var no_of_guests = parseInt($("#no_of_guests option:selected").val());  
+  var no_of_guests = parseInt($("#page-booking #no_of_guests option:selected").val());  
   seat_available = parseInt(seat_available);  
   if(no_of_guests>seat_available)
   {
@@ -4750,26 +4752,27 @@ function select_booking_time(timings='',seat_available='',no_of_guests='')
   }
   else
   {  
-   $('#top_end_table_booking').css('display','none');		
-   $('#no_of_guests').prop('disabled', 'disabled');
-   $('.date_booking	').prop('disabled', 'disabled');
-   $('#booking_time').prop('disabled', 'disabled');
-   $('.search_table_timing').prop('disabled', 'disabled');
+   var no_of_guests = $("#page-booking #no_of_guests option:selected").val();
+   $('#page-booking #top_end_table_booking').css('display','none');		
+   $('#page-booking #no_of_guests').prop('disabled', 'disabled');
+   $('#page-booking .date_booking	').prop('disabled', 'disabled');
+   $('#page-booking #booking_time').prop('disabled', 'disabled');
+   $('#page-booking .search_table_timing').prop('disabled', 'disabled');
    
-   var booking_date = $('.date_booking').val();
-   var booking_time = $("#table_booking_time option:selected").text();
-   var user_time    = $("#table_booking_time option:selected").val();
+   var booking_date = $('#page-booking .date_booking').val();
+   var booking_time = $("#page-booking #table_booking_time option:selected").text();
+   var user_time    = $("#page-booking #table_booking_time option:selected").val();
    var date_time    = booking_date+" "+display_hours+" "+ampm; 
 
-   $('#user_selected_time').val(timings);
-   $('#booking_date_time').val(date_time);
-   $('#booking_dates').val(booking_date);   
-   $('#txt_no_of_guests').val(no_of_guests);
+   $('#page-booking #user_selected_time').val(timings);
+   $('#page-booking #booking_date_time').val(date_time);
+   $('#page-booking #booking_dates').val(booking_date);   
+   $('#page-booking #txt_no_of_guests').val(no_of_guests);
    //$('#booking_date_time').prop('disabled', 'disabled');
    //$('#txt_no_of_guests').prop('disabled', 'disabled');
-   $('#booking_details_div').css('display','block'); 
+   $('#page-booking #booking_details_div').css('display','block'); 
 
-   $('#hide_book_a_table').css('display','block');
+   $('#page-booking #hide_book_a_table').css('display','block');
 
  /* var client_first_name = getStorage("client_first_name");  
   // var client_last_name  = getStorage("client_last_name");
@@ -4805,6 +4808,7 @@ function showMerchantInfo(data)
 	{		 
 		// alert("else");
 		$('#book-table').show();	
+		$("#page-merchantinfo #info-book").attr('onclick','popUpTableBooking('+getStorage('merchant_id','hide')+');');
 	}
 	$("#page-merchantinfo h3").html(data.merchant_info.restaurant_name);
 	$("#page-merchantinfo h5").html(data.merchant_info.cuisine);
@@ -4936,18 +4940,81 @@ function submitBooking()
 				var params = $( "#frm-booking").serialize();	      
 				params+="&merchant_id=" +  merchant_id ;
 				callAjax("bookATableNewconcept",params);	       
+				dialogBooking.hide();
 				return false;
 			}
 			else
 			{
 				var params = $( "#frm-booking").serialize();	      
 				params+="&merchant_id=" +  merchant_id +"&client_id="+getStorage("client_id");
-				callAjax("bookATableNewconcept",params);	       
+				callAjax("bookATableNewconcept",params);
+				dialogBooking.hide();	
 				return false;
 			}
 	    }  
 	});
 }
+
+//table booking popup				
+	function popUpTableBooking(merchant_id,logo,restaurant_name,hide)				
+		{									
+				if(hide =="hide")				
+				{				
+					merhantPopOverMenu.hide();				
+			}				
+							
+			    if (typeof dialogBooking === "undefined" || dialogBooking==null || dialogBooking=="" ) { 					
+					ons.createDialog('bookingDialog.html').then(function(dialog) {								
+				dialog.show();				
+					translatePage();				
+					initMobileScroller();							
+									
+				  $(".number_guest").attr("placeholder", getTrans('Number Of Guests','number_of_guest') );				
+		      	  $(".date_booking").attr("placeholder", getTrans('Date Of Booking','date_of_booking') );				
+		      	  $(".booking_time").attr("placeholder", getTrans('Time Of Booking','time_of_booking') );				
+		      	  $(".booking_name").attr("placeholder", getTrans('Name','name') );				
+		      	  $(".email").attr("placeholder", getTrans('Email Address','email_address') );				
+		      	  $(".mobile").attr("placeholder", getTrans('Mobile Number','mobile_number') );				
+				  $('#page-booking .hidden_merchant_id').val(merchant_id);				
+		      	  $(".booking_notes").attr("placeholder", getTrans('Your Instructions','your_instructions') );				
+		      	  translateValidationForm();				
+		      	  if(getStorage('client_id')=="" || getStorage('client_id')==null){				
+				  }				
+				  else{				
+				  callAjax('getProfile',"client_token="+getStorage("client_token"));  				
+				  }				
+			    });							
+					} else {									
+						$("#page-booking #no_of_guests").val('');				
+						$("#page-booking #booking_time").val('');				
+						$("#page-booking #date_booking").val('');				
+						$("#page-booking #user_selected_time").val('');				
+						$('#page-booking .hidden_merchant_id').val(merchant_id);								
+						$("#no_of_guests").prop("disabled", false);				
+						$("#date_booking").prop("disabled", false);				
+						$("#booking_time").prop("disabled", false);				
+						$('#page-booking #diplay_timing_slots').html(''); 				
+						$(".search_table_timing").prop("disabled", false);				
+										
+						$("#page-booking #top_end_table_booking").show();				
+						$("#page-booking #hide_book_a_table").hide();				
+						translatePage();				
+						if(getStorage('client_id')=="" || getStorage('client_id')==null){				
+						}				
+						else{				
+						callAjax('getProfile',"client_token="+getStorage("client_token"));  				
+						}				
+						dialogBooking.show();				
+										
+					}				
+				$('#page-booking .hidden_merchant_id').val(merchant_id);							
+		}				
+		//Ends here		
+	
+
+
+
+
 
 function loadMoreReviews()
 {
@@ -6912,6 +6979,7 @@ function showMenu(element)
 		   enabled_table_booking = getStorage('enabled_table_booking');	    
 		    if(enabled_table_booking==2){
 		    	$(".book_table_menu").show();
+				$("#merchnt-pop-menu #bookid-mer").attr('onclick','popUpTableBooking('+getStorage('merchant_id')+',\'\',\'\',\'hide\');');
 		    } else $(".book_table_menu").hide();
 		    
 		    translatePage();
@@ -6924,6 +6992,7 @@ function showMenu(element)
 			enabled_table_booking = getStorage('enabled_table_booking');	    
 		    if(enabled_table_booking==2){
 		    	$(".book_table_menu").show();
+				$("#merchnt-pop-menu #bookid-mer").attr('onclick','popUpTableBooking('+getStorage('merchant_id')+',\'\',\'\',\'hide\');');
 		    } else $(".book_table_menu").hide();
 		});				
 		
