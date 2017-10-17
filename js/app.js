@@ -4656,7 +4656,7 @@ function search_table_timing()
               return ;
             }
             var base_url     = ajax_url; 
-            var merchant_id  = getStorage('merchant_id');             
+            var merchant_id  = $("#frm-booking .hidden_merchant_id").val();           
             var url  = "https://www.cuisine.je/mobileapp/api/check_seat_availability"; 
             $('#timing_slots').html('');
             $('#booking_details_div').css('display','none');
@@ -4885,7 +4885,6 @@ function loadBookingForm()
 
 function table_booking_optn(merchant_id,logo,restaurant_name)
 {	    	
-	var merchant_id  = $("#frm-booking .hidden_merchant_id").val(merchant_id);
 	var options = {
       animation: 'slide',
       onTransitionEnd: function() { 	
@@ -4906,7 +4905,7 @@ function table_booking_optn(merchant_id,logo,restaurant_name)
       	  $(".email").attr("placeholder", getTrans('Email Address','email_address') );
       	  $(".mobile").attr("placeholder", getTrans('Mobile Number','mobile_number') );
       	  $(".booking_notes").attr("placeholder", getTrans('Your Instructions','your_instructions') );
-      	  //$('#page-booking .hidden_merchant_id').val(merchant_id);
+      	  $('#page-booking .hidden_merchant_id').val(merchant_id);
       	  translateValidationForm();
 		  
       	  if(getStorage('client_id')=="" || getStorage('client_id')==null){
