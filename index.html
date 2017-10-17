@@ -47,7 +47,6 @@ display:none;
 <script src="lib/jquery.mask.min.js"></script>
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAspbfu1o8_mGN_hWDah_YTqXdXiPg6DkE"></script>
-<!--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script> -->
 <link href="https://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />
 <script src="js/jquery.geocomplete.min.js"></script>
 
@@ -71,7 +70,7 @@ display:none;
 
 </head>
 <body>
-<ons-modal var="loader">
+<ons-modal var="loader" >
   <div class="myloader"></div>
 </ons-modal>
 
@@ -397,9 +396,9 @@ display:none;
      <div class="center white"><span id="search-text" class="trn" data-trn-key="menu" >Menu</span></div>           
      
      <div class="right">     
-         <ons-toolbar-button onclick="showCart();" >         
-           <div class="notification cart-num cartcount " >0</div>
-           <ons-icon icon="fa-shopping-cart" class="cart carticon ">
+         <ons-toolbar-button onclick="showCart();" class="cart-circle" >         
+           <div class="notification cart-num cartcount animate" >0</div>
+           <ons-icon icon="fa-shopping-cart" class="cart carticon animate"></ons-icon>
          </ons-toolbar-button>
          
          <ons-toolbar-button onclick="showMenu(this);">
@@ -458,8 +457,8 @@ display:none;
      
      <div class="right">       
         <ons-toolbar-button>
-        <span class="notification cart-num cartcount " onclick="showCart();" >0</span>
-        <ons-icon icon="fa-shopping-cart" onclick="showCart();" class="cart carticon "></ons-toolbar-button>
+        <span class="notification cart-num cartcount" onclick="showCart();" >0</span>
+        <ons-icon icon="fa-shopping-cart" onclick="showCart();" class="cart carticon"></ons-toolbar-button>
         
         <ons-toolbar-button onclick="showEasyCategory(this);">
            <ons-icon icon="ion-ios-list" size="30px"></ons-icon>
@@ -939,6 +938,123 @@ display:none;
   </ons-dialog> 
 </script>
 
+
+<!--Table Booking Popup-->
+<script type="text/ons-template" id="bookingDialog.html">    
+  <ons-dialog var="dialogBooking" style="width:90%;height:450px;" cancelable  >
+
+    
+	  	
+<ons-page id="page-booking" class="onsen-display">
+   <ons-toolbar>        
+     <div class="left"><ons-back-button></ons-back-button></div> 
+     <div class="center white"><span id="search-text" class="trn" data-trn-key="book_a_table">Book a table</span></div>                         
+     <div class="right">        
+     </div>
+   </ons-toolbar>     
+<form id="frm-booking" class="frm-booking" method="post" >
+   <div class="wrapper">                 
+
+   <div id="top_end_table_booking"> 
+    
+   <div class="field-wrapper">
+      
+        <select class="form-control text-input text-input--underbar has_validation" name="no_of_guests" id="no_of_guests">
+                          <option value="" disabled selected>Number of Guests</option>
+						  <option value="1">1 Person </option>
+                          <option value="2">2 Person </option>
+                          <option value="3">3 Person </option>
+                          <option value="4">4 Person </option>
+                          <option value="5">5 Person </option>
+                          <option value="6">6 Person </option>
+                          <option value="7">7 Person </option>
+                          <option value="8">8 Person </option>
+                          <option value="9">9 Person </option>
+                          <option value="10">10 Person </option>
+                          <option value="11">11 Person </option>
+                          <option value="12">12 Person </option>
+                          <option value="13">13 Person </option>
+                          <option value="14">14 Person </option>
+                          <option value="15">15 Person </option>
+                          <option value="16">16 Person </option>
+                          <option value="17">17 Person </option>
+                          <option value="18">18 Person </option>
+                          <option value="19">19 Person </option>
+                          <option value="20">20 Person </option>
+        </select>
+      </div> 
+	  
+   <div class="field-wrapper">
+      <input type="text" name="date_booking" id="date_booking" class="date_booking text-input text-input--underbar has_validation" 
+      placeholder="Date Of Booking" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
+   </div>
+   
+
+       <div class="field-wrapper">
+          <select name="booking_time" onchange="search_table_timing();" id="booking_time" class="booking_time text-input text-input--underbar has_validation" 
+           data-validation="required" data-validation-error-msg="this field is mandatory!" >		   
+           </select>
+       </div> 
+      
+            <section id="diplay_timing_slots" >                 
+                                 
+            </section>       
+      <!-- <button class="button green-btn button--large trn search_table_timing" onclick="search_table_timing();" data-trn-key="search">
+      Search 
+      <div class="search-btn"><ons-icon icon="fa-chevron-right"></ons-icon></div>
+       </button>-->
+  </div>     
+  <div id="hide_book_a_table" style="display:none;">
+
+      <input value="" name="user_selected_time" id="user_selected_time" type="hidden">
+
+       <div class="field-wrapper">
+          <input type="text" name="booking_date_time" id="booking_date_time" readonly class="text-input text-input--underbar has_validation" 
+          placeholder="01/01/1970 12:00" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
+       </div>
+
+       <div class="field-wrapper">
+          <input type="text" name="txt_no_of_guests" id="txt_no_of_guests" readonly class="text-input text-input--underbar has_validation" 
+          placeholder="1" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
+       </div>
+
+       <div class="field-wrapper">
+          <input type="text" name="booking_name"  class="booking_name text-input text-input--underbar has_validation" 
+          placeholder="Name" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
+       </div>
+       
+       <div class="field-wrapper">
+          <input type="text" name="email"  class="email text-input text-input--underbar has_validation" 
+          placeholder="Email Address" value="" data-validation="email" data-validation-error-msg="You have not given a correct e-mail address!" >
+       </div>
+       
+       <div class="field-wrapper">
+          <input type="text" name="mobile"  class="mobile_inputs mobile text-input text-input--underbar has_validation" 
+          placeholder="Mobile Number" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
+       </div>
+       
+       <div class="field-wrapper">
+          <input type="text" name="booking_notes"  class="booking_notes text-input text-input--underbar" 
+          placeholder="Your Instructions" value="" >
+       </div>
+
+       <input type="hidden" id="hidden_merchant_id" class="hidden_merchant_id" value="" >
+       <div class="wrapper">
+       <button class="button green-btn button--large trn" onclick="submitBooking();" data-trn-key="book_now">
+    	Book Now!
+    	<div class="search-btn"><ons-icon icon="fa-chevron-right"></ons-icon></div>
+       </button>
+	   </div>
+  </div> 
+
+  </div> 
+     
+   </form>
+</ons-page>  	  	  	
+  </ons-dialog> 
+</script>
+<!--End here-->
+
 <script type="text/ons-template" id="paymentOption.html"> 
 <ons-page id="page-paymentoption" class="onsen-display">
    <ons-toolbar>        
@@ -1153,7 +1269,7 @@ display:none;
        <p class="total-reviews"></p>
        <address></address>-->
 	<div id="book-table" class="book-btn">   
-	   <button class="button button--quiet green bold trn" onclick="loadBookingForm();" data-trn-key="book_here">
+	   <button class="button button--quiet green bold trn" id="info-book" data-trn-key="book_here">
 		  Book a Table
 	   </button>
 	</div> 
@@ -1290,17 +1406,17 @@ display:none;
 
        <div class="field-wrapper">
           <select name="booking_time" id="booking_time" class="booking_time text-input text-input--underbar has_validation" 
-           data-validation="required" data-validation-error-msg="this field is mandatory!" >
+           data-validation="required" data-validation-error-msg="this field is mandatory!" onchange="search_table_timing();">
            </select>
        </div> 
       
             <section id="diplay_timing_slots" >                 
                                  
             </section>       
-       <button class="button green-btn button--large trn search_table_timing" onclick="search_table_timing();" data-trn-key="search">
+      <!-- <button class="button green-btn button--large trn search_table_timing" onclick="search_table_timing();" data-trn-key="search">
       Search 
       <div class="search-btn"><ons-icon icon="fa-chevron-right"></ons-icon></div>
-       </button>
+       </button>-->
   </div>     
   <div id="hide_book_a_table" style="display:none;">
 
@@ -2646,12 +2762,12 @@ display:none;
 
 
 <script type="text/ons-template" id="merchantmenu.html">   
-  <ons-popover animation="fade" cancelable var="merhantPopOverMenu"  >
+  <ons-popover animation="fade" cancelable var="merhantPopOverMenu"  id="merchnt-pop-menu">
       <ons-scroller>        
        <ons-list>
           <ons-list-item modifier="tappable" onclick="loadPageMerchantInfo();" 
           class="trn" data-trn-key="resto_info" >Restaurant Info</ons-list-item>
-          <ons-list-item modifier="tappable" onclick="loadBookingForm1();"
+          <ons-list-item modifier="tappable" id="bookid-mer" 
           class="trn book_table_menu" data-trn-key="book_a_table"  >Book a table</ons-list-item>
           <ons-list-item modifier="tappable" onclick="loadMoreReviews1();" 
           class="trn" data-trn-key="reviews" >Reviews</ons-list-item>
@@ -2675,11 +2791,7 @@ display:none;
    </ons-toolbar>
    
    <div id="map_canvas_div">
-		<input type="hidden" class="mlat" />
-		<input type="hidden" class="mlng" />
-		<input type="hidden" class="alat" />
-		<input type="hidden" class="alng" />
-		
+   
        <div class="list-wrapper" id="direction-wrap">
          <ons-list>
            <ons-list-item  modifier="task-list"  >
@@ -2777,7 +2889,7 @@ display:none;
 		 
 	          
 	   </div>
-	   <div class="wrapper" id="sel-addrs">
+	   <div class="wrapper">
 	      <div class="field-wrapper">  
 		 <select class="form-control select-class has_validation selnew" name="location_name_drop" id="lookupDropdown" data-validation="required" data-validation-error-msg="this field is mandatory!">
 		 <option value="" selected disabled><option>
@@ -3182,7 +3294,7 @@ display:none;
 
 
 <ons-toolbar id="flash_msg" class="navigation-bar" style="position: absolute; z-index: 10000; left: 0px; right: 0px; top: 30px; display:none;">
-<div class="center push-title navigation-bar__title navigation-bar__center button green-btn"><span class="cart-circle2"><ons-icon icon="fa-shopping-cart" class="cart carticon animate"></ons-icon></span> <span class="cart-content">Food loaded to cart</span></div></ons-toolbar></ons-toolbar>
+<div class="center push-title navigation-bar__title navigation-bar__center button green-btn"><span class="cart-circle2"><ons-icon icon="fa-shopping-cart" class="cart carticon animate"></ons-icon></span> <span class="cart-content">Food loaded to cart</span></div></ons-toolbar>
 </body>
 
 <script src="https://getaddress.io/js/jquery.getAddress-2.0.0.min.js"></script>
