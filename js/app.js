@@ -4883,6 +4883,61 @@ function loadBookingForm()
     sNavigator.pushPage("booking.html", options);		 
 }
 
+
+function popUpTableBooking(merchant_id,logo,restaurant_name,hide)
+{					
+		if(hide =="hide")
+		{
+			merhantPopOverMenu.hide();
+		}
+		
+		    if (typeof dialogBooking === "undefined" || dialogBooking==null || dialogBooking=="" ) { 	
+				ons.createDialog('bookingDialog.html').then(function(dialog) {				
+				dialog.show();
+				translatePage();
+				initMobileScroller();			
+				
+		  $(".number_guest").attr("placeholder", getTrans('Number Of Guests','number_of_guest') );
+      	  $(".date_booking").attr("placeholder", getTrans('Date Of Booking','date_of_booking') );
+      	  $(".booking_time").attr("placeholder", getTrans('Time Of Booking','time_of_booking') );
+      	  $(".booking_name").attr("placeholder", getTrans('Name','name') );
+      	  $(".email").attr("placeholder", getTrans('Email Address','email_address') );
+      	  $(".mobile").attr("placeholder", getTrans('Mobile Number','mobile_number') );
+		  $('#page-booking .hidden_merchant_id').val(merchant_id);
+      	  $(".booking_notes").attr("placeholder", getTrans('Your Instructions','your_instructions') );
+      	  translateValidationForm();
+      	  if(getStorage('client_id')=="" || getStorage('client_id')==null){
+		  }
+		  else{
+		  callAjax('getProfile',"client_token="+getStorage("client_token"));  
+		  }
+	    });			
+			} else {					
+				$("#page-booking #no_of_guests").val('');
+				$("#page-booking #booking_time").val('');
+				$("#page-booking #date_booking").val('');
+				$("#page-booking #user_selected_time").val('');
+				$('#page-booking .hidden_merchant_id').val(merchant_id);				
+				$("#no_of_guests").prop("disabled", false);
+				$("#date_booking").prop("disabled", false);
+				$("#booking_time").prop("disabled", false);
+				$('#page-booking #diplay_timing_slots').html(''); 
+				$(".search_table_timing").prop("disabled", false);
+				
+				$("#page-booking #top_end_table_booking").show();
+				$("#page-booking #hide_book_a_table").hide();
+				translatePage();
+				if(getStorage('client_id')=="" || getStorage('client_id')==null){
+				}
+				else{
+				callAjax('getProfile',"client_token="+getStorage("client_token"));  
+				}
+				dialogBooking.show();
+				
+			}
+		$('#page-booking .hidden_merchant_id').val(merchant_id);			
+}
+
 function table_booking_optn(merchant_id,logo,restaurant_name)
 {	    	
 	var options = {
@@ -4935,14 +4990,16 @@ function submitBooking()
 			{
 				var params = $( "#frm-booking").serialize();	      
 				params+="&merchant_id=" +  merchant_id ;
-				callAjax("bookATableNewconcept",params);	       
+				callAjax("bookATableNewconcept",params);	
+				dialogBooking.hide();	
 				return false;
 			}
 			else
 			{
 				var params = $( "#frm-booking").serialize();	      
 				params+="&merchant_id=" +  merchant_id +"&client_id="+getStorage("client_id");
-				callAjax("bookATableNewconcept",params);	       
+				callAjax("bookATableNewconcept",params);	 
+				dialogBooking.hide();	
 				return false;
 			}
 	    }  
