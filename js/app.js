@@ -4897,6 +4897,7 @@ function popUpTableBooking(merchant_id,logo,restaurant_name,hide)
 			merhantPopOverMenu.hide();
 		}
 		
+		alert(merchant_id);
 		    if (typeof dialogBooking === "undefined" || dialogBooking==null || dialogBooking=="" ) { 	
 				ons.createDialog('bookingDialog.html').then(function(dialog) {				
 				dialog.show();
