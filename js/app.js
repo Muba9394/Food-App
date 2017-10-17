@@ -4738,7 +4738,7 @@ function select_booking_time(timings,seat_available,no_of_guests)
   
   var ampm = hours >= 12 ? 'pm' : 'am'; 
 
-  var no_of_guests = parseInt($("'#page-booking #no_of_guests option:selected").val());  
+  var no_of_guests = parseInt($("#page-booking #no_of_guests option:selected").val());  
   seat_available = parseInt(seat_available);  
   if(no_of_guests>seat_available)
   {
