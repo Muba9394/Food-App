@@ -2516,7 +2516,7 @@ function menuCategoryResult(data)
 	$("#menucategory-page .logo-wrap").html('<img src="'+data.logo+'" />');
 	if(data.enabled_table_booking==2)
 	{
-		$("#menucategory-page .tbl-book").html('<button id="tbl-booking" class="white-btn" onclick="popUpTableBooking(('+data.merchant_id+',\''+data.logo+'\',\''+data.restaurant_name+'\')" > Book a Table </button>');
+		$("#menucategory-page .tbl-book").html('<button id="tbl-booking" class="white-btn" onclick="popUpTableBooking('+data.merchant_id+',\''+data.logo+'\',\''+data.restaurant_name+'\')" > Book a Table </button>');
 	}	
 	if ( data.open){
 		$("#merchant_open").val(2);
