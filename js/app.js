@@ -1212,6 +1212,7 @@ function callAjax(action,params)
 				      	  $(".book-ty-msg").html(data.msg);
 				      } 
 				    };     
+					
 				    sNavigator.pushPage("bookingTY.html", options);
 				    break;
 				case "merchantReviews":
@@ -4924,7 +4925,8 @@ function submitBooking()
 			{
 				var params = $( "#frm-booking").serialize();	      
 				params+="&merchant_id=" +  merchant_id ;
-				callAjax("bookATableNewconcept",params);	       
+				callAjax("bookATableNewconcept",params);	
+				dialogBooking.hide();		
 				return false;
 			}
 			else
@@ -4932,6 +4934,7 @@ function submitBooking()
 				var params = $( "#frm-booking").serialize();	      
 				params+="&merchant_id=" +  merchant_id +"&client_id="+getStorage("client_id");
 				callAjax("bookATableNewconcept",params);	       
+				dialogBooking.hide();	
 				return false;
 			}
 	    }  
