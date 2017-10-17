@@ -151,7 +151,7 @@ ons.ready(function() {
 	}
 				
 	//getLanguageSettings();
-	//setTimeout('getLanguageSettings()', 1100);
+	setTimeout('getLanguageSettings()', 1100);
 	
 	$( document ).on( "click", "#s", function() {    	     	    	   
 	   $("#s").val('');
@@ -420,7 +420,6 @@ document.addEventListener("pageinit", function(e) {
 		  "client_token="+getStorage("client_token")
 		  );
 		  translatePage();
-		  $("#page-profile .profile-pic-wrap").show();
 		  translateValidationForm();
 		  
 		  $(".first_name").attr("placeholder",  getTrans('First Name','first_name') );
@@ -1212,7 +1211,6 @@ function callAjax(action,params)
 				      	  $(".book-ty-msg").html(data.msg);
 				      } 
 				    };     
-					
 				    sNavigator.pushPage("bookingTY.html", options);
 				    break;
 				case "merchantReviews":
@@ -2044,7 +2042,7 @@ function displayRestaurantResults(data , target_id , display_type )
 		    	            	{ 
 									var btn_txt = 'Book a Table';
 									if($("#search-text").text() == "Take Away")  btn_txt = 'Take Away';
-									htm+='<div class="booking-btn" onclick="popUpTableBooking('+val.merchant_id+','+rest_logo+','+rest_name+')" > '+btn_txt+' </div>';   			
+									htm+='<div class="booking-btn" onclick="table_booking_optn('+val.merchant_id+','+rest_logo+','+rest_name+')" > '+btn_txt+' </div>';   			
 						   		}
 					    	}
 	    	           
@@ -2346,7 +2344,7 @@ function menuCategoryResult(data)
 	$("#menucategory-page .logo-wrap").html('<img src="'+data.logo+'" />');
 	if(data.enabled_table_booking==2)
 	{
-		$("#menucategory-page .tbl-book").html('<button id="tbl-booking" class="white-btn" onclick="popUpTableBooking(('+data.merchant_id+',\''+data.logo+'\',\''+data.restaurant_name+'\')" > Book a Table </button>');
+		$("#menucategory-page .tbl-book").html('<button id="tbl-booking" class="white-btn" onclick="table_booking_optn('+data.merchant_id+',\''+data.logo+'\',\''+data.restaurant_name+'\')" > Book a Table </button>');
 	}	
 	if ( data.open){
 		$("#merchant_open").val(2);
@@ -2517,7 +2515,7 @@ function menuCategoryResult(data)
 	$("#menucategory-page .logo-wrap").html('<img src="'+data.logo+'" />');
 	if(data.enabled_table_booking==2)
 	{
-		$("#menucategory-page .tbl-book").html('<button id="tbl-booking" class="white-btn" onclick="popUpTableBooking('+data.merchant_id+',\''+data.logo+'\',\''+data.restaurant_name+'\')" > Book a Table </button>');
+		$("#menucategory-page .tbl-book").html('<button id="tbl-booking" class="white-btn" onclick="table_booking_optn('+data.merchant_id+',\''+data.logo+'\',\''+data.restaurant_name+'\')" > Book a Table </button>');
 	}	
 	if ( data.open){
 		$("#merchant_open").val(2);
@@ -3651,22 +3649,18 @@ function showCart()
 
 function showCartNosOrder()
 {
-	$(".cart-num, .carticon").removeClass('animate');
 	dump('showCartNosOrder');
 	dump(  cart.length );
 	if ( cart.length>0 ){		
 		//$(".cart-num").show();	    
 		$(".cart-num").css({ "display":"inline-block","position":"absolute","margin-left":"-10px" });
 		$(".cart-num").text(cart.length);
-		setTimeout(function(){$(".cart-num, .carticon").addClass('animate');	},100);
 	} else {
 		$(".cart-num").hide();
 	}
 	//onsenAlert("Food Item Added to Cart");
-	$("#flash_msg").show();	
-	setTimeout(function(){$(".cart-num, .carticon").removeClass('animate');	},500);	
-	setTimeout(function(){$(".cart-num, .carticon").removeClass('animate');	},1000);		
-	setTimeout(function(){$("#flash_msg").hide();$(".cart-num, .carticon").addClass('animate');	},2000);
+	$("#flash_msg").show();
+	setTimeout(function(){$("#flash_msg").hide();},2000);
 	
 }
 
@@ -4643,43 +4637,42 @@ function initMobileScroller()
 		          if(php_script_response.msg!='')
 		          {
 		          	html += '<option value="">'+php_script_response.msg+'</option>';
-		          } */		          
-		           $('#page-booking #booking_time').html(php_script_response);
+		          } */
+		          $('#booking_time').html(php_script_response);
+		          
 		        }
 		      }); 
 }
 
 
 function search_table_timing()
-      {     			
-			$('#page-booking #diplay_timing_slots').html('');    		
-            var no_of_guests = $.trim($('#frm-booking #no_of_guests option:selected').val());			
-            var date_booking = $('#frm-booking #date_booking').val();  			
-            var time_slot    = $.trim($('#frm-booking #booking_time option:selected').val());						
+      {     
+      		$('#diplay_timing_slots').html('');    		
+            var no_of_guests = $.trim($('#no_of_guests option:selected').val());
+            var date_booking = $('#date_booking').val();  
+            var time_slot    = $.trim($('#booking_time option:selected').val());
             if(time_slot=='')
             {              
-			   
-			  return;	
+              return ;
             }
             var base_url     = ajax_url; 
-            var merchant_id  = $("#page-booking #hidden_merchant_id").val();
-            var url  = "https://www.cuisine.je/mobileapp/api/check_seat_availability"; 			
-            //$('#page-booking #diplay_timing_slots').html('');
-            //$('#page-booking #booking_details_div').css('display','none');
+            var merchant_id  = getStorage('merchant_id');             
+            var url  = "https://www.cuisine.je/mobileapp/api/check_seat_availability"; 
+            $('#timing_slots').html('');
+            $('#booking_details_div').css('display','none');
             $.ajax({
                     type:'POST',
                     url : url , 
 					crossDomain:true,		
                     data: {no_of_guests:no_of_guests,date_booking:date_booking,time_slot:time_slot,merchant_id:merchant_id},
                     dataType:'json',
-					crossDomain:true,
-					cache:false,
                     success:function(response)
-                    {							
+                    {
                         if($.trim(response)!='')
                         {                          	
-                          //$('#page-booking #diplay_timing_slots').css('display','block');		
-                          var timing_html = '';                           
+                          $('#timing_slots').css('display','block');		
+                          var timing_html = '';
+                          // alert(response.toSource);
 
                             $.each(response, function( key, value ) 
                             {                                
@@ -4700,12 +4693,15 @@ function search_table_timing()
                                      	disabled_type = 'disabled';
                                      }
                             
-                            timing_html += '<div class="mobile_time_slots"> <ons-button class="ng-isolate-scope button effect-button slide-left" value="'+value.slot_starting+'" onclick="select_booking_time(\''+key+'\',\''+value.seating_capacity+'\',\''+no_of_guests+'\')" '+disabled_type+' >'+value.slot_starting+'</ons-button> <span class="available_seats_span">'+seats_available+'</span></div>' ;                                       
+                            timing_html += '<div class="mobile_time_slots"> <ons-button class="ng-isolate-scope button effect-button slide-left" value="'+value.slot_starting+'" onclick="select_booking_time(\''+key+'\',\''+value.seating_capacity+'\',\''+no_of_guests+'\')" '+disabled_type+' >'+value.slot_starting+'</ons-button> <span class="available_seats_span">'+seats_available+'</span></div>' ;           
+                            // timing_html +='<div class="col-lg-2">  <input value="'+value.slot_starting+'" class="btn btn-primary btn-block" onclick="select_booking_time(\''+key+'\',\''+value.seating_capacity+'\',\''+no_of_guests+'\')" type="button" '+disabled_type+' >  <span class="available_seats_span">'+seats_available+'</span>  </div>';
 
                             });
 
-                            $('#page-booking #diplay_timing_slots').append(timing_html);
-                        
+                            $('#diplay_timing_slots').append(timing_html);
+                          /*   <div class="col-lg-2">
+                                   <input value="Search" class="btn btn-primary btn-block search_table_booking" type="button">
+                              </div> */
 
                         }
                         else
@@ -4718,11 +4714,11 @@ function search_table_timing()
             })   
       }
 
-function select_booking_time(timings,seat_available,no_of_guests)
+function select_booking_time(timings='',seat_available='',no_of_guests='')
 {
    
   //	  $('#top_end_table_booking').css('display','none');	
-  $('#page-booking .booking_error_message').html("");
+  $('.booking_error_message').html("");
 
   var display_time =  timings.split('-');
   var display_hours = '';
@@ -4739,7 +4735,7 @@ function select_booking_time(timings,seat_available,no_of_guests)
   
   var ampm = hours >= 12 ? 'pm' : 'am'; 
 
-  var no_of_guests = parseInt($("#page-booking #no_of_guests option:selected").val());  
+  var no_of_guests = parseInt($("#no_of_guests option:selected").val());  
   seat_available = parseInt(seat_available);  
   if(no_of_guests>seat_available)
   {
@@ -4754,28 +4750,44 @@ function select_booking_time(timings,seat_available,no_of_guests)
   }
   else
   {  
-   var no_of_guests = $("#page-booking #no_of_guests option:selected").val();
-   $('#page-booking #top_end_table_booking').css('display','none');		
-   $('#page-booking #no_of_guests').prop('disabled', 'disabled');
-   $('#page-booking .date_booking	').prop('disabled', 'disabled');
-   $('#page-booking #booking_time').prop('disabled', 'disabled');
-   $('#page-booking .search_table_timing').prop('disabled', 'disabled');
+   $('#top_end_table_booking').css('display','none');		
+   $('#no_of_guests').prop('disabled', 'disabled');
+   $('.date_booking	').prop('disabled', 'disabled');
+   $('#booking_time').prop('disabled', 'disabled');
+   $('.search_table_timing').prop('disabled', 'disabled');
    
-   var booking_date = $('#page-booking .date_booking').val();
-   var booking_time = $("#page-booking #table_booking_time option:selected").text();
-   var user_time    = $("#page-booking #table_booking_time option:selected").val();
+   var booking_date = $('.date_booking').val();
+   var booking_time = $("#table_booking_time option:selected").text();
+   var user_time    = $("#table_booking_time option:selected").val();
    var date_time    = booking_date+" "+display_hours+" "+ampm; 
 
-   $('#page-booking #user_selected_time').val(timings);
-   $('#page-booking #booking_date_time').val(date_time);
-   $('#page-booking #booking_dates').val(booking_date);   
-   $('#page-booking #txt_no_of_guests').val(no_of_guests);
+   $('#user_selected_time').val(timings);
+   $('#booking_date_time').val(date_time);
+   $('#booking_dates').val(booking_date);   
+   $('#txt_no_of_guests').val(no_of_guests);
    //$('#booking_date_time').prop('disabled', 'disabled');
    //$('#txt_no_of_guests').prop('disabled', 'disabled');
-   $('#page-booking #booking_details_div').css('display','block'); 
+   $('#booking_details_div').css('display','block'); 
 
-   $('#page-booking #hide_book_a_table').css('display','block');
+   $('#hide_book_a_table').css('display','block');
 
+ /* var client_first_name = getStorage("client_first_name");  
+  // var client_last_name  = getStorage("client_last_name");
+  var client_email_address = getStorage("client_email_address");
+ 	// alert(" client_first_name " + client_first_name ) ;
+
+   if(client_first_name===null)
+   {   	
+   		client_first_name = ""; 
+   }		
+   if(client_email_address===null)
+   {
+   		client_email_address = "";
+   }
+   $(".booking_name").val(client_first_name);	
+   $(".email").val(client_email_address);	
+	alert(client_first_name);
+	*/
   }
   
 }	  
@@ -4793,8 +4805,6 @@ function showMerchantInfo(data)
 	{		 
 		// alert("else");
 		$('#book-table').show();	
-
-		$("#page-merchantinfo #info-book").attr('onclick','popUpTableBooking('+getStorage('merchant_id','hide')+');');				
 	}
 	$("#page-merchantinfo h3").html(data.merchant_info.restaurant_name);
 	$("#page-merchantinfo h5").html(data.merchant_info.cuisine);
@@ -4925,8 +4935,7 @@ function submitBooking()
 			{
 				var params = $( "#frm-booking").serialize();	      
 				params+="&merchant_id=" +  merchant_id ;
-				callAjax("bookATableNewconcept",params);	
-				dialogBooking.hide();		
+				callAjax("bookATableNewconcept",params);	       
 				return false;
 			}
 			else
@@ -4934,7 +4943,6 @@ function submitBooking()
 				var params = $( "#frm-booking").serialize();	      
 				params+="&merchant_id=" +  merchant_id +"&client_id="+getStorage("client_id");
 				callAjax("bookATableNewconcept",params);	       
-				dialogBooking.hide();	
 				return false;
 			}
 	    }  
@@ -5607,63 +5615,6 @@ function popUpAddressBook()
 		//translatePage();
 	}	
 }
-
-//table booking popup		
-	function popUpTableBooking(merchant_id,logo,restaurant_name,hide)		
-	{							
-			if(hide =="hide")		
-			{		
-				merhantPopOverMenu.hide();		
-		}		
-				
-		    if (typeof dialogBooking === "undefined" || dialogBooking==null || dialogBooking=="" ) { 			
-				ons.createDialog('bookingDialog.html').then(function(dialog) {						
-				dialog.show();		
-				translatePage();		
-				initMobileScroller();					
-						
-			  $(".number_guest").attr("placeholder", getTrans('Number Of Guests','number_of_guest') );		
-	      	  $(".date_booking").attr("placeholder", getTrans('Date Of Booking','date_of_booking') );		
-	      	  $(".booking_time").attr("placeholder", getTrans('Time Of Booking','time_of_booking') );		
-	      	  $(".booking_name").attr("placeholder", getTrans('Name','name') );		
-	      	  $(".email").attr("placeholder", getTrans('Email Address','email_address') );		
-	      	  $(".mobile").attr("placeholder", getTrans('Mobile Number','mobile_number') );		
-			  $('#page-booking .hidden_merchant_id').val(merchant_id);		
-	      	  $(".booking_notes").attr("placeholder", getTrans('Your Instructions','your_instructions') );		
-	      	  translateValidationForm();		
-	      	  if(getStorage('client_id')=="" || getStorage('client_id')==null){		
-			  }		
-			  else{		
-			  callAjax('getProfile',"client_token="+getStorage("client_token"));  		
-			  }		
-		    });					
-				} else {							
-					$("#page-booking #no_of_guests").val('');		
-					$("#page-booking #booking_time").val('');		
-					$("#page-booking #date_booking").val('');		
-					$("#page-booking #user_selected_time").val('');		
-					$('#page-booking .hidden_merchant_id').val(merchant_id);						
-					$("#no_of_guests").prop("disabled", false);		
-					$("#date_booking").prop("disabled", false);		
-					$("#booking_time").prop("disabled", false);		
-					$('#page-booking #diplay_timing_slots').html(''); 		
-					$(".search_table_timing").prop("disabled", false);		
-							
-					$("#page-booking #top_end_table_booking").show();		
-					$("#page-booking #hide_book_a_table").hide();		
-					translatePage();		
-					if(getStorage('client_id')=="" || getStorage('client_id')==null){		
-					}		
-					else{		
-					callAjax('getProfile',"client_token="+getStorage("client_token"));  		
-					}		
-					dialogBooking.show();		
-							
-				}		
-			$('#page-booking .hidden_merchant_id').val(merchant_id);					
-	}		
-	//Ends here
-
 
 function displayAddressBookPopup(data)
 {		
@@ -6961,7 +6912,6 @@ function showMenu(element)
 		   enabled_table_booking = getStorage('enabled_table_booking');	    
 		    if(enabled_table_booking==2){
 		    	$(".book_table_menu").show();
-				$("#merchnt-pop-menu #bookid-mer").attr('onclick','popUpTableBooking('+getStorage('merchant_id')+',\'\',\'\',\'hide\');');
 		    } else $(".book_table_menu").hide();
 		    
 		    translatePage();
@@ -6974,7 +6924,6 @@ function showMenu(element)
 			enabled_table_booking = getStorage('enabled_table_booking');	    
 		    if(enabled_table_booking==2){
 		    	$(".book_table_menu").show();
-				$("#merchnt-pop-menu #bookid-mer").attr('onclick','popUpTableBooking('+getStorage('merchant_id')+',\'hide\');');
 		    } else $(".book_table_menu").hide();
 		});				
 		
