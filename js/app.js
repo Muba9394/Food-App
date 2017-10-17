@@ -103,7 +103,7 @@ jQuery.fn.exists = function(){return this.length>0;}
 
 function dump(data)
 {
-	//console.debug(data);
+	console.debug(data);
 }
 
 function setStorage(key,value)
@@ -138,7 +138,7 @@ $( document ).on( "keyup", ".numeric_only", function() {
 
 //ons.bootstrap();  
 ons.ready(function() {
-	//dump('ready');
+	dump('ready');
 	
 	
 	//navigator.splashscreen.hide()	
@@ -185,7 +185,7 @@ function hasConnection()
 
 function geoComplete()
 {
-	//dump( "country_code_set=>" + getStorage("country_code_set"));
+	dump( "country_code_set=>" + getStorage("country_code_set"));
 			
 	if ( empty(getStorage("country_code_set")) ){				
 		if(empty(getStorage("mobile_country_code"))){
@@ -264,8 +264,8 @@ function searchMerchant()
 });*/
 
 document.addEventListener("pageinit", function(e) {
-	//dump("pageinit");	
-	//dump("pagname => "+e.target.id);
+	dump("pageinit");	
+	dump("pagname => "+e.target.id);
 			
 	switch (e.target.id)
 	{		
@@ -498,7 +498,7 @@ document.addEventListener("pageinit", function(e) {
 		  		
 		   
 		case "page-pts":   
-		  //dump('page-pts');
+		  dump('page-pts');
 		   callAjax('getPTS',
 		    "client_token="+getStorage("client_token")
 		   );
@@ -625,14 +625,14 @@ function applyFilter(type)
 		});			
 	}
 	
-	//dump("services=>"+services);
+	dump("services=>"+services);
 	var cuisine_type='';
 	if (  $(".cuisine_type").exists()){
 		$.each( $(".cuisine_type:checked") , function( key, val ) { 			
 			cuisine_type+= $(this).val() +",";
 		});		
 	}
-	//dump("cuisine_type=>"+cuisine_type);
+	dump("cuisine_type=>"+cuisine_type);
 	if(type==1)
 	{
 	callAjax("search","type="+type+"&address="+ getStorage("search_address") +"&services=" + services + 
@@ -680,14 +680,14 @@ function callAjax(action,params)
 		return;
 	}
 	
-	//dump("action=>"+action);
+	dump("action=>"+action);
 	
 	/*add language use parameters*/
 	params+="&lang_id="+getStorage("default_lang");
 	if(!empty(krms_config.APIHasKey)){
 		params+="&api_key="+krms_config.APIHasKey;
 	}	
-	//dump(ajax_url+"/"+action+"?"+params);
+	dump(ajax_url+"/"+action+"?"+params);
 	
     ajax_request = $.ajax({
 		url: ajax_url+"/"+action, 
@@ -726,7 +726,7 @@ function callAjax(action,params)
 		hideAllModal();		
 	},
 	success: function (data) {	  
-		//dump(data); 		
+		dump(data); 		
 		if (data.code==1){
 			switch (action)
 			{
@@ -753,7 +753,7 @@ function callAjax(action,params)
 				case "MenuCategory":			
 				/*save merchant logo*/									
 				setStorage("merchant_logo",data.details.logo);
-				//dump(data.details.restaurant_name);
+				dump(data.details.restaurant_name);
 				setStorage("merchant_name",data.details.restaurant_name);
 				
 				setStorage("enabled_table_booking",data.details.enabled_table_booking);
@@ -900,8 +900,8 @@ function callAjax(action,params)
 						var options = {
 					      animation: 'slide',
 					      onTransitionEnd: function() { 	
-					      	 // dump( getStorage("merchant_logo") );	      	  
-					      	//  dump( getStorage("order_total") );
+					      	  dump( getStorage("merchant_logo") );	      	  
+					      	  dump( getStorage("order_total") );
 					      	  displayMerchantLogo2( getStorage("merchant_logo") ,
 					      	     getStorage("order_total") ,
 					      	     'page-checkoutsignup');
@@ -972,7 +972,7 @@ function callAjax(action,params)
 					    sNavigator.pushPage("SignupVerification.html", options);
 					        
 					} else {
-					//	dump('payment_option');
+						dump('payment_option');
 						 var options = {
 					      animation: 'slide',
 					      onTransitionEnd: function() { 						      	  
@@ -1032,7 +1032,7 @@ function callAjax(action,params)
 			   	   
 			   	   /*pts*/
 			   	   if ( getStorage("pts")==2){			   	   	   
-			   	   	//   dump('pts is enabled');
+			   	   	   dump('pts is enabled');
 			   	   	   $(".redeem_points").attr("placeholder",data.details.pts.pts_label_input);
 			   	   	   $(".pts_available_points").html(data.details.pts.balance);
 			   	   } else {
@@ -1126,7 +1126,7 @@ function callAjax(action,params)
 						  }
 						};
 						
-						//dump(rzr_options);
+						dump(rzr_options);
 						
 						if(isDebug()){
 						   rzr_successCallback('pay_debug_1234566');
@@ -1257,7 +1257,7 @@ function callAjax(action,params)
 				  $("#frm-booking input[name='email']").val(data.details.email_address);
 				  $("#frm-booking input[name='mobile']").val(data.details.contact_phone);
 				  
-				 // dump('set avatar');
+				  dump('set avatar');
 				  setStorage("avatar",data.details.avatar);
 				  
 				  imageLoaded('.img_loaded');
@@ -1445,7 +1445,7 @@ function callAjax(action,params)
 			    case "getLanguageSettings":   			       		      
 			       setStorage("translation",JSON.stringify(data.details.translation));
 			       
-			     //  dump(data);
+			       dump(data);
 			       /*set settings to storage*/			       
 			       setStorage("decimal_place",data.details.settings.decimal_place);
 			       setStorage("currency_position",data.details.settings.currency_position);
@@ -1455,10 +1455,10 @@ function callAjax(action,params)
 			       setStorage("show_addon_description",data.details.settings.show_addon_description);
 
 			       var device_set_lang=getStorage("default_lang");
-			     //  dump("device_set_lang=>"+device_set_lang);
+			       dump("device_set_lang=>"+device_set_lang);
 			       
 			       if (empty(device_set_lang)){
-			      // 	   dump('proceed');
+			       	   dump('proceed');
 				       if(!empty(data.details.settings.default_lang)){			       	  
 				          setStorage("default_lang",data.details.settings.default_lang);
 				       } else {
@@ -1489,7 +1489,7 @@ function callAjax(action,params)
 			       break;
 			       
 			   case "applyVoucher":   
-			      // dump(data.details);			       
+			       dump(data.details);			       
 			       $(".voucher_amount").val( data.details.amount );
 			       $(".voucher_type").val( data.details.voucher_type );
 			       
@@ -1567,7 +1567,7 @@ function callAjax(action,params)
 			      
 			      
 			      var new_total= data.details.new_total;
-			    //  dump('compute new total for pts');
+			      dump('compute new total for pts');
 			      
 			      $(".total-amount").html( prettyPrice(new_total) );
 			      
@@ -1669,7 +1669,7 @@ function callAjax(action,params)
 			       if ( data.details.history.length>0){
 			       	  var html='<ul>';
 			       	  $.each( data.details.history , function( key, val ) {     
-			       	  	//  dump(val);
+			       	  	  dump(val);
 			       	  	  html+='<li>';
 				       	  	  html+='<div class="s-c-g"></div>';
 				       	  	  html+='<p>'+val.date_time+'</p>';
@@ -1786,7 +1786,7 @@ function callAjax(action,params)
 		} else {
 			/*failed condition*/
 			
-		//	dump('failed condition');
+			dump('failed condition');
 			switch(action)
 			{					
 											
@@ -1829,7 +1829,7 @@ function callAjax(action,params)
 			      break;   
 				
 			    case "getProfile":  
-			   //   dump('show login form')
+			      dump('show login form')
 			      menu.setMainPage('prelogin.html', {closeMenu: true});
 			      break;   
 			      
@@ -1903,7 +1903,7 @@ function callAjax(action,params)
 
 function setHome()
 {
-	//dump("setHome");
+	dump("setHome");
 	var options = {     	  		  
 	  	  closeMenu:true,
 	      animation: 'slide',
@@ -1915,7 +1915,7 @@ function setHome()
 
 function setSubHome()
 {
-	//dump("setHome");
+	dump("setHome");
 	var options = {     	  		  
 	  	  closeMenu:true,
 	      animation: 'slide',
@@ -1943,7 +1943,7 @@ function displayRestaurantResults(data , target_id , display_type )
     $.each( data, function( key, val ) {     
     	//alert(val.merchant_id);	  
     	 // alert(data.toSource());  	
-    	// dump(val);    	 
+    	 dump(val);    	 
     	 var rest_logo = '';
     	 rest_logo = "'"+val.logo+"'";
 		 var rest_name = '';
@@ -1996,7 +1996,7 @@ function displayRestaurantResults(data , target_id , display_type )
 					   
 	    	           htm+='<div class="rating-stars" data-score="'+val.ratings.ratings+'"></div>';
 					   
-	    	               	       //   dump(val.service);
+	    	               	          dump(val.service);
     	          
     	          if(!empty(val.service)){
 					htm+='<ul>';
@@ -2113,7 +2113,7 @@ function loadRestaurantCategory(mtid,logo,name)
   removeStorage("tips_percentage");  
   removeStorage("cc_id");  
   
- // dump('clear cart');
+  dump('clear cart');
   var options = {
       animation: 'slide',
       onTransitionEnd: function() { 
@@ -2605,7 +2605,7 @@ function menuCategoryResult(data)
 			     html+='<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(1)" >';	
 			 } else {
 			 	  var single_add_item=getStorage("single_add_item");
-			 	//  dump("=>"+single_add_item);
+			 	  dump("=>"+single_add_item);
 			 	  if (val.single_item==2 && single_add_item==2){
 			 	  	  item_auto_price="0|";
 			 	  	  item_auto_discount="0";
@@ -2765,7 +2765,7 @@ function displayMerchantLogo2(logo,total,page_id)
 function displayItemByCategory(data)
 {			
 	
-	//dump( "mobile_menu=>"+data.mobile_menu );
+	dump( "mobile_menu=>"+data.mobile_menu );
 	
 	$("#page-menubycategoryitem #search-text").html(data.category_info.category_name);
 	$("#page-menubycategoryitem .restauran-title").text(data.merchant_info.restaurant_name);
@@ -2785,7 +2785,7 @@ function displayItemByCategory(data)
 			     html+='<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(1)" >';	
 			 } else {
 			 	  var single_add_item=getStorage("single_add_item");
-			 	 // dump("=>"+single_add_item);
+			 	  dump("=>"+single_add_item);
 			 	  if (val.single_item==2 && single_add_item==2){
 			 	  	  item_auto_price="0|";
 			 	  	  item_auto_discount="0";
@@ -3231,7 +3231,7 @@ jQuery(document).ready(function() {
 	});
 	
 	$( document ).on( "click", ".payment_list", function() {		
-		//dump( $(this).val() );
+		dump( $(this).val() );
 		var paypal_card_fee=$(".paypal_card_fee").val();
 		switch( $(this).val() )
 		{
@@ -3290,7 +3290,7 @@ jQuery(document).ready(function() {
 	
 	$( document ).on( "click", ".logo-wrap img", function() {
 		var page = sNavigator.getCurrentPage();	
-		//dump("pagename=>"+page.name);		
+		dump("pagename=>"+page.name);		
 		if ( page.name=="merchantInfo.html"){			
 			return;
 		}
@@ -3309,13 +3309,13 @@ jQuery(document).ready(function() {
 		
 		var found=false;
 		var _pages = sNavigator.getPages();
-	//	dump( _pages.length );
+		dump( _pages.length );
 		if ( _pages.length>0){
 			$.each( _pages, function( key, val ) { 	
 				if (!empty(val)){
-				//	dump(val.name);
+					dump(val.name);
 					if ( val.name=="merchantInfo.html"){
-					//	dump('found');
+						dump('found');
 						found=true;
 						//sNavigator.resetToPage("merchantInfo.html",options);			
 						sNavigator.popPage();
@@ -3325,7 +3325,7 @@ jQuery(document).ready(function() {
 		}
 		
 		if (found){
-		//	dump('exit');
+			dump('exit');
 			return;
 		}
 						
@@ -3335,7 +3335,7 @@ jQuery(document).ready(function() {
 	$( document ).on( "click", ".setAddress", function() {		
 		var address=$(this).data("address");		
 		var address_split=address.split("|");
-	//	dump(address_split);
+		dump(address_split);
 		if ( address_split.length>0){
 			$(".street").val( address_split[0] );
 			$(".city").val( address_split[1] );
@@ -3386,13 +3386,13 @@ function setCartValue()
 		selected_price=0;
 	}	
 	
-	//dump("discount=>"+discount);
-	//dump("selected_price=>"+selected_price);
+	dump("discount=>"+discount);
+	dump("selected_price=>"+selected_price);
 	var qty=parseFloat($(".qty").val());
 	var total_value=qty* (selected_price-discount);    
 	
 	//adon	
-	//dump('addon totalx');	
+	dump('addon totalx');	
 	var addon_total=0;
 	
 	var addon_prices = [];
@@ -3415,8 +3415,8 @@ function setCartValue()
     	    	
         var addo_price=explode("|",$(this).val());       
 
-       // dump(addo_price);
-       // dump(addo_price[1]);
+        dump(addo_price);
+        dump(addo_price[1]);
                
         addon_total+=qty * parseFloat(addo_price[1]);
         addon_prices.push( parseFloat(addo_price[1]) );
@@ -3424,12 +3424,12 @@ function setCartValue()
         
     total_value+=addon_total;
     
-   // dump("total_value =>"+total_value);    
+    dump("total_value =>"+total_value);    
     if ( $(".two_flavors").val()==2 ){
-    	//dump("two_flavors");
-    	//dump(addon_prices);
+    	dump("two_flavors");
+    	dump(addon_prices);
     	total_value = Math.max.apply(Math,addon_prices); 
-    	//dump('get the highest value => ' + total_value );
+    	dump('get the highest value => ' + total_value );
     	total_value = parseInt($("#page-itemdisplay .qty").val()) * total_value;	
     }
     
@@ -3478,7 +3478,7 @@ function addToCart()
 		});
 	}
 
-	//dump("proceed=>"+proceed);
+	dump("proceed=>"+proceed);
 	if (!proceed){
 		return;
 	}	
@@ -3557,13 +3557,13 @@ function addToCart()
 				xx++;
 			});	
 			
-			//dump(addon_price_array);
+			dump(addon_price_array);
 			/*var largest = addon_price_array.reduce(function(x,y){
 			       return (x > y) ? x : y;
 			});*/
 			largest = Math.max.apply(Math,addon_price_array); 
 			
-		//	dump("largest price => "+largest);
+			dump("largest price => "+largest);
 			price=largest;
    	   	   
 		} else {
@@ -3619,7 +3619,7 @@ function addToCart()
 
 function showCart()
 {
-	//dump('showCart');
+	dump('showCart');
 	var cartnum=$(".cart-num").html();
 	if(cartnum=="" || cartnum=="0"){
 		sNavigator.pushPage("cartempty.html", options);
@@ -3650,8 +3650,8 @@ function showCart()
 
 function showCartNosOrder()
 {
-	//dump('showCartNosOrder');
-	//dump(  cart.length );
+	dump('showCartNosOrder');
+	dump(  cart.length );
 	if ( cart.length>0 ){		
 		//$(".cart-num").show();	    
 		$(".cart-num").css({ "display":"inline-block","position":"absolute","margin-left":"-10px" });
@@ -4056,7 +4056,7 @@ function displayCart(data)
 			 	$.each( val.sub_item , function( key_sub, val_sub ) {			 		 
 				 	 htm+='<ons-list-header class="subitem-row'+xx+'">'+key_sub+'</ons-list-header>';
 				 	 $.each( val_sub  , function( key_sub2, val_sub2 ) {			 		 
-				 	    //  dump(val_sub2);	
+				 	      dump(val_sub2);	
 				 	      if ( val_sub2.qty =="itemqty"){
 				 	      	 subitem_qty=val.qty;
 				 	      } else {
@@ -4119,7 +4119,7 @@ function displayCart(data)
 	if (empty(transaction_type)){	
 		transaction_type='delivery';
 	}
-	//dump("transaction_type=>"+transaction_type);
+	dump("transaction_type=>"+transaction_type);
 	setStorage('transaction_type',transaction_type);
 		
 	htm+='<ons-list-header class="trn" data-trn-key="delivery_options">Delivery Options</ons-list-header>';
@@ -4128,7 +4128,7 @@ function displayCart(data)
 	
 	/*fixed transaction type*/
 	
-	//dump("services =>"+data.merchant_info.service);
+	dump("services =>"+data.merchant_info.service);
 	
 	switch (data.merchant_info.service)
 	{
@@ -4222,14 +4222,14 @@ function applyCartChanges()
 	$(".subitem-qty").hide();
 	$(".row-del-wrap").hide();
 	
-//	dump( "qty L=>"+ $(".item-qty").length );
+	dump( "qty L=>"+ $(".item-qty").length );
 	if (!empty( $(".item-qty") )){
 		cart=[];		
 		var x=1;
 		$.each( $(".item-qty") , function( key, val ) { 	
 
 			var x=$(this).data("rowid");
-		//	dump("rowid=>"+x);
+			dump("rowid=>"+x);
 			
 			var sub_item=[];
 			var ingredients=[];
@@ -4292,8 +4292,8 @@ function applyCartChanges()
 			x++;
 		});	
 		
-		//dump('updated cartx');
-		//dump(cart);
+		dump('updated cartx');
+		dump(cart);
 								
 		var cart_params=JSON.stringify(cart);      
 		
@@ -4316,21 +4316,21 @@ function applyCartChanges()
 function checkOut()
 {	
 	var validation_msg=$(".validation_msg").val();
-	//dump(validation_msg);
-	//dump(cart);
+	dump(validation_msg);
+	dump(cart);
 	if ( cart.length<1){
 		onsenAlert( getTrans("Your cart is empty",'your_cart_is_empty') );
 		return;
 	}
 	
 	if ( validation_msg!="" ){
-	//	dump('d2');
+		dump('d2');
 		onsenAlert(validation_msg);
 		return;
 	}		
 	//var tr_type=getStorage("transaction_type");
 	var tr_type = $(".transaction_type:checked").val();
-	//dump("tr_type=>"+tr_type);
+	dump("tr_type=>"+tr_type);
 	
 	if ( tr_type =="pickup"){
 		if ( $(".delivery_time").val()==""){
@@ -4411,7 +4411,7 @@ function clientShipping()
 	    onSuccess : function() {  
 	       var params = $( "#frm-shipping").serialize();			      	       
 	       setStorage('shipping_address',params);
-	       //dump(params);	       
+	       dump(params);	       
 	       var options = {
 		      animation: 'slide',
 		      onTransitionEnd: function() { 						      	  
@@ -4443,7 +4443,7 @@ function displayPaymentOptions(data)
 {
 	var htm='';
 	$.each( $(data.details.payment_list) , function( key, val ) { 			
-	//	dump(val);
+		dump(val);
 		htm+=tplPaymentList('payment_list', val.value, val.label, val.icon);
 	});		
 	createElement('payment-list',htm);
@@ -4451,7 +4451,7 @@ function displayPaymentOptions(data)
 	var htm='';
 	if (data.details.pay_on_delivery_flag==1){
 		$.each( $(data.details.pay_on_delivery_list) , function( key, val ) { 			
-	//	    dump(val);
+		    dump(val);
 		    htm+=tplPaymentProvider('payment_provider_name', val.payment_name, val.payment_name, val.payment_logo);
 	    });		    
 	    createElement('payon-deliver-list',htm);
@@ -4463,9 +4463,9 @@ function placeOrder()
 	if ( $('.payment_list:checked').length > 0){
 		
 		var selected_payment=$('.payment_list:checked').val();
-		//dump(selected_payment);
+		dump(selected_payment);
 		if ( selected_payment=="pyr"){
-		//	dump( $('.payment_provider_name:checked').length );
+			dump( $('.payment_provider_name:checked').length );
 			if ( $('.payment_provider_name:checked').length <= 0){
 				onsenAlert( getTrans("Please select payment provider",'please_select_payment_provider') );
 				return;
@@ -4537,13 +4537,13 @@ function placeOrder()
 /*sliding menu*/
 ons.ready(function() {
   menu.on('preopen', function() {
-       //console.log("Menu page is going to open");
+       console.log("Menu page is going to open");
        
        if (isLogin()){
-       	  // dump('logon ok');
+       	   dump('logon ok');
        	   
        	   var pts = getStorage("pts");
-	    //   dump("pts=>"+pts);
+	       dump("pts=>"+pts);
 	       if(pts!=2){
 	       	  $(".menu-pts").hide();
 	       } else {
@@ -4553,16 +4553,16 @@ ons.ready(function() {
        	   $(".logout-menu").css({"display":"block"});
        	   
        	   var avatar=getStorage("avatar");
-       //	   dump("avatar=>"+avatar);       	   
+       	   dump("avatar=>"+avatar);       	   
        	   if(!empty(avatar)){
-       	 //  	   dump('fillavatar');
+       	   	   dump('fillavatar');
 	       	   $(".profile-pic-wrap").show();
 	       	   $(".avatar").attr("src", getStorage("avatar") );
 	       	   $(".avatar-right").html(  getStorage("client_name_cookie") );
 	       	   $(".avatar-wrap-menu div").addClass("img_loaded");
        	   }
        } else {
-       	 //  dump('logon not');
+       	   dump('logon not');
        	   $(".logout-menu").hide();
        	   $(".profile-pic-wrap").hide();
        	   $(".menu-pts").hide();
@@ -4572,7 +4572,7 @@ ons.ready(function() {
           
   });  
   menu.on('postopen', function() {
-    //  dump('menu is open');      
+      dump('menu is open');      
       imageLoaded('.img_loaded');
   });
 });
@@ -4657,8 +4657,7 @@ function search_table_timing()
               return ;
             }
             var base_url     = ajax_url; 
-            var merchant_id  = getStorage('merchant_id');    
-			
+            var merchant_id  = getStorage('merchant_id');             
             var url  = "https://www.cuisine.je/mobileapp/api/check_seat_availability"; 
             $('#timing_slots').html('');
             $('#booking_details_div').css('display','none');
@@ -4796,7 +4795,7 @@ function select_booking_time(timings='',seat_available='',no_of_guests='')
 
 function showMerchantInfo(data)
 {	 
-	//dump(data);
+	dump(data);
 	// alert(data.enabled_table_booking);	 
 	if(data.enabled_table_booking==1)
 	{
@@ -5418,7 +5417,7 @@ function displayBookingHistory(data)
 
 function showOrderDetails(order_id)
 {
-  //  dump(order_id);
+    dump(order_id);
 	var options = {
       animation: 'slide',
       onTransitionEnd: function() {        	
@@ -5452,7 +5451,7 @@ function displayOrderHistoryDetails(data)
 	var htm='<ons-list-header class="center trn" data-trn-key="status_history">Status History</ons-list-header>';	
 	if ( data.history_data.length>0){		
 		$.each( data.history_data, function( key, val ) {   		
-		//	dump(val);
+			dump(val);
 			htm+='<ons-list-item>';
 	        htm+='<ons-row class="row">';
 	           htm+='<ons-col class="" width="40%">';
@@ -5585,7 +5584,7 @@ function displayAddressBook(data)
 
 function modifyAddressBook(id)
 {
-	//dump(id);	
+	dump(id);	
 	var options = {
       animation: 'slide',
       onTransitionEnd: function() {        	
@@ -5652,7 +5651,7 @@ function deleteAddressBook()
 	  primaryButtonIndex: 1,
 	  cancelable: true,
 	  callback: function(index) {
-	  //	dump(index);
+	  	dump(index);
 	    if ( index==0){
 	    	var id=$(".id").val();		
 	        var params="&client_token="+ getStorage("client_token")+"&id="+id;
@@ -5711,7 +5710,7 @@ function displayAddressBookPopup(data)
 
 function initFacebook()
 {	
- //  dump('initFacebook');  
+   dump('initFacebook');  
    if ( !empty(krms_config.facebookAppId)){   	   
    	   var facebook_flag = getStorage("facebook_flag");
    	   if (facebook_flag==2){
@@ -5769,7 +5768,7 @@ function getFbInfo()
 			fields:"email,first_name,last_name"
 		},
 		success: function(data) {			
-		//    dump(data);				    
+		    dump(data);				    
 		    var params="&email="+ data.email;
 	        params+="&first_name="+data.first_name;
 	        params+="&last_name="+data.last_name;
@@ -5858,7 +5857,7 @@ function showOrders2()
 
 function initMerchantMap(data)
 {		
-	//dump(data);	
+	dump(data);	
 	if ( !empty(data)){
 		var map = new GoogleMap();	
 	    map.initialize('merchant-map', data.lat, data.lng , 15);
@@ -6002,7 +6001,7 @@ function getCurrentLocationOld()
 
 function geolocationSuccess(position)
 {
-	//dump(position);
+	dump(position);
 	var params="lat="+position.coords.latitude;
 	params+="&lng="+position.coords.longitude;
 	callAjax("reverseGeoCoding",params);
@@ -6091,7 +6090,7 @@ function changeAddress()
 	    onError : function() {      
 	    },	    
 	    onSuccess : function() {     	      
-	      //  dump('change address');
+	        dump('change address');
 	        
 	        sNavigator.popPage({cancelIfRunning: true}); //back button
 	        
@@ -6110,7 +6109,7 @@ function changeAddress()
 
 function geoCompleteChangeAddress()
 {
-	//dump( "country_code_set=>" + getStorage("country_code_set"));
+	dump( "country_code_set=>" + getStorage("country_code_set"));
 	if ( empty(getStorage("country_code_set")) ){		
 		$("#new_s").geocomplete();		
 	} else {		
@@ -6196,7 +6195,7 @@ function getLanguageSettings()
 
 function translatePage()
 {
-//	dump("TranslatePage");			
+	dump("TranslatePage");			
 	//if (getStorage("translation")!="undefined"){
 	if (typeof getStorage("translation") === "undefined" || getStorage("translation")==null || getStorage("translation")=="" ) { 	   
 		return;		
@@ -6208,7 +6207,7 @@ function translatePage()
 		var default_lang=getStorage("default_lang");
 		//dump(default_lang);
 		if (default_lang!="undefined" && default_lang!=""){
-		//	dump("INIT TRANSLATE");
+			dump("INIT TRANSLATE");
 			translator = $('body').translate({lang: default_lang, t: dictionary});
 		} 
 	}		
@@ -6282,12 +6281,12 @@ function showLanguageList()
 function displayLanguageSelection(data)
 {
 	var selected = getStorage("default_lang");
-	//dump("selected=>"+selected);	
+	dump("selected=>"+selected);	
 	var htm='';
 	htm+='<ons-list>';
 	htm+='<ons-list-header class="list-header trn" data-trn-key="language">Language</ons-list-header>';
 	$.each( data, function( key, val ) {        		  		  
-		//dump(val.lang_id);
+		dump(val.lang_id);
 		ischecked='';
 		if ( val.lang_id==selected){
 			ischecked='checked="checked"';
@@ -6308,7 +6307,7 @@ function displayLanguageSelection(data)
 function setLanguage(lang_id)
 {	
 	//removeStorage("translation");
-//	dump( getStorage("translation") );
+	dump( getStorage("translation") );
 	if (typeof getStorage("translation") === "undefined" || getStorage("translation")==null || getStorage("translation")=="" ) { 	
 	   languageOptions.hide();   
        ons.notification.confirm({
@@ -6393,7 +6392,7 @@ function deviceBackReceipt()
 
 function prettyPrice( price )
 {
-	//dump(price);
+	dump(price);
 	
 	var decimal_place = getStorage("decimal_place");		
 	var currency_position= getStorage("currency_position");
@@ -6401,11 +6400,11 @@ function prettyPrice( price )
 	var thousand_separator = getStorage("thousand_separator");
 	var decimal_separator = getStorage("decimal_separator");	
 			
-//	dump("decimal_place=>"+decimal_place);	
-//	dump("currency_symbol=>"+currency_symbol);
-//	dump("thousand_separator=>"+thousand_separator);
-//	dump("decimal_separator=>"+decimal_separator);
-//	dump("currency_position=>"+currency_position);
+	dump("decimal_place=>"+decimal_place);	
+	dump("currency_symbol=>"+currency_symbol);
+	dump("thousand_separator=>"+thousand_separator);
+	dump("decimal_separator=>"+decimal_separator);
+	dump("currency_position=>"+currency_position);
 		
 	price = number_format(price,decimal_place, decimal_separator ,  thousand_separator ) ;
 	
@@ -6612,7 +6611,7 @@ function cpyPayNow()
 function stripePayNow()
 {
 	var stripe_publish_key = getStorage('stripe_publish_key');
-//	dump(stripe_publish_key);
+	dump(stripe_publish_key);
 	 $.validate({ 	
 	    form : '#frm-stp',    
 	    borderColorOnError:"#FF0000",
@@ -6642,9 +6641,9 @@ function stripePayNow()
 
 function stripeResponseHandler(status, response)
 {
-//	dump('stripe response');
-//	dump(status);
-//	dump(response);
+	dump('stripe response');
+	dump(status);
+	dump(response);
 	if (response.error) {
 		hideAllModal();
 	 	onsenAlert( response.error.message );
@@ -6667,8 +6666,8 @@ function autoAddToCart(item_id,price,discount)
 		return;
 	}
 	
-//	dump(item_id);
-//	dump(price);
+	dump(item_id);
+	dump(price);
     cart[cart.length]={		  
 	  "item_id":item_id,
 	  "qty":1,
@@ -6679,7 +6678,7 @@ function autoAddToCart(item_id,price,discount)
 	  'order_notes': '',
 	  'discount':discount
 	};
-//	dump(cart);
+	dump(cart);
 	
 	var cart_value={		  
 	  "item_id":item_id,
@@ -6719,7 +6718,7 @@ function validateCLient()
 
 function detailsPTS(pts_type)
 {
-//	dump(pts_type);
+	dump(pts_type);
 	var options = {
       animation: 'slide',
       onTransitionEnd: function() {
@@ -6836,19 +6835,19 @@ function imageLoaded(div_id)
 {	
 	$(div_id).imagesLoaded()
 	  .always( function( instance ) {
-	   // console.log('all images loaded');
+	    console.log('all images loaded');
 	  })
 	  .done( function( instance ) {
-	   // console.log('all images successfully loaded');
+	    console.log('all images successfully loaded');
 	  })
 	  .fail( function() {
-	  //  console.log('all images loaded, at least one is broken');
+	    console.log('all images loaded, at least one is broken');
 	  })
 	  .progress( function( instance, image ) {
 	    var result = image.isLoaded ? 'loaded' : 'broken';	    	   
 	    //image.img.parentNode.className = image.isLoaded ? '' : 'is-broken';
 		image.img.parentNode.className = image.isLoaded ? '' : '';
-	  //  console.log( 'image is ' + result + ' for ' + image.img.src );	    
+	    console.log( 'image is ' + result + ' for ' + image.img.src );	    
 	});
 }
 
@@ -6953,7 +6952,7 @@ function fillPopOverCategoryList(data)
 	   });	
 	}	
 	html+='</ons-list>';
-//	dump(html);		
+	dump(html);		
 	easy_category_list=html;
 }
 
@@ -7112,8 +7111,8 @@ function viewTaskMapInit()
 	merchant_latitude = getStorage("merchant_latitude");
 	merchant_longtitude = getStorage("merchant_longtitude");
 	
-//	dump(  merchant_latitude );
-//	dump( merchant_longtitude );	
+	dump(  merchant_latitude );
+	dump( merchant_longtitude );	
 	
 	google_lat = new plugin.google.maps.LatLng( merchant_latitude , merchant_longtitude );
 	//alert("Merchant"+google_lat);
@@ -7278,7 +7277,7 @@ function viewTaskDirection()
 function initIntelInputs()
 {
 	 var mobile_country_code=getStorage("mobile_country_code");
-//	 dump(mobile_country_code);
+	 dump(mobile_country_code);
 	 if(!empty(mobile_country_code)){
 	 	 $(".mobile_inputs").intlTelInput({      
 		    autoPlaceholder: false,		      
@@ -7407,7 +7406,7 @@ function checkGPS_AddressMap()
 	
 	if ( $(".search_address_geo").exists() ){
 		
-//		dump('checkGPS_AddressMap');
+		dump('checkGPS_AddressMap');
 		$('.map_search_field_wrap').css('height',"auto");
 		
 		$( document ).on( "click", "#search_address_geo", function() {    	     	    
@@ -7423,7 +7422,7 @@ function checkGPS_AddressMap()
 		   country: country_code_set
 	    }).bind("geocode:result", function(event, result){	    	    		    	    		        
 	    	
-//	    	 dump(result);    
+	    	 dump(result);    
 	    	 
 	    	 $('.map_search_field_wrap').css('height',"auto");
 	    	 
@@ -7449,11 +7448,11 @@ function checkGPS_AddressMap()
 	            }
 	        });
 	        
-//	        dump("formatted_address=>"+formatted_address);
-//	        dump("address=>"+address);
-//	        dump("city=>"+city);
-//	        dump("state=>"+state);
-//	        dump("zip=>"+zip);
+	        dump("formatted_address=>"+formatted_address);
+	        dump("address=>"+address);
+	        dump("city=>"+city);
+	        dump("state=>"+state);
+	        dump("zip=>"+zip);
 	    	 
 	         s_lat = result.geometry.location.lat();
 	         s_lng = result.geometry.location.lng();
@@ -7473,7 +7472,7 @@ function checkGPS_AddressMap()
 	         }
              
 	         var map_address_action=getStorage("map_address_action");
-//	         dump(map_address_action);
+	         dump(map_address_action);
 	         	         
 	         setStorage("map_address_result_address", address );
 			 setStorage("map_address_result_city", city );
@@ -7646,7 +7645,7 @@ function useThisLocation()
 	
 	var map_address_action=getStorage("map_address_action");
 	//alert(map_address_action);
-//	dump(map_address_action);
+	dump(map_address_action);
 	
 	switch (map_address_action){
 		case "mapaddress":
@@ -7704,7 +7703,7 @@ function showChangeAddressPage(object)
 
 function showOrderOptions(order_id)
 {
-//	dump(order_id);
+	dump(order_id);
 	var options = {
       animation: 'none',
       onTransitionEnd: function() {     
@@ -7716,7 +7715,7 @@ function showOrderOptions(order_id)
 
 function showHistoryDetails(booking_id)
 {
-//	dump(booking_id);
+	dump(booking_id);
 	var options = {
       animation: 'none',
       onTransitionEnd: function() {   
@@ -7895,7 +7894,7 @@ function submitContactForm()
 function playNotification()
 {	 
 	 var sound_url= "file:///android_asset/www/audio/fb-alert.mp3";
-//	 dump(sound_url);
+	 dump(sound_url);
 	 if(!empty(sound_url)){
         playAudio(sound_url);
 	 }
@@ -7908,13 +7907,13 @@ function playAudio(url) {
     my_media = new Media(url,
         // success callback
         function () {
-        //    dump("playAudio():Audio Success");
+            dump("playAudio():Audio Success");
             my_media.stop();
             my_media.release();
         },
         // error callback
         function (err) {
-        //    dump("playAudio():Audio Error: " + err);
+            dump("playAudio():Audio Error: " + err);
         }
     );
     // Play audio
@@ -7939,12 +7938,12 @@ function saveCartToDb()
 function runTrackOrder()
 {
 	if ($('#page-track-order').is(':visible')) {	
-	 //  dump("runTrackOrder");
+	   dump("runTrackOrder");
 	   var params='order_id=' + $(".order_option_order_id").val();
        params+="&client_token="+getStorage("client_token");
        callAjax("trackOrderHistory",params);	       	 
 	} else {
-	//	dump("stop runTrackOrder");
+		dump("stop runTrackOrder");
 		stopTrackInterval();
 	}
 }
@@ -7972,21 +7971,21 @@ function stopTrackMapInterval() {
 function runTrackMap()
 {	
 	if ($('#tracking-page').is(':visible')) {	
-	 //  dump("runTrackMap");
+	   dump("runTrackMap");
 	   stopTrackMapInterval();
 	   var params='order_id=' + $(".order_option_order_id").val();
        params+="&client_token="+getStorage("client_token");
        callAjax("trackOrderMap",params);	       	 
 	} else {
-	//	dump("stop runTrackMap");
+		dump("stop runTrackMap");
 		stopTrackMapInterval();
 	}
 }
 
 function reInitTrackMap(data)
 {
-//	dump('reInitTrackMap');
-//	dump(data);
+	dump('reInitTrackMap');
+	dump(data);
     var driver_lat = data.driver_lat;
 	var driver_lng = data.driver_lng;
 	
@@ -7994,8 +7993,8 @@ function reInitTrackMap(data)
 	var task_lng = data.task_lng;
 	
 	if(isDebug()){
-		//dump("driver location=>" + driver_lat + ":"+ driver_lng);
-		//dump("task location=>" + task_lat + ":"+ task_lng);
+		dump("driver location=>" + driver_lat + ":"+ driver_lng);
+		dump("task location=>" + task_lat + ":"+ task_lng);
 		return;
 	}
 	
@@ -8139,7 +8138,7 @@ function setCC(cc_id)
 	  primaryButtonIndex: 1,
 	  cancelable: true,
 	  callback: function(index) {
-	  	//  dump(index);
+	  	  dump(index);
 	      switch (index)
 	      {
 	      	 case 0:
