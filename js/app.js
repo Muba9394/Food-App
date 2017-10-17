@@ -2043,7 +2043,7 @@ function displayRestaurantResults(data , target_id , display_type )
 		    	            	{ 
 									var btn_txt = 'Book a Table';
 									if($("#search-text").text() == "Take Away")  btn_txt = 'Take Away';
-									htm+='<div class="booking-btn" onclick="popUpTableBooking(('+val.merchant_id+','+rest_logo+','+rest_name+')" > '+btn_txt+' </div>';   			
+									htm+='<div class="booking-btn" onclick="popUpTableBooking('+val.merchant_id+','+rest_logo+','+rest_name+')" > '+btn_txt+' </div>';   			
 						   		}
 					    	}
 	    	           
