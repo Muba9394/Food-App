@@ -4806,7 +4806,7 @@ function showMerchantInfo(data)
 	{		 
 		// alert("else");
 		$('#book-table').show();	
-		$("#page-merchantinfo #info-book").attr('onclick','table_booking_optn('+getStorage('merchant_id')+',\''+getStorage('merc_logo')+'\',\''+getStorage('merc_name')+'\',"hide");');
+		$("#page-merchantinfo #info-book").attr('onclick','table_booking_optn('+getStorage('merchant_id','hide')+');');
 	}
 	$("#page-merchantinfo h3").html(data.merchant_info.restaurant_name);
 	$("#page-merchantinfo h5").html(data.merchant_info.cuisine);
@@ -6997,7 +6997,6 @@ function showMenu(element)
 
 function loadPageMerchantInfo()
 {
-	
 	var options = {
       animation: 'none',
       onTransitionEnd: function() { 	 	      	  
