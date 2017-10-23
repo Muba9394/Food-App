@@ -103,7 +103,7 @@ jQuery.fn.exists = function(){return this.length>0;}
 
 function dump(data)
 {
-	console.debug(data);
+	//console.debug(data);
 }
 
 function setStorage(key,value)
@@ -138,7 +138,7 @@ $( document ).on( "keyup", ".numeric_only", function() {
 
 //ons.bootstrap();  
 ons.ready(function() {
-	dump('ready');
+	//dump('ready');
 	
 	
 	//navigator.splashscreen.hide()	
@@ -151,7 +151,7 @@ ons.ready(function() {
 	}
 				
 	//getLanguageSettings();
-	setTimeout('getLanguageSettings()', 1100);
+	//setTimeout('getLanguageSettings()', 1100);
 	
 	$( document ).on( "click", "#s", function() {    	     	    	   
 	   $("#s").val('');
@@ -2508,7 +2508,7 @@ function menuCategoryResult(data)
 	}	*/
 	 	
 	$('#merchant_open_close_timing').val(data.selected_date);
-
+	
 	$("#menucategory-page .restauran-title").text(data.restaurant_name);
 	$("#menucategory-page .rating-stars").attr("data-score",data.ratings.ratings);
 	initRating();
@@ -2516,6 +2516,8 @@ function menuCategoryResult(data)
 	if(data.enabled_table_booking==2)
 	{
 		$("#menucategory-page .tbl-book").html('<button id="tbl-booking" class="white-btn" onclick="table_booking_optn('+data.merchant_id+',\''+data.logo+'\',\''+data.restaurant_name+'\')" > Book a Table </button>');
+		setStorage('merc_logo',data.logo);
+		setStorage('res_name',data.restaurant_name);
 	}	
 	if ( data.open){
 		$("#merchant_open").val(2);
@@ -4536,7 +4538,7 @@ function placeOrder()
 /*sliding menu*/
 ons.ready(function() {
   menu.on('preopen', function() {
-       console.log("Menu page is going to open");
+      // console.log("Menu page is going to open");
        
        if (isLogin()){
        	   dump('logon ok');
@@ -4805,6 +4807,7 @@ function showMerchantInfo(data)
 	{		 
 		// alert("else");
 		$('#book-table').show();	
+		$("#book-table #info-book").attr('onclick','table_booking_optn('+getStorage('merchant_id')+',\''+getStorage('merc_logo')+'\',\''+getStorage('res_name')+'\');');
 	}
 	$("#page-merchantinfo h3").html(data.merchant_info.restaurant_name);
 	$("#page-merchantinfo h5").html(data.merchant_info.cuisine);
@@ -4883,8 +4886,12 @@ function loadBookingForm()
     sNavigator.pushPage("booking.html", options);		 
 }
 
-function table_booking_optn(merchant_id,logo,restaurant_name)
+function table_booking_optn(merchant_id,logo,restaurant_name,hide)
 {	    	
+	if(hide)
+	{
+		$("#merchnt-pop-menu").hide();
+	}
 	var options = {
       animation: 'slide',
       onTransitionEnd: function() { 	
@@ -6774,19 +6781,19 @@ function imageLoaded(div_id)
 {	
 	$(div_id).imagesLoaded()
 	  .always( function( instance ) {
-	    console.log('all images loaded');
+	   // console.log('all images loaded');
 	  })
 	  .done( function( instance ) {
-	    console.log('all images successfully loaded');
+	 //   console.log('all images successfully loaded');
 	  })
 	  .fail( function() {
-	    console.log('all images loaded, at least one is broken');
+	  //  console.log('all images loaded, at least one is broken');
 	  })
 	  .progress( function( instance, image ) {
 	    var result = image.isLoaded ? 'loaded' : 'broken';	    	   
 	    //image.img.parentNode.className = image.isLoaded ? '' : 'is-broken';
 		image.img.parentNode.className = image.isLoaded ? '' : '';
-	    console.log( 'image is ' + result + ' for ' + image.img.src );	    
+	 //   console.log( 'image is ' + result + ' for ' + image.img.src );	    
 	});
 }
 
@@ -6912,6 +6919,8 @@ function showMenu(element)
 		   enabled_table_booking = getStorage('enabled_table_booking');	    
 		    if(enabled_table_booking==2){
 		    	$(".book_table_menu").show();
+				$("#merchnt-pop-menu #bookid-mer").attr('onclick','table_booking_optn('+getStorage('merchant_id')+',\''+getStorage('merc_logo')+'\',\''+getStorage('res_name')+'\',\'hide\');');
+				
 		    } else $(".book_table_menu").hide();
 		    
 		    translatePage();
@@ -6924,6 +6933,7 @@ function showMenu(element)
 			enabled_table_booking = getStorage('enabled_table_booking');	    
 		    if(enabled_table_booking==2){
 		    	$(".book_table_menu").show();
+				$("#merchnt-pop-menu #bookid-mer").attr('onclick','table_booking_optn('+getStorage('merchant_id')+',\''+getStorage('merc_logo')+'\',\''+getStorage('res_name')+'\',\'hide\');');
 		    } else $(".book_table_menu").hide();
 		});				
 		
