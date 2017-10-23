@@ -151,7 +151,7 @@ ons.ready(function() {
 	}
 				
 	//getLanguageSettings();
-	//setTimeout('getLanguageSettings()', 1100);
+	setTimeout('getLanguageSettings()', 1100);
 	
 	$( document ).on( "click", "#s", function() {    	     	    	   
 	   $("#s").val('');
@@ -713,7 +713,7 @@ function callAjax(action,params)
 				   translatePage();
 				   break;
 			    case "getLanguageSettings":			    
-			       loaderLang.show();
+			      // loaderLang.show();
 			       break;
 				default:
 				   loader.show();
