@@ -13,9 +13,9 @@ var app_paypal = {
   configuration: function() {
     // for more options see `paypal-mobile-js-helper.js`
     var config = new PayPalConfiguration({
-      merchantName: "Food App",
+      merchantName: "Cuisine.JE",
       merchantPrivacyPolicyURL: "http://www.cuisine.je/",
-      merchantUserAgreementURL: "http://www.cuisine.je/"
+      merchantUserAgreementURL: "https://www.cuisine.je/store/page/terms-amp-conditions"
     });
     return config;
   },
