@@ -118,7 +118,7 @@
     </ons-list-item>
 
 	<ons-list-item onclick="showHistory();" class="bottom-menu-item">
-      <ons-icon icon="ion-ios-help"></ons-icon>
+      <ons-icon icon="ion-ios-clock"></ons-icon>
       <span class="trn" data-trn-key="history">Booking History</span>
     </ons-list-item>
 
@@ -127,10 +127,10 @@
       <span class="trn" data-trn-key="address_book">Address Book</span>
     </ons-list-item>
 
-    <ons-list-item onclick="menu.setMainPage('pts.html', {closeMenu: true})" class="menu-pts bottom-menu-item">
-      <ons-icon icon="ion-connection-bars"></ons-icon>
-      <span class="trn" data-trn-key="my_points">My Points</span>
-    </ons-list-item>
+    <ons-list-item onclick="showHistory();" class="bottom-menu-item">
+        <ons-icon icon="ion-ios-information"></ons-icon>
+        <span class="trn" data-trn-key="history">Terms & Conditions</span>
+      </ons-list-item>
 
     <ons-list-item onclick="menu.setMainPage('settings.html', {closeMenu: true})" class="bottom-menu-item">
       <ons-icon icon="ion-gear-a"></ons-icon>
@@ -564,7 +564,7 @@
         <ons-col class="text-right">
 			<div class="wrapper mer-detail">
            <p class="restauran-title concat-text white trn" data-trn-key="total">Total</p>
-           <p class="text-big white total-amount"></p>
+           <p class="text-big  total-amount"></p>
 			</div>
         </ons-col>
       </ons-row>
@@ -1314,7 +1314,7 @@
 
 
 
-  <!--<script type="text/ons-template" id="booking.html">
+  <script type="text/ons-template" id="booking.html">
 <ons-page id="page-booking" class="onsen-display">
    <ons-toolbar>
      <div class="left"><ons-back-button></ons-back-button></div>
@@ -1337,7 +1337,7 @@
       </ons-row>
    </div>
 
-   <!--<form id="frm-booking1" class="frm-booking1" method="post" style="display:none">
+  <!-- <form id="frm-booking1" class="frm-booking1" method="post" style="display:none">
    <div class="field-wrapper">
        <input type="number" name="number_guest"  class="validation number_guest numeric_only text-input text-input--underbar has_validation"
         placeholder="Number Of Guests" value="" data-validation="number"  data-validation-allowing="range[1;1000]" data-validation-error-msg="The input value was not a correct number" >
@@ -1378,7 +1378,7 @@
   </div>
 
    </form>-->
-  <!--<form id="frm-booking" class="frm-booking" method="post" >
+  <form id="frm-booking" class="frm-booking" method="post" >
    <div class="wrapper">
 
    <div id="top_end_table_booking">
@@ -1387,7 +1387,7 @@
         <!-- <input type="number" name="number_guest"  class="validation number_guest numeric_only text-input text-input--underbar has_validation"
         placeholder="Number Of Guests" value="" data-validation="number"  data-validation-allowing="range[1;1000]" data-validation-error-msg="The input value was not a correct number" > -->
 
-  <!--     <select class="form-control text-input text-input--underbar has_validation" name="no_of_guests" id="no_of_guests">
+     <select class="form-control text-input text-input--underbar has_validation" name="no_of_guests" id="no_of_guests">
                           <option value="" disabled selected>Number of Guests</option>
 						  <option value="1">1 Person </option>
                           <option value="2">2 Person </option>
@@ -1480,7 +1480,7 @@
    </form>
 </ons-page>
 </script>
--->
+
   <script type="text/ons-template" id="bookingTY.html">
 <ons-page id="page-booking-ty" class="onsen-display">
    <ons-toolbar>
@@ -1658,7 +1658,7 @@
 
    <ons-scroller  infinit-scroll-enable="true"  can-load="true" on-scrolled="onsenAlert('ok')" threshold="2">
     <ons-list class="restaurant-list" id="restaurant-result" >
-    </ons-list>    
+    </ons-list>
    </ons-scroller>
 
 </ons-page>
@@ -2006,6 +2006,30 @@
 </ons-page>
 </ons-navigator>
 </script>
+
+
+<script type="text/ons-template" id="terms.html">
+<ons-navigator title="Navigator" var="sNavigator">
+<ons-page id="page-terms" on-device-backbutton="backtoHome()" >
+ <ons-toolbar>
+
+  <div class="left">
+   <ons-toolbar-button onclick="setHome();">
+      <ons-icon icon="fa-chevron-left"></ons-icon>
+   </ons-toolbar-button>
+  </div>
+
+  <div class="center white"><span id="search-text" class="trn" data-trn-key="your_recent_order">Terms and Conditions</span></div>
+ </ons-toolbar>
+
+ <ons-scroller id="recent-terms">
+ </ons-scroller>
+
+</ons-page>
+</ons-navigator>
+</script>
+
+
 
 
   <script type="text/ons-template" id="history.html">

@@ -449,6 +449,13 @@ document.addEventListener("pageinit", function(e) {
 		  translatePage();
 		  break;
 
+			case "page-terms":
+			  callAjax('getTerms',
+			  "client_token="+getStorage("client_token")+"&client_id="+getStorage("client_id")
+			  );
+			  translatePage();
+			  break;
+
 		case "page-addressbook":
 		  callAjax('getAddressBook',
 		  "client_token="+getStorage("client_token")
@@ -1367,6 +1374,10 @@ function callAjax(action,params)
 				  displayBookingHistory(data.details);
 				  break;
 
+					case "getTerms":
+					  displayTerms(data.details);
+					  break;
+
 				case "ordersDetails":
 				  displayOrderHistoryDetails(data.details);
 				  break;
@@ -1997,17 +2008,21 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
 					   		setStorage("merchant_is_open",val.is_open);
 					   }
 
-	    	           htm+='<div class="rating-stars" data-score="'+val.ratings.ratings+'"></div>';
+	    	           htm+='<div class="rating-stars" data-score="'+val.ratings.ratings+'"></div><br>';
 
-	    	               	        //  dump(val.service);
+	    	               	          dump(val.service);
 
-    	          if(!empty(val.service)){
+					if (empty(val.services)) {
+
+					}
+    	          else if(!empty(val.service)){
 					htm+='<ul>';
     	          	  $.each( val.services, function( key_service, val_services ) {
     	           	   	  htm+='<li>'+val_services+' <i class="green-color ion-android-checkmark-circle"></i></li>';
     	           	   });
 					htm+='</ul>';
     	          }
+
 
     	          htm+='<p class="cod">'+val.payment_options.cod+'</p>';
 	    	           if(!empty(val.distance)){
@@ -2683,27 +2698,6 @@ function menuCategoryResult(data)
     createElement('menu-list',html);
 
     imageLoaded('.img_loaded');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 function loadmenu(cat_id,mtid)
@@ -5347,6 +5341,12 @@ function showHistory()
 	}
 }
 
+function showHistory()
+{
+		menu.setMainPage('terms.html', {closeMenu: true});
+
+}
+
 function showAddressBook()
 {
   if (isLogin()){
@@ -5395,6 +5395,41 @@ function displayBookingHistory(data)
 	});
 	htm+='</ons-list>';
 	createElement('recent-history',htm);
+}
+
+
+//for terms and conditions
+function displayTerms(data)
+{
+	var htm='<ons-list>';
+
+			 //htm+='<ons-list-item modifier="tappable" class="list-item-container" onclick="showOrderDetails('+val.order_id+');" >';
+			 htm+='<ons-list-item modifier="tappable" class="list-item-container"  >';
+					 htm+='<ons-row class="row">';
+							htm+='<ons-col class="col-orders concat-text">';
+								htm+="Updated soon";
+							htm+='</ons-col>';
+							htm+='<ons-col class="col-order-stats center" width="98px">';
+							htm+='</ons-col>';
+					 htm+='</ons-row>';
+				 htm+='</ons-list-item>';
+	htm+='</ons-list>';
+	/*var htm='<ons-list>';
+	$.each( data, function( key, val ) {
+	     //htm+='<ons-list-item modifier="tappable" class="list-item-container" onclick="showOrderDetails('+val.order_id+');" >';
+	     htm+='<ons-list-item modifier="tappable" class="list-item-container" onclick="showHistoryDetails('+val.booking_id+');" >';
+           htm+='<ons-row class="row">';
+              htm+='<ons-col class="col-orders concat-text">';
+                htm+='#'+val.booking_id+'  '+ val.booking_name+'  '+val.date_booking;
+              htm+='</ons-col>';
+              htm+='<ons-col class="col-order-stats center" width="98px">';
+                 htm+='<span class="notification concat-text '+val.status+' ">'+val.status+'</span>';
+              htm+='</ons-col>';
+           htm+='</ons-row>';
+         htm+='</ons-list-item>';
+	});
+	htm+='</ons-list>';*/
+	createElement('recent-terms',htm);
 }
 
 
