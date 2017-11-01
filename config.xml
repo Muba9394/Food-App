@@ -2,11 +2,11 @@
 <widget xmlns = "http://www.w3.org/ns/widgets"
     xmlns:gap = "http://phonegap.com/ns/1.0"
     xmlns:android = "http://schemas.android.com/apk/res/android"
-    id        = "com.cuisine.cuisineje"
-    version   = "1.2">
+    id        = "je.cuisine.je"
+    version   = "1.0">
     <name>Cuisine.je</name>
     <description>
-        Order food online in JERSEY
+        Online Table Booking and food ordering service in JERSEY,UK
     </description>
     <author email="worldcuisine.je@gmail.com" href="http://www.cuisine.je/">
         ESH Solutions Limited
@@ -14,7 +14,7 @@
     <icon src="icon.png" />           
     <content src="index.html" />
 
-    <preference name="loadUrlTimeoutValue" value="700000" />                
+    <preference name="loadUrlTimeoutValue" value="70000" />                
 	<preference name="orientation" value="portrait" />
 	<preference name="android-build-tool" value="gradle" />
 	<preference name="permissions" value="none"/>	
@@ -31,6 +31,7 @@
 
 	<!--<gap:plugin name="cordova-plugin-fastrde-checkgps" source="npm" spec="1.0.0"  />-->
 	<gap:plugin spec="https://github.com/rodrigo-martinezd/cordova-dialog-gps.git" source="git" />
+	<gap:plugin spec="https://github.com/Muba9394/cordova-plugin-dreams-inappbrowser.git" source="git" />
 	
 	<gap:plugin spec="https://github.com/razorpay/razorpay-cordova.git" source="git" />
 	<gap:plugin name="cordova-plugin-media" source="npm" spec="3.0.0" />	

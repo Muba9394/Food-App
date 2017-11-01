@@ -15,6 +15,8 @@ var track_order_map_interval;
 var drag_marker_bounce=1;
 var start="0";
 var limit="5";
+var menustart="0";
+var menulimit="10";
 document.addEventListener("deviceready", onDeviceReady,  false);
 
 
@@ -105,7 +107,7 @@ jQuery.fn.exists = function(){return this.length>0;}
 
 function dump(data)
 {
-	console.debug(data);
+	console.log(data);
 }
 
 function setStorage(key,value)
@@ -373,6 +375,11 @@ document.addEventListener("pageinit", function(e) {
 		case "searchresult-page":
 		$("#search-text").html('Take Away');
 		callAjax("search_take_away","&start="+start+"&limit="+limit+"&type=1&address="+ getStorage("search_address")+"&cuisine="+getStorage("cuisine")+"&parish="+getStorage("parish"));
+		break;
+
+		case "page-searchmap":
+		$("#mapsearch-text").html('Browse on our map');
+		callAjax("search_take_away_on_map","&start=0&limit=40&type=1&address=null&cuisine=&parish=");
 		break;
 
 		case "page-home":
@@ -749,7 +756,6 @@ function callAjax(action,params)
 				displayRestaurantResults(data.details.data ,'restaurant-results',1);
 				//$(".result-msg").text(data.details.total+" Restaurant found");
 				$(".result-msg").text(data.details.total+" "+getTrans("Restaurant found",'restaurant_found') );
-
 				break;
 
 				case "search_take_away":
@@ -757,7 +763,9 @@ function callAjax(action,params)
 					$(".result-msg").text(data.details.total+" "+getTrans("Restaurant found",'restaurant_found') );
 				break;
 
-
+				case "search_take_away_on_map":
+				displayRestaurantResultsOnMap(data.details.data);
+				break;
 
 				case "LoadAddOns":
 				append_addons(data);
@@ -1083,6 +1091,7 @@ function callAjax(action,params)
 						      	  $(".total_w_tax").val( data.details.payment_details.total_w_tax );
 						      }
 						  };
+
 						  sNavigator.pushPage("cpyPaymentForm.html", options);
 
 				  	   break;
@@ -1171,7 +1180,6 @@ function callAjax(action,params)
 				case "paypalSuccessfullPayment":
 				case "PayAtz":
 				case "Paycpy":
-
 				case "PayStp":
 				case "razorPaymentSuccessfull":
 
@@ -1631,7 +1639,7 @@ function callAjax(action,params)
 			       setStorage("google_lat",data.details.lat);
 			       setStorage("google_lng",data.details.lng);
 
-			        map_search.addMarker({
+			        map.addMarker({
 					  'position': your_location ,
 					  'title': marker_title,
 					  'snippet': getTrans( "Press on marker 2 seconds to drag" ,'press_marker'),
@@ -1924,6 +1932,7 @@ function setHome()
 	start="0";
 	limit="5";
 	came="0";
+
 	var options = {
 	  	  closeMenu:true,
 	      animation: 'slide',
@@ -1932,7 +1941,10 @@ function setHome()
 	 menu.setMainPage('select_dining.html',options);
 }
 
-
+function backclear()
+{
+	menustart="0";
+}
 function setSubHome()
 {
 	//Check if the currency symbol and all other data like decimal, left alignment of Pound symbol are set or not.
@@ -1969,8 +1981,11 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
     	 //dump(val);
     	 var rest_logo = '';
     	 rest_logo = "'"+val.logo+"'";
-		 	 var rest_name = '';
+		 	 var rest_name = "";
     	 rest_name = "'"+val.restaurant_name+"'";
+
+
+
     	 htm+='<ons-list-item modifier="tappable" class="list-item-container product list list__item ons-list-item-inner list__item--tappable">';
     	 htm+='<ons-row class="row product-list ons-row-inner">';
     	     htm+='<ons-col class="col-image border col ons-col-inner">';
@@ -1992,6 +2007,7 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
 
     	     htm+='<ons-col class="col-description product-desc border col ons-col-inner">';
     	           htm+='<div>';
+
     	           	   if(display_type==2)
     	           	   {
     	           	   		htm+='<p class="restauran-title concat-text" onclick="loadRestaurantCategory('+val.merchant_id+','+rest_logo+','+rest_name+')" >'+val.restaurant_name+'</p>';
@@ -2044,17 +2060,21 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
 
 	    	           	   });
 	    	           }
+									 //rest_name="'"+val.restaurant_name+"'";
+									// console.log(rest_name);
+									// var rest_names= rest_name.replace("'", '');
+
 
 	    	           		if(display_type==3||display_type==1)
 	    	           		{
-	    	    				htm+='<div class="booking-btn" data="book" onclick="loadRestaurantCategory('+val.merchant_id+','+rest_logo+','+rest_name+')" > View Menu </div>';
+	    	    						htm+='<div class="booking-btn" data="book" onclick="loadRestaurantCategory('+val.merchant_id+')" > View Menu </div>';
 	    	           		}
 	    	           		else
 	    	           		{
 
 		    	            	if(val.table_booking_option=='yes')
 		    	            	{
-		    	            		htm+='<div class="booking-btn" data="menu" onclick="loadRestaurantCategory('+val.merchant_id+','+rest_logo+','+rest_name+')" > View Menu </div>';
+		    	            		htm+='<div class="booking-btn" data="menu" onclick="loadRestaurantCategory('+val.merchant_id+')" > View Menu </div>';
 						   		}
 						   		else
 		    	            	{
@@ -2137,6 +2157,7 @@ function loadRestaurantCategory(mtid)
     var n = weekday[d.getDay()];
 	var current_day = n.substring(0, 3);
 	var current_day = current_day.toLowerCase();
+	setStorage("c_day",current_day);
 	$('#mob_current_timing').val(current_day);
   cart = [] ; /*clear cart variable*/
   removeStorage("tips_percentage");
@@ -2146,7 +2167,7 @@ function loadRestaurantCategory(mtid)
   var options = {
       animation: 'slide',
       onTransitionEnd: function() {
-      	  callAjax("MenuCategory","merchant_id="+mtid + "&device_id=" + getStorage("device_id")+"&current_day="+current_day  );
+      	  callAjax("MenuCategory","start="+menustart+"&end="+menulimit+"&merchant_id="+mtid + "&device_id=" + getStorage("device_id")+"&current_day="+current_day  );
       }
    };
    setStorage("merchant_id",mtid);
@@ -2309,7 +2330,7 @@ function cuisineResult(data)
 ons.bootstrap();
 
 
-
+var menucame=0;
 function menuCategoryResult(data)
 {
 	//$("#page-booking #frm-booking .hidden_merchant_id").val(data.merchant_id);
@@ -2538,167 +2559,284 @@ function menuCategoryResult(data)
 	} else {
 		onsenAlert(  getTrans("This restaurant has not published their menu yet.",'this_restaurant_no_menu') );
 	}	*/
-
+	var menutotal=data.category_item_count;
 	$('#merchant_open_close_timing').val(data.selected_date);
 	$("#menucategory-page .restauran-title").text(data.restaurant_name);
-	$("#menucategory-page .rating-stars").attr("data-score",data.ratings.ratings);
+	$("#menucategory-page .rating-stars").attr("data-score", data.ratings.ratings);
 	initRating();
-	$("#menucategory-page .logo-wrap").html('<img src="'+data.logo+'" />');
-	if(data.enabled_table_booking==2)
-	{
-		$("#menucategory-page .tbl-book").html('<button id="tbl-booking" class="white-btn" onclick="table_booking_optn('+data.merchant_id+',\''+data.logo+'\',\''+data.restaurant_name+'\')" > Book a Table </button>');
-		setStorage('merc_logo',data.logo);
-		setStorage('res_name',data.restaurant_name);
+	$("#menucategory-page .logo-wrap").html('<img src="' + data.logo + '" />');
+	if (data.enabled_table_booking == 2) {
+	    $("#menucategory-page .tbl-book").html('<button id="tbl-booking" class="white-btn" onclick="table_booking_optn(' + data.merchant_id + ',\'' + data.logo + '\',\'' + data.restaurant_name + '\')" > Book a Table </button>');
+	    setStorage('merc_logo', data.logo);
+	    setStorage('res_name', data.restaurant_name);
 	}
-	if ( data.open){
-		$("#merchant_open").val(2);
+	if (data.open) {
+	    $("#merchant_open").val(2);
 	} else $("#merchant_open").val(1);
 
-	if (data.merchant_close_store){
-		$("#close_store").val(2);
+	if (data.merchant_close_store) {
+	    $("#close_store").val(2);
 	} else $("#close_store").val(1);
-	if(!data.menu_category)
-	 {
-    	onsenAlert(getTrans("Error: Restaurant has no menu",'Restaurant has no menu')  );
-    	return;
-     }
+	if (!data.menu_category) {
+	    onsenAlert(getTrans("Error: Restaurant has no menu", 'Restaurant has no menu'));
+	    return;
+	}
 
-	 	var htm='';
-		// htm+='<ons-list class="cate-list"> <ons-carousel swipeable style="margin-top: 5px; height: 70px;" overscrollable auto-scroll item-width="auto"> ';
-		var all_cat_id = [];
-		var count = 1 ;
-		/*	$.each( data.menu_category, function( key, val ) {
-		    a.push(count);
-		    count += parseInt(1);
-		});
-		var s = a.join(', ');
-		alert(s.toSource); */
-		htm += '<ons-list><div class="swiper-container"><div class="swiper-wrapper">';
-		$.each( data.menu_category, function( key, val ) {
-			  all_cat_id.push(val.cat_id);
-			var active_class = '';
+	var htm = '';
+	// htm+='<ons-list class="cate-list"> <ons-carousel swipeable style="margin-top: 5px; height: 70px;" overscrollable auto-scroll item-width="auto"> ';
+	var all_cat_id = [];
+	var count = 1;
+	/*	$.each( data.menu_category, function( key, val ) {
+	    a.push(count);
+	    count += parseInt(1);
+	});
+	var s = a.join(', ');
+	alert(s.toSource); */
+	htm += '<ons-list><div class="swiper-container"><div class="swiper-wrapper">';
+	$.each(data.menu_category, function(key, val) {
+	    all_cat_id.push(val.cat_id);
+	    var active_class = '';
 
-           //  htm+='<ons-list-item modifier="tappable" class="row" onclick="loadmenu('+val.cat_id+','+val.merchant_id+');">'+val.category_name+'</ons-list-item>';
-        //   htm+='<ons-list-item modifier="tappable" class="row" onclick="scroll_list('+val.cat_id+');">'+val.category_name+'</ons-list-item>';
-       	// alert(val.category_name);
-        // htm += '<ons-carousel-item ng-repeat="i in ['+count+']"><a href="javascript:;" class="menu-type" onclick="scroll_list('+val.cat_id+');" >'+val.category_name+'</a></ons-carousel-item>';
-        if(count==1) { active_class = 'active';   }
-        htm += '<div class="swiper-slide '+active_class+'"  ><a href="javascript:;" data-scroll="scroll_div_'+val.cat_id+'" onclick="scroll_list('+val.cat_id+',this)"  > '+val.category_name+'</a></div>';
-        count = parseInt(count)+1;
-		});
-		// htm+='</ons-carousel></ons-list>';
-		htm += '</div></div><div class="swiper-pagination"></div></ons-list>';
-			/*
-					alert(htm);
-					return; */
+	    //  htm+='<ons-list-item modifier="tappable" class="row" onclick="loadmenu('+val.cat_id+','+val.merchant_id+');">'+val.category_name+'</ons-list-item>';
+	    //   htm+='<ons-list-item modifier="tappable" class="row" onclick="scroll_list('+val.cat_id+');">'+val.category_name+'</ons-list-item>';
+	    // alert(val.category_name);
+	    // htm += '<ons-carousel-item ng-repeat="i in ['+count+']"><a href="javascript:;" class="menu-type" onclick="scroll_list('+val.cat_id+');" >'+val.category_name+'</a></ons-carousel-item>';
+	    if (count == 1) {
+	        active_class = 'active';
+	    }
+	    htm += '<div class="swiper-slide ' + active_class + '"  ><a href="javascript:;" data-scroll="scroll_div_' + val.cat_id + '" onclick="scroll_list(' + val.cat_id + ',this)"  > ' + val.category_name + '</a></div>';
+	    count = parseInt(count) + 1;
+	});
+	// htm+='</ons-carousel></ons-list>';
+	htm += '</div></div><div class="swiper-pagination"></div></ons-list>';
+	/*
+			alert(htm);
+			return; */
 
-			createElement('category-list',htm);
+	createElement('category-list', htm);
+
+	var swiper = new Swiper('.swiper-container', {
+	    pagination: '.swiper-pagination',
+	    slidesPerView: 'auto',
+	    paginationClickable: true,
+	    spaceBetween: 15
+	})
+
+	var html = '';
+	var all_cat = [];
+	var count = 0;
+	var display_count = 1;
+	//var ending_div = '';
+	if (menustart == 0) {
+	    html += '<ons-list class="restaurant-list ng-scope list ons-list-inner">';
+	    $.each(data.item, function(key, val) {
+	        var display_style = 'style = "display:none;"';
+	        if ($.inArray(val.category_id, all_cat) !== -1) {} else {
+	            all_cat.push(val.category_id);
+	            if (count > 0) {
+	                html += "</div>";
+	            }
+	            if (display_count == 1) {
+	                display_style = 'style = "display:block;"';
+	            }
+
+	            //html += '<div id = "scroll_div_'+val.category_id+'"  '+display_style+'   data-anchor="scroll_div_'+val.category_id+'" class="scrolling-div" >  <div class="category-heading" >'+ val.category_name +'</div>';
+
+	            html += '<div id = "scroll_div_' + val.category_id + '"  ' + display_style + '   data-anchor="scroll_div_' + val.category_id + '" class="scrolling-div" > ';
+	            count = parseInt(count) + 1;
+	            display_count = parseInt(display_count) + 1;
+	        }
+
+	        // alert(val.category_id + val.item_name );
+
+	        if (data.disabled_ordering == 2) {
+	            html += '<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(2)" >';
+	        } else {
+	            if (val.not_available == 2) {
+	                html += '<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(1)" >';
+	            } else {
+	                var single_add_item = getStorage("single_add_item");
+	                dump("=>" + single_add_item);
+	                if (val.single_item == 2 && single_add_item == 2) {
+	                    item_auto_price = "0|";
+	                    item_auto_discount = "0";
+	                    if (val.prices.length > 0) {
+	                        $.each(val.prices, function(key_price, price) {
+	                            if (!empty(price.price_discount_pretty)) {
+	                                item_auto_price = "'" + price.price + "|'";
+	                                item_auto_discount = parseInt(price.price) - parseInt(price.price_discount)
+	                            } else {
+	                                item_auto_price = "'" + price.price + "|'";
+	                            }
+	                        });
+	                    }
+	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="autoAddToCart(' + val.item_id + ',' + item_auto_price + ',' + item_auto_discount + ');"  >';
+	                } else {
+	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="loadItemDetails(' + val.item_id + ',' + data.merchant_info.merchant_id + ',' + data.category_info.cat_id + ');"  >';
+	                }
+	            }
+	        }
+
+	        html += '<ons-row class="row ons-row-inner">';
+	        html += '<ons-col class="col-image food-img col ons-col-inner" width="35%">';
+	        html += '<div class="logo-wrap2" >';
+	        html += '<div class="img_loaded" >';
+	        html += '<img src="' + val.photo + '" />';
+	        html += '</div>';
+	        html += '</div>';
+	        html += '</ons-col>';
+	        html += '<ons-col class="col-description food-desc col ons-col-inner" width="65%">';
+	        html += '<p class="restauran-titles concat-text">' + val.item_name + '</p>';
+	        html += '<p class="concat-text">' + val.item_description + '</p>';
+
+	        if (val.prices.length > 0) {
+	            $.each(val.prices, function(key_price, price) {
+	                var price_size = '';
+	                if (price.size != 'standard') {
+	                    price_size = price.size;
+	                }
+	                if (!empty(price.price_discount_pretty)) {
+	                    html += '<p class="p-small">' + price_size + ' <price class="discount">' + price.price_pretty + '</price>';
+	                    html += '<price>' + price.price_discount_pretty + '</price>';
+	                    html += '</p>';
+	                } else {
+	                    html += '<p class="p-small">' + price_size + ' <price>' + price.price_pretty + '</price></p>';
+	                }
+	            });
+	        }
+
+	        html += '<img height="20" src="' + val.category_img_url + '">';
+
+	        if (val.not_available == 2) {
+	            html += '<p>item not available</p>';
+	        }
+
+	        html += '</ons-col>';
+	        html += '</ons-row>';
+	        html += '</ons-list-item>';
+	    });
+
+	    html += '</ons-list>';
+	    createElement('menu-list', html);
+	} else {
+	    var cid;
+	    var categoryid = [];
+	    $.each(data.item, function(key, val) {
+	        var html='';
+	        cid = val.category_id;
+	        if (jQuery.inArray(val.category_id, categoryid) !== -1) {
+
+	        } else {
+	            categoryid.push(val.category_id);
+	        }
+	        var display_style = 'style = "display:none;"';
+	        if ($.inArray(val.category_id, all_cat) !== -1) {} else {
+	            all_cat.push(val.category_id);
+	            if (count > 0) {
+	                //html += "</div>";
+	            }
+	            if (display_count == 1) {
+	                display_style = 'style = "display:block;"';
+	            }
+
+	            //html += '<div id = "scroll_div_'+val.category_id+'"  '+display_style+'   data-anchor="scroll_div_'+val.category_id+'" class="scrolling-div" >  <div class="category-heading" >'+ val.category_name +'</div>';
+
+	            //html += '<div id = "scroll_div_'+val.category_id+'"  '+display_style+'   data-anchor="scroll_div_'+val.category_id+'" class="scrolling-div" > ';
+
+	            count = parseInt(count) + 1;
+	            display_count = parseInt(display_count) + 1;
+	        }
+	        // alert(val.category_id + val.item_name );
+
+	        if (data.disabled_ordering == 2) {
+	            html += '<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(2)" >';
+	        } else {
+	            if (val.not_available == 2) {
+	                html += '<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(1)" >';
+	            } else {
+	                var single_add_item = getStorage("single_add_item");
+	                dump("=>" + single_add_item);
+	                if (val.single_item == 2 && single_add_item == 2) {
+	                    item_auto_price = "0|";
+	                    item_auto_discount = "0";
+	                    if (val.prices.length > 0) {
+	                        $.each(val.prices, function(key_price, price) {
+	                            if (!empty(price.price_discount_pretty)) {
+	                                item_auto_price = "'" + price.price + "|'";
+	                                item_auto_discount = parseInt(price.price) - parseInt(price.price_discount)
+	                            } else {
+	                                item_auto_price = "'" + price.price + "|'";
+	                            }
+	                        });
+	                    }
+	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="autoAddToCart(' + val.item_id + ',' + item_auto_price + ',' + item_auto_discount + ');"  >';
+	                } else {
+	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="loadItemDetails(' + val.item_id + ',' + data.merchant_info.merchant_id + ',' + data.category_info.cat_id + ');"  >';
+	                }
+	            }
+	        }
+
+	        html += '<ons-row class="row ons-row-inner">';
+	        html += '<ons-col class="col-image food-img col ons-col-inner" width="35%">';
+	        html += '<div class="logo-wrap2" >';
+	        html += '<div class="img_loaded" >';
+	        html += '<img src="' + val.photo + '" />';
+	        html += '</div>';
+	        html += '</div>';
+	        html += '</ons-col>';
+	        html += '<ons-col class="col-description food-desc col ons-col-inner" width="65%">';
+	        html += '<p class="restauran-titles concat-text">' + val.item_name + '</p>';
+	        html += '<p class="concat-text">' + val.item_description + '</p>';
+
+	        if (val.prices.length > 0) {
+	            $.each(val.prices, function(key_price, price) {
+	                var price_size = '';
+	                if (price.size != 'standard') {
+	                    price_size = price.size;
+	                }
+	                if (!empty(price.price_discount_pretty)) {
+	                    html += '<p class="p-small">' + price_size + ' <price class="discount">' + price.price_pretty + '</price>';
+	                    html += '<price>' + price.price_discount_pretty + '</price>';
+	                    html += '</p>';
+	                } else {
+	                    html += '<p class="p-small">' + price_size + ' <price>' + price.price_pretty + '</price></p>';
+	                }
+	            });
+	        }
+
+	        html += '<img height="20" src="' + val.category_img_url + '">';
+
+	        if (val.not_available == 2) {
+	            html += '<p>item not available</p>';
+	        }
+
+	        html += '</ons-col>';
+	        html += '</ons-row>';
+	        html += '</ons-list-item>';
+	        html += '</div>';
+
+	        $("#scroll_div_" + cid).append(html);
+	    });
+
+	    /* $.each(categoryid, function(key, val) {
+
+	    }); */
+
+	}
+
+	var menutcame = Object.keys(data).length;
+	menucame=parseInt(menucame)+parseInt(menutcame);
+
+	imageLoaded('.img_loaded');
+	menustart = parseFloat(menustart) + 10;
+	var mid = getStorage("merchant_id");
+	var c_day = getStorage("c_day");
+	if (menucame < menutotal) {
+	    callAjax("MenuCategory", "start=" + menustart + "&end=" + menulimit + "&merchant_id=" + mid + "&device_id=" + getStorage("device_id") + "&current_day=" + c_day);
+	}
 
 
-  var swiper = new Swiper('.swiper-container', {
-        pagination: '.swiper-pagination',
-        slidesPerView: 'auto',
-        paginationClickable: true,
-        spaceBetween: 15
-    })
-
-		var html='';
-	html+='<ons-list class="restaurant-list">';
-
- 	var all_cat = [];
- 	var count  = 0 ;
- 	var display_count = 1 ;
- 	//var ending_div = '';
-	$.each( data.item, function( key, val ) {
-		var display_style = 'style = "display:none;"';
-		if( $.inArray(val.category_id,all_cat) !== -1 )
-		{
-		}
-		else
-		{
-			all_cat.push(val.category_id);
-			if(count>0)
-			{
-				html += "</div>";
-			}
-			if(display_count==1) { display_style = 'style = "display:block;"';  }
-
-			html += '<div id = "scroll_div_'+val.category_id+'"  '+display_style+'   data-anchor="scroll_div_'+val.category_id+'" class="scrolling-div" >  <div class="category-heading" >'+ val.category_name +'</div>';
-			count = parseInt(count)+1;
-			display_count = parseInt(display_count)+1;
-		}
-
-			// alert(val.category_id + val.item_name );
-
-		 if (data.disabled_ordering==2){
-		 html+='<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(2)" >';
-		 } else {
-			 if (val.not_available==2){
-			     html+='<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(1)" >';
-			 } else {
-			 	  var single_add_item=getStorage("single_add_item");
-			 	  dump("=>"+single_add_item);
-			 	  if (val.single_item==2 && single_add_item==2){
-			 	  	  item_auto_price="0|";
-			 	  	  item_auto_discount="0";
-			 	  	  if ( val.prices.length>0){
-			 	  	  	  $.each( val.prices, function( key_price, price ) {
-			 	  	  	  	   if (!empty(price.price_discount_pretty)){
-			 	  	  	  	   	   item_auto_price = "'"+price.price+"|'";
-			 	  	  	  	   	   item_auto_discount=parseInt(price.price)-parseInt(price.price_discount)
-			 	  	  	  	   } else {
-			 	  	  	  	   	   item_auto_price=  "'"+price.price+"|'";
-			 	  	  	  	   }
-			 	  	  	  });
-			 	  	  }
-			 	  	  html+='<ons-list-item modifier="tappable" class="list-item-container" onclick="autoAddToCart('+val.item_id+','+item_auto_price+','+item_auto_discount+');"  >';
-			 	  } else {
-			          html+='<ons-list-item modifier="tappable" class="list-item-container" onclick="loadItemDetails('+val.item_id+','+data.merchant_info.merchant_id+','+data.category_info.cat_id+');"  >';
-			 	  }
-			 }
-		 }
-
-         html+='<ons-row class="row">';
-             html+='<ons-col class="col-image food-img" width="35%">';
-                html+='<div class="logo-wrap2" >';
-                  html+='<div class="img_loaded" >';
-                  html+='<img src="'+val.photo+'" />';
-                  html+='</div>';
-                html+='</div>';
-             html+='</ons-col>';
-             html+='<ons-col class="col-description food-desc" width="65%">';
-                html+='<p class="restauran-title concat-text">'+val.item_name+'</p>';
-                html+='<p class="concat-text">'+val.item_description+'</p>';
-
-                if ( val.prices.length>0){
-	                $.each( val.prices, function( key_price, price ) {
-	                	var price_size = '';
-	                	if(price.size!='standard') { price_size = price.size; }
-	                   if (!empty(price.price_discount_pretty)){
-	                   	   html+='<p class="p-small">'+price_size+' <price class="discount">'+price.price_pretty+'</price>';
-	                   	   html+='<price>'+price.price_discount_pretty+'</price>';
-	                   	   html+='</p>';
-	                   } else {
-	                   	   html+='<p class="p-small">'+price_size+' <price>'+price.price_pretty+'</price></p>';
-	                   }
-	                });
-                }
-
-                   html+='<img height="20" src="'+val.category_img_url+'">';
-
-                if (val.not_available==2){
-                	html+='<p>item not available</p>';
-                }
-
-             html+='</ons-col>';
-         html+='</ons-row>';
-        html+='</ons-list-item>';
-    });
-    html+='</ons-list>';
-    createElement('menu-list',html);
-
-    imageLoaded('.img_loaded');
-}
+	}
 
 function loadmenu(cat_id,mtid)
 {
@@ -2786,7 +2924,7 @@ function displayItemByCategory(data)
 
 
 	var html='';
-	html+='<ons-list class="restaurant-list">';
+	html+='<ons-list class="restaurant-list ng-scope list ons-list-inner ">';
 	$.each( data.item, function( key, val ) {
 
 		 if (data.disabled_ordering==2){
@@ -5341,9 +5479,35 @@ function showHistory()
 	}
 }
 
-function showHistory()
+function showTerms()
 {
-		menu.setMainPage('terms.html', {closeMenu: true});
+	var iabRef = null;
+
+    function iabLoadStart(event) {
+        alert(event.type + ' - ' + event.url);
+    }
+
+    function iabLoadStop(event) {
+        alert(event.type + ' - ' + event.url);
+    }
+
+    function iabLoadError(event) {
+        alert(event.type + ' - ' + event.message);
+    }
+
+    function iabClose(event) {
+         alert(event.url);
+         iabRef.removeEventListener('loadstart', iabLoadStart);
+         iabRef.removeEventListener('loadstop', iabLoadStop);
+         iabRef.removeEventListener('loaderror', iabLoadError);
+         iabRef.removeEventListener('exit', iabClose);
+    }
+	//	menu.setMainPage('terms.html', {closeMenu: true});
+	iabRef = window.open('https://google.com', '_blank', 'location=no');
+         iabRef.addEventListener('loadstart', iabLoadStart);
+         iabRef.addEventListener('loadstop', iabLoadStop);
+         iabRef.removeEventListener('loaderror', iabLoadError);
+         iabRef.addEventListener('exit', iabClose);
 
 }
 
@@ -7042,6 +7206,173 @@ function loadMoreReviews1()
 	loadMoreReviews();
 }
 
+function searchMerchantMap()
+{
+
+	var options = {
+      animation: 'none',
+      onTransitionEnd: function() {
+      	 // showAllOnMap();
+      }
+    };
+	kNavigator.pushPage("searchMap.html", options);
+}
+
+function displayRestaurantResultsOnMap(data)
+{
+   /* $.each( data, function( key, val ) {
+    	 var rest_name = '';
+    	 rest_name = "'"+val.restaurant_name+"'";
+         val.cuisine
+	     val.is_open
+         val.payment_options.cod
+	});
+*/
+ showAllOnMap(data);
+}
+
+function showAllOnMap(data) {
+	//Get all the restaurants info and parse the lat and long
+	google_lat = new plugin.google.maps.LatLng(49.217231, -2.140589 ); //Center of JERSEY, Unfortunately its hard coded for our convenience
+	//alert("Merchant"+google_lat);
+	setTimeout(function(){
+        var div = document.getElementById("searchmap_canvas_div");
+        $('#searchmap_canvas_div').css('height', $(window).height() - $('#searchmap_canvas_div').offset().top);
+        map_search = plugin.google.maps.Map.getMap(div, {
+	     'camera': {
+	      'latLng': google_lat,
+	      'zoom': 12
+		 },
+		 'controls': {
+			'compass': true,
+			'myLocationButton': true,
+			'indoorPicker': true,
+			'zoom': true
+		  }
+		});
+        map_search.on(plugin.google.maps.event.MAP_READY, searchMapInit)
+		}, 1000); // and timeout for clear transitions
+}
+
+function searchMapInit()
+{
+
+	var GOOGLE = new plugin.google.maps.LatLng( merchant_latitude , merchant_longtitude);
+	search_map.clear();
+	search_map.off();
+	search_map.setCameraTarget(GOOGLE);
+	search_map.setCameraZoom(11);
+
+    search_map.addMarker({
+	  'position': new plugin.google.maps.LatLng( merchant_latitude , merchant_longtitude ),
+	  'title': delivery_address ,
+	  'snippet': getTrans( "Destination" ,'destination'),
+	  'icon': {
+	    'url': getStorage("destination_icon")
+	   }
+     }, function(marker) {
+
+     	marker.showInfoWindow();
+
+     	navigator.geolocation.getCurrentPosition( function(position) {
+
+	    	 var your_location = new plugin.google.maps.LatLng(position.coords.latitude , position.coords.longitude);
+	    	 	    //	 $("#map_canvas_div .alng").val(position.coords.longitude);
+	    	 	   // 	 $("#map_canvas_div .alat").val(position.coords.latitude);
+
+	    	 var destination = new plugin.google.maps.LatLng( merchant_latitude , merchant_longtitude );
+
+			 search_map.addPolyline({
+			    points: [
+			      destination,
+			      your_location
+			    ],
+			    'color' : '#AA00FF',
+			    'width': 10,
+			    'geodesic': true
+			   }, function(polyline) {
+
+				search_map.animateCamera({
+					  'target': your_location,
+					  'zoom': 17,
+					  'tilt': 30
+					}, function() {
+
+					   var data = [
+				          {
+				            'title': getTrans('You are here','you_are_here'),
+				            'position': your_location ,
+				            'icon': {
+							    'url': getStorage("from_icon")
+							  }
+				          }
+				       ];
+
+				       hideAllModal();
+
+					   addSearchMarkers(data, function(markers) {
+					    markers[markers.length - 1].showInfoWindow();
+					   });
+
+				   });
+
+			   });
+	    	 // end position success
+
+	      }, function(error){
+	      	 hideAllModal();
+	    	 toastMsg( error.message );
+	    	 // end position error
+	      },
+          { timeout: 10000, enableHighAccuracy : getLocationAccuracy() }
+        );
+
+     });
+}
+
+function addSearchMarkers(data, callback) {
+	var markers = [];
+	function onMarkerAdded(marker) {
+	  markers.push(marker);
+	  if (markers.length === data.length) {
+		callback(markers);
+	  }
+	}
+	data.forEach(function(markerOptions) {
+	  search_map.addMarker(markerOptions, onMarkerAdded);
+	});
+  }
+
+
+function addMarkers(data, callback) {
+  var markers = [];
+  function onMarkerAdded(marker) {
+    markers.push(marker);
+    if (markers.length === data.length) {
+      callback(markers);
+    }
+  }
+  data.forEach(function(markerOptions) {
+    map.addMarker(markerOptions, onMarkerAdded);
+  });
+}
+
+
+function getLocationAccuracy()
+{
+	var networkState = navigator.connection.type;
+	switch (networkState)
+	{
+		case "Connection.WIFI":
+		case "wifi":
+		return false;
+		break;
+
+		default:
+		return true;
+		break;
+	}
+}
 
 function loadMap()
 {

@@ -104,8 +104,10 @@
 
     <ons-list-item onclick="menu.setMainPage('browseRestaurant.html', {closeMenu: true})" class="bottom-menu-item">
       <ons-icon icon="ion-android-menu"></ons-icon>
-      <span class="trn" data-trn-key="browse_resto">Browse Restaurant</span>
+      <span class="trn" data-trn-key="browse_resto">Browse Restaurants</span>
     </ons-list-item>
+
+    
 
     <ons-list-item onclick="showProfile();" class="bottom-menu-item">
       <ons-icon icon="ion-android-contact"></ons-icon>
@@ -127,7 +129,7 @@
       <span class="trn" data-trn-key="address_book">Address Book</span>
     </ons-list-item>
 
-    <ons-list-item onclick="showHistory();" class="bottom-menu-item">
+    <ons-list-item onclick="showTerms();" class="bottom-menu-item">
         <ons-icon icon="ion-ios-information"></ons-icon>
         <span class="trn" data-trn-key="history">Terms & Conditions</span>
       </ons-list-item>
@@ -209,10 +211,10 @@
     </div>
 
     <div class="home-page wrapper center">
-      <h4 class="trn" data-trn-key="enter_your_location">Choose your location</h4>
+      <!--<h4 class="trn" data-trn-key="enter_your_location">Choose</h4>-->
        <section class="field-section">
          <select class="selnew form-control select-class settings-list" name="parish" id="parish">
-                    <option value="0">Choose Parish</option>
+                    <option value="0">Your Parish</option>
                     <option value="1">St Helier</option>
                     <option value="2">Grouville</option>
                     <option value="3">St Brélade</option>
@@ -228,7 +230,7 @@
         </select>
         <br /><br />
         <select class="selnew form-control select-class settings-list" name="filter_cuisine" id="cuisine">
-		<option value="">All Categories</option>
+		<option value="">All Cuisines</option>
 			<option value="21"> Japanese </option>
 			<option value="1"> American </option>
 			<option value="3"> Indian </option>
@@ -236,7 +238,7 @@
 			<option value="8"> Italian </option>
 			<option value="9"> Mexican </option>
 			<option value="11"> Burgers </option>
-			<option value="14"> Middle Eastern </option>
+			<option value="14"> Oriental </option>
 			<option value="15"> Thai </option>
 			<option value="16"> Chinese </option>
 			<option value="19"> Pizza </option>
@@ -253,10 +255,14 @@
        </div>  -->
        <br />
         <button class="button green-btn button--large" onclick="searchMerchant();">
-          <span class="trn" data-trn-key="search_restaurant">Search Restaurant</span>
+          <span class="trn" data-trn-key="search_restaurant">Find</span>
           <div class="search-btn"><ons-icon icon="fa-chevron-right"></ons-icon></div>
        </button>
-
+       <br />
+       <button class="button green-btn button--large" onclick="searchMerchantMap();">
+        <span class="trn" data-trn-key="search_restaurant">Locate on Jersey Map</span>
+        <div class="search-btn"><ons-icon icon="fa-search-plus"></ons-icon></div>
+       </button>
 
     </div>
     </div>
@@ -302,6 +308,22 @@
 </ons-page>
 </ons-navigator>
 </script>
+
+<script type="text/ons-template" id="searchMap.html">
+
+  <ons-page id="page-searchmap" modifier="map-searchpage" >
+
+     <ons-toolbar>
+       <div class="left"><ons-back-button></ons-back-button></div>
+       <div class="center white"><span class="trn" data-trn-key="searchmap" >Restaurants on Map</span></div>
+     </ons-toolbar>
+     <div class="center white"><span id="searchmap-text"></span></div>
+     <div id="searchmap_canvas_div">  </div>
+
+  </ons-page>
+
+  </script>
+
 
 
   <script type="text/ons-template" id="filterOptons.html">
@@ -391,7 +413,7 @@
   <script type="text/ons-template" id="menucategory.html">
 <ons-page id="menucategory-page" >
    <ons-toolbar>
-     <div class="left"><ons-back-button></ons-back-button></div>
+     <div class="left"><ons-back-button onclick="backclear();"></ons-back-button></div>
      <div class="center white"><span id="search-text" class="trn" data-trn-key="menu" >Menu</span></div>
 
      <div class="right">
@@ -1389,26 +1411,26 @@
 
      <select class="form-control text-input text-input--underbar has_validation" name="no_of_guests" id="no_of_guests">
                           <option value="" disabled selected>Number of Guests</option>
-						  <option value="1">1 Person </option>
-                          <option value="2">2 Person </option>
-                          <option value="3">3 Person </option>
-                          <option value="4">4 Person </option>
-                          <option value="5">5 Person </option>
-                          <option value="6">6 Person </option>
-                          <option value="7">7 Person </option>
-                          <option value="8">8 Person </option>
-                          <option value="9">9 Person </option>
-                          <option value="10">10 Person </option>
-                          <option value="11">11 Person </option>
-                          <option value="12">12 Person </option>
-                          <option value="13">13 Person </option>
-                          <option value="14">14 Person </option>
-                          <option value="15">15 Person </option>
-                          <option value="16">16 Person </option>
-                          <option value="17">17 Person </option>
-                          <option value="18">18 Person </option>
-                          <option value="19">19 Person </option>
-                          <option value="20">20 Person </option>
+						  <option value="1">1 Guest </option>
+                          <option value="2">2 Guests </option>
+                          <option value="3">3 Guests </option>
+                          <option value="4">4 Guests </option>
+                          <option value="5">5 Guests </option>
+                          <option value="6">6 Guests </option>
+                          <option value="7">7 Guests </option>
+                          <option value="8">8 Guests </option>
+                          <option value="9">9 Guests </option>
+                          <option value="10">10 Guests </option>
+                          <option value="11">11 Guests </option>
+                          <option value="12">12 Guests </option>
+                          <option value="13">13 Guests </option>
+                          <option value="14">14 Guests </option>
+                          <option value="15">15 Guests </option>
+                          <option value="16">16 Guests </option>
+                          <option value="17">17 Guests </option>
+                          <option value="18">18 Guests </option>
+                          <option value="19">19 Guests </option>
+                          <option value="20">20 Guests </option>
         </select>
       </div>
 
@@ -2812,17 +2834,13 @@
           <ons-list-item modifier="tappable" onclick="loadMoreReviews1();"
           class="trn" data-trn-key="reviews" >Reviews</ons-list-item>
 
-         <!-- <ons-list-item modifier="tappable" onclick="loadMap();"
-          class="trn" data-trn-key="map" >Map</ons-list-item> -->
-
-
        </ons-list>
       </ons-scroller>
   </ons-popover>
 </script>
 
 
-  <script type="text/ons-template" id="map.html">
+<script type="text/ons-template" id="map.html">
 <ons-page id="page-map" modifier="map-page" >
 
    <ons-toolbar>
