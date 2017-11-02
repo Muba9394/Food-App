@@ -7189,23 +7189,23 @@ function payCityPay(fireurl)
 	var iabRef = null;
 
     function iabLoadStart(event) {
-        alert(event.type + ' - ' + event.url);
+      //  alert(event.type + ' - ' + event.url);
     }
 
     function iabLoadStop(event) {
-        alert(event.type + ' - ' + event.url);
+      //  alert(event.type + ' - ' + event.url);
 				var success="https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true";
 				if (event.url == success) {
-    			iabRef.close();
+    			iabClose();
     		}
     }
 
     function iabLoadError(event) {
-        alert(event.type + ' - ' + event.message);
+      //  alert(event.type + ' - ' + event.message);
     }
 
     function iabClose(event) {
-         alert(event.url);
+      //   alert(event.url);
          iabRef.removeEventListener('loadstart', iabLoadStart);
          iabRef.removeEventListener('loadstop', iabLoadStop);
          iabRef.removeEventListener('loaderror', iabLoadError);
