@@ -7200,7 +7200,7 @@ function payCityPay(fireurl)
 				console.log("Successurl"+successurl);
 				console.log("Event"+event.url);
 				if (event.url == successurl) {
-    			iabClose();
+					iabRef.close();
     		}
     }
 
