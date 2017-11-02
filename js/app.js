@@ -7194,7 +7194,8 @@ function payCityPay(fireurl)
 
 
     function iabLoadStop(event) {
-			 setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
+			 //setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
+			 setStorage("successurl","https://www.cuisine.je/store/receipt/id/citypay_success/true");
 				var successurl= getStorage("successurl");
 				console.log("Successurl"+successurl);
 				console.log("Event"+event.url);
