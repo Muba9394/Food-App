@@ -7209,11 +7209,11 @@ function payCityPay(fireurl)
     }
 
     function iabClose(event) {
-      //   alert(event.url);
-         iabRef.removeEventListener('loadstart', iabLoadStart);
-         iabRef.removeEventListener('loadstop', iabLoadStop);
-         iabRef.removeEventListener('loaderror', iabLoadError);
-         iabRef.removeEventListener('exit', iabClose);
+        alert(event.url);
+        // iabRef.removeEventListener('loadstart', iabLoadStart);
+      //   iabRef.removeEventListener('loadstop', iabLoadStop);
+        // iabRef.removeEventListener('loaderror', iabLoadError);
+         //iabRef.removeEventListener('exit', iabClose);
     	}
 				 iabRef = window.open(fireurl, '_blank', 'location=no','toolbar=yes');
          iabRef.addEventListener('loadstart', iabLoadStart);
