@@ -4668,7 +4668,7 @@ function placeOrder()
 
 		extra_params+="&citypay_mode="+ getStorage('citypay_mode');
 		extra_params+="&citypay_username="+ getStorage('citypay_username');
-		extra_params+="&citypay_password"+ getStorage('citypay_password');
+		extra_params+="&citypay_password="+ getStorage('citypay_password');
 		extra_params+="&citypay_fee"+ getStorage('citypay_fee');
 
 		/*tips*/
@@ -7191,14 +7191,12 @@ function payCityPay(fireurl)
     function iabLoadStart(event) {
         alert(event.type + ' - ' + event.url);
     }
-var success="https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true";
 
-console.log(success);
     function iabLoadStop(event) {
         alert(event.type + ' - ' + event.url);
 				var success="https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true";
 				if (event.url == success) {
-    			ref.close();
+    			iabRef.close();
     		}
     }
 
