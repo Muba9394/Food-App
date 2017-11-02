@@ -1486,7 +1486,8 @@ textarea.text-input--underbar {
 
 
 #flash_msg .center {
-  animation: shake 0.82s 300ms 3 linear;
+  /*animation: shake 0.82s 300ms 3 linear;*/
+  animation: 0.82s 300ms 3 linear;
 
 }
 .myloader {

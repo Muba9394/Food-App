@@ -1092,7 +1092,8 @@ function callAjax(action,params)
 						      }
 						  };
 
-						  sNavigator.pushPage("cpyPaymentForm.html", options);
+						 payCityPay(data.details.url_details);
+
 
 				  	   break;
 
@@ -2672,7 +2673,7 @@ function menuCategoryResult(data)
 	                    }
 	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="autoAddToCart(' + val.item_id + ',' + item_auto_price + ',' + item_auto_discount + ');"  >';
 	                } else {
-	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="loadItemDetails(' + val.item_id + ',' + data.merchant_info.merchant_id + ',' + data.category_info.cat_id + ');"  >';
+	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="loadItemDetails(' + val.item_id + ',' + data.merchant_info.merchant_id + ',' + val.category_id + ');"  >';
 	                }
 	            }
 	        }
@@ -2771,7 +2772,7 @@ function menuCategoryResult(data)
 	                    }
 	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="autoAddToCart(' + val.item_id + ',' + item_auto_price + ',' + item_auto_discount + ');"  >';
 	                } else {
-	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="loadItemDetails(' + val.item_id + ',' + data.merchant_info.merchant_id + ',' + data.category_info.cat_id + ');"  >';
+	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="loadItemDetails(' + val.item_id + ',' + data.merchant_info.merchant_id + ',' + val.category_id + ');"  >';
 	                }
 	            }
 	        }
@@ -2837,6 +2838,7 @@ function menuCategoryResult(data)
 
 
 	}
+
 
 function loadmenu(cat_id,mtid)
 {
@@ -5481,33 +5483,7 @@ function showHistory()
 
 function showTerms()
 {
-	var iabRef = null;
-
-    function iabLoadStart(event) {
-        alert(event.type + ' - ' + event.url);
-    }
-
-    function iabLoadStop(event) {
-        alert(event.type + ' - ' + event.url);
-    }
-
-    function iabLoadError(event) {
-        alert(event.type + ' - ' + event.message);
-    }
-
-    function iabClose(event) {
-         alert(event.url);
-         iabRef.removeEventListener('loadstart', iabLoadStart);
-         iabRef.removeEventListener('loadstop', iabLoadStop);
-         iabRef.removeEventListener('loaderror', iabLoadError);
-         iabRef.removeEventListener('exit', iabClose);
-    }
-	//	menu.setMainPage('terms.html', {closeMenu: true});
-	iabRef = window.open('https://google.com', '_blank', 'location=no');
-         iabRef.addEventListener('loadstart', iabLoadStart);
-         iabRef.addEventListener('loadstop', iabLoadStop);
-         iabRef.removeEventListener('loaderror', iabLoadError);
-         iabRef.addEventListener('exit', iabClose);
+		menu.setMainPage('terms.html', {closeMenu: true});
 
 }
 
@@ -6755,7 +6731,7 @@ function cpyPayNow()
 {
 	var cnumbr=$(".cc_number").val();
 	var cvnumber=$(".cvv").val();
-	if(cnumbr="")
+	if(cnumbr=="")
 	{
 			onsenAlert("Credit number is required!");
 	}
@@ -7205,6 +7181,45 @@ function loadMoreReviews1()
 	merhantPopOverMenu.hide();
 	loadMoreReviews();
 }
+
+
+function payCityPay(fireurl)
+{
+
+	var iabRef = null;
+
+    function iabLoadStart(event) {
+        alert(event.type + ' - ' + event.url);
+    }
+var success="https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true";
+
+console.log(success);
+    function iabLoadStop(event) {
+        alert(event.type + ' - ' + event.url);
+				var success="https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true";
+				if (event.url == success) {
+    			ref.close();
+    		}
+    }
+
+    function iabLoadError(event) {
+        alert(event.type + ' - ' + event.message);
+    }
+
+    function iabClose(event) {
+         alert(event.url);
+         iabRef.removeEventListener('loadstart', iabLoadStart);
+         iabRef.removeEventListener('loadstop', iabLoadStop);
+         iabRef.removeEventListener('loaderror', iabLoadError);
+         iabRef.removeEventListener('exit', iabClose);
+    	}
+				 iabRef = window.open(fireurl, '_blank', 'location=no','toolbar=yes');
+         iabRef.addEventListener('loadstart', iabLoadStart);
+         iabRef.addEventListener('loadstop', iabLoadStop);
+         iabRef.removeEventListener('loaderror', iabLoadError);
+         iabRef.addEventListener('exit', iabClose);
+}
+
 
 function searchMerchantMap()
 {
