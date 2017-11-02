@@ -7191,10 +7191,12 @@ function payCityPay(fireurl)
     function iabLoadStart(event) {
       //  alert(event.type + ' - ' + event.url);
     }
-
+var success="https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true";
+console.log(success);
     function iabLoadStop(event) {
       //  alert(event.type + ' - ' + event.url);
 				var success="https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true";
+				console.log(success);
 				if (event.url == success) {
     			iabClose();
     		}
