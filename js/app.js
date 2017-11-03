@@ -7209,7 +7209,7 @@ function payCityPay(fireurl)
     }
 
     function iabClose(event) {
-        alert(event.url);
+      //  alert(event.url);
         // iabRef.removeEventListener('loadstart', iabLoadStart);
       //   iabRef.removeEventListener('loadstop', iabLoadStop);
         // iabRef.removeEventListener('loaderror', iabLoadError);
