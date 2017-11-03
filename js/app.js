@@ -2145,7 +2145,7 @@ function initRating()
 
 function loadRestaurantCategory(mtid)
 {
-
+	menustart="0";
   var d = new Date();
     var weekday = new Array(7);
     weekday[0] = "Sunday";
