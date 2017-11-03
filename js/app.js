@@ -223,6 +223,7 @@ function createElement(elementId,elementvalue)
 
 function searchMerchant()
 {
+	start ="0";
   var s = $('#s').val();
 
   var parish  = $.trim($('#parish').val());
@@ -7240,7 +7241,7 @@ var successurl;
          //iabRef.removeEventListener('exit', iabClose);
     	}
 
-		 iabRef = cordova.InAppBrowser.open(fireurl, '_blank', 'location=no','toolbar=yes');
+		 iabRef = cordova.InAppBrowser.open(fireurl, '_blank', 'location=no','toolbar=no','clearcache=yes','zoom=no');
          iabRef.addEventListener('loadstart', iabLoadStart);
          iabRef.addEventListener('loadstop', iabLoadStop);
         // iabRef.removeEventListener('loaderror', iabLoadError);
