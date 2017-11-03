@@ -7215,6 +7215,18 @@ var successurl;
 			if(event.url == successurl)
 			{
 				console.log("Equals");
+				var options = {
+						animation: 'slide',
+						onTransitionEnd: function() {
+								displayMerchantLogo2(
+									 getStorage("merchant_logo") ,
+									 '' ,
+									 'page-booking-ty'
+								);
+
+								$(".book-ty-msg").html(data.msg);
+						}
+					};
 				sNavigator.pushPage("bookingTY.html", options);
 
 			}
@@ -7227,10 +7239,11 @@ var successurl;
         // iabRef.removeEventListener('loaderror', iabLoadError);
          //iabRef.removeEventListener('exit', iabClose);
     	}
+
 		 iabRef = cordova.InAppBrowser.open(fireurl, '_blank', 'location=no','toolbar=yes');
          iabRef.addEventListener('loadstart', iabLoadStart);
          iabRef.addEventListener('loadstop', iabLoadStop);
-         iabRef.removeEventListener('loaderror', iabLoadError);
+        // iabRef.removeEventListener('loaderror', iabLoadError);
          iabRef.addEventListener('exit', iabClose);
 }
 
