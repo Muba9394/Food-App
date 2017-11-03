@@ -7192,13 +7192,11 @@ function payCityPay(fireurl)
       //  alert(event.type + ' - ' + event.url);
     }
 
-
+var successurl;
     function iabLoadStop(event) {
 			 //setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
-			 setStorage("successurl","https://www.cuisine.je/store/receipt/id//citypay_success/true");
-				var successurl= getStorage("successurl");
-				console.log("Successurl"+successurl);
-				console.log("Event"+event.url);
+			 setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
+				successurl= getStorage("successurl");
 				if (event.url == successurl) {
 					iabRef.close();
     		}
@@ -7209,13 +7207,20 @@ function payCityPay(fireurl)
     }
 
     function iabClose(event) {
+			if(event.url == successurl)
+			{
+				sNavigator.pushPage("bookingTY.html", options);
+			}
+			else{
+
+			}
       //  alert(event.url);
         // iabRef.removeEventListener('loadstart', iabLoadStart);
       //   iabRef.removeEventListener('loadstop', iabLoadStop);
         // iabRef.removeEventListener('loaderror', iabLoadError);
          //iabRef.removeEventListener('exit', iabClose);
     	}
-				 iabRef = window.open(fireurl, '_blank', 'location=no','toolbar=yes');
+		 iabRef = cordova.InAppBrowser.open(fireurl, '_self', 'location=no','toolbar=yes');
          iabRef.addEventListener('loadstart', iabLoadStart);
          iabRef.addEventListener('loadstop', iabLoadStop);
          iabRef.removeEventListener('loaderror', iabLoadError);
@@ -7223,9 +7228,7 @@ function payCityPay(fireurl)
 }
 
 
-function searchMerchantMap()
-{
-
+function searchMerchantMap() {
 	var options = {
       animation: 'none',
       onTransitionEnd: function() {
@@ -7235,20 +7238,8 @@ function searchMerchantMap()
 	kNavigator.pushPage("searchMap.html", options);
 }
 
-function displayRestaurantResultsOnMap(data)
-{
-   /* $.each( data, function( key, val ) {
-    	 var rest_name = '';
-    	 rest_name = "'"+val.restaurant_name+"'";
-         val.cuisine
-	     val.is_open
-         val.payment_options.cod
-	});
-*/
- showAllOnMap(data);
-}
 
-function showAllOnMap(data) {
+function displayRestaurantResultsOnMap(data) {
 	//Get all the restaurants info and parse the lat and long
 	google_lat = new plugin.google.maps.LatLng(49.217231, -2.140589 ); //Center of JERSEY, Unfortunately its hard coded for our convenience
 	//alert("Merchant"+google_lat);
@@ -7267,84 +7258,29 @@ function showAllOnMap(data) {
 			'zoom': true
 		  }
 		});
-        map_search.on(plugin.google.maps.event.MAP_READY, searchMapInit)
+        map_search.on(plugin.google.maps.event.MAP_READY, searchMapInit(data));
 		}, 1000); // and timeout for clear transitions
 }
 
-function searchMapInit()
-{
+function searchMapInit(data) {
+	map_search.clear();
+	//map_search.off();
+	map_search.setCameraZoom(11);
+	//map_search.setTrafficEnabled(true);
 
-	var GOOGLE = new plugin.google.maps.LatLng( merchant_latitude , merchant_longtitude);
-	search_map.clear();
-	search_map.off();
-	search_map.setCameraTarget(GOOGLE);
-	search_map.setCameraZoom(11);
+	var mData =[];
+	$.each(data, function( key, val ) {
+		if(val.latitude) {
+			var point = new plugin.google.maps.LatLng(val.latitude , val.longitude);
+			var entry = {'position': point,'title': val.restaurant_name,'icon': {'url': 'https://www.cuisine.je/assets/images/menu-icon.png' }};
+			mData.push(entry);
+		}
+	});
 
-    search_map.addMarker({
-	  'position': new plugin.google.maps.LatLng( merchant_latitude , merchant_longtitude ),
-	  'title': delivery_address ,
-	  'snippet': getTrans( "Destination" ,'destination'),
-	  'icon': {
-	    'url': getStorage("destination_icon")
-	   }
-     }, function(marker) {
-
-     	marker.showInfoWindow();
-
-     	navigator.geolocation.getCurrentPosition( function(position) {
-
-	    	 var your_location = new plugin.google.maps.LatLng(position.coords.latitude , position.coords.longitude);
-	    	 	    //	 $("#map_canvas_div .alng").val(position.coords.longitude);
-	    	 	   // 	 $("#map_canvas_div .alat").val(position.coords.latitude);
-
-	    	 var destination = new plugin.google.maps.LatLng( merchant_latitude , merchant_longtitude );
-
-			 search_map.addPolyline({
-			    points: [
-			      destination,
-			      your_location
-			    ],
-			    'color' : '#AA00FF',
-			    'width': 10,
-			    'geodesic': true
-			   }, function(polyline) {
-
-				search_map.animateCamera({
-					  'target': your_location,
-					  'zoom': 17,
-					  'tilt': 30
-					}, function() {
-
-					   var data = [
-				          {
-				            'title': getTrans('You are here','you_are_here'),
-				            'position': your_location ,
-				            'icon': {
-							    'url': getStorage("from_icon")
-							  }
-				          }
-				       ];
-
-				       hideAllModal();
-
-					   addSearchMarkers(data, function(markers) {
-					    markers[markers.length - 1].showInfoWindow();
-					   });
-
-				   });
-
-			   });
-	    	 // end position success
-
-	      }, function(error){
-	      	 hideAllModal();
-	    	 toastMsg( error.message );
-	    	 // end position error
-	      },
-          { timeout: 10000, enableHighAccuracy : getLocationAccuracy() }
-        );
-
-     });
+	addSearchMarkers(mData, function(markers) {
+			markers[markers.length - 1].showInfoWindow();
+			markers[markers.length - 1].setAnimation(plugin.google.maps.Animation.BOUNCE);
+		});
 }
 
 function addSearchMarkers(data, callback) {
@@ -7356,9 +7292,10 @@ function addSearchMarkers(data, callback) {
 	  }
 	}
 	data.forEach(function(markerOptions) {
-	  search_map.addMarker(markerOptions, onMarkerAdded);
+		//dump(markerOptions);
+		map_search.addMarker(markerOptions, onMarkerAdded);
 	});
-  }
+}
 
 
 function addMarkers(data, callback) {
@@ -7476,8 +7413,8 @@ function viewTaskMapInit()
 	merchant_latitude = getStorage("merchant_latitude");
 	merchant_longtitude = getStorage("merchant_longtitude");
 
-	dump(  merchant_latitude );
-	dump( merchant_longtitude );
+	//dump(  merchant_latitude );
+	//dump( merchant_longtitude );
 
 	google_lat = new plugin.google.maps.LatLng( merchant_latitude , merchant_longtitude );
 	//alert("Merchant"+google_lat);
@@ -7489,7 +7426,7 @@ function viewTaskMapInit()
         map = plugin.google.maps.Map.getMap(div, {
 	     'camera': {
 	      'latLng': google_lat,
-	      'zoom': 17
+	      'zoom': 14
 	     }
 	    });
         //map.setBackgroundColor('white');
