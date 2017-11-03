@@ -7227,7 +7227,7 @@ var successurl;
         // iabRef.removeEventListener('loaderror', iabLoadError);
          //iabRef.removeEventListener('exit', iabClose);
     	}
-		 iabRef = cordova.InAppBrowser.open(fireurl, '_self', 'location=no','toolbar=yes');
+		 iabRef = cordova.InAppBrowser.open(fireurl, '_blank', 'location=no','toolbar=yes');
          iabRef.addEventListener('loadstart', iabLoadStart);
          iabRef.addEventListener('loadstop', iabLoadStop);
          iabRef.removeEventListener('loaderror', iabLoadError);
