@@ -7197,6 +7197,8 @@ var successurl;
 			 //setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
 			 setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
 				successurl= getStorage("successurl");
+				console.log(event.url);
+				console.log(successurl);
 				if (event.url == successurl) {
 					iabRef.close();
     		}
@@ -7207,12 +7209,17 @@ var successurl;
     }
 
     function iabClose(event) {
+			console.log(successurl);
+			console.log("close event");
+			console.log(event.url);
 			if(event.url == successurl)
 			{
+				console.log("Equals");
 				sNavigator.pushPage("bookingTY.html", options);
+
 			}
 			else{
-
+				console.log("Not set");
 			}
       //  alert(event.url);
         // iabRef.removeEventListener('loadstart', iabLoadStart);
