@@ -24,11 +24,11 @@
     <gap:plugin name="com.paypal.cordova.mobilesdk" source="npm"  />
     <gap:plugin name="cordova-plugin-device" source="npm"/>
 	<gap:plugin name="cordova-plugin-splashscreen" source="npm"/>
-	<gap:plugin name="cordova-plugin-inappbrowser" source="npm"/>
+	<!--<gap:plugin name="cordova-plugin-inappbrowser" source="npm"/>
 	<gap:plugin name="cordova-plugin-whitelist" source="npm"/>
 	<allow-navigation href="*://*.citypay.com/*" />
 	<allow-intent href="*://*.citypay.com/*" />
-	<access origin="http://*.citypay.com" />
+	<access origin="http://*.citypay.com" />-->
 	<gap:plugin name="cordova-plugin-geolocation" source="npm"/>
 	<gap:plugin name="cordova-plugin-network-information" source="npm" />
 	<gap:plugin name="cordova-plugin-request-location-accuracy" source="npm"  spec="2.2.0" />
@@ -37,7 +37,7 @@
 	<!--<gap:plugin name="cordova-plugin-fastrde-checkgps" source="npm" spec="1.0.0"  />-->
 	<gap:plugin spec="https://github.com/rodrigo-martinezd/cordova-dialog-gps.git" source="git" />
   <gap:plugin spec="https://github.com/Muba9394/cordova-plugin-dreams-inappbrowser.git" source="git" />
-  
+
 	<gap:plugin spec="https://github.com/razorpay/razorpay-cordova.git" source="git" />
 	<gap:plugin name="cordova-plugin-media" source="npm" spec="3.0.0" />
 	<gap:plugin name="cordova.plugins.diagnostic" source="npm" spec="3.4.2" />
