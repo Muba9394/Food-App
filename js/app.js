@@ -2171,7 +2171,8 @@ function loadRestaurantCategory(mtid)
       }
    };
    setStorage("merchant_id",mtid);
-   sNavigator.pushPage("menucategory.html", options);
+
+   	sNavigator.pushPage("menucategory.html", options);
 }
 
 function cuisineResults(data)
@@ -2561,6 +2562,7 @@ function menuCategoryResult(data)
 	} else {
 		onsenAlert(  getTrans("This restaurant has not published their menu yet.",'this_restaurant_no_menu') );
 	}	*/
+	console.log("MenuStartStarting"+menustart);
 	 menutotal=data.category_item_count;
 	 menutcame = Object.keys(data).length;
 	$('#merchant_open_close_timing').val(data.selected_date);
@@ -2596,16 +2598,18 @@ function menuCategoryResult(data)
 	var s = a.join(', ');
 	alert(s.toSource); */
 	htm += '<ons-list><div class="swiper-container"><div class="swiper-wrapper">';
-	var itemcount;
+	var itemcount=[];
+	var itemcounts;
 	$.each(data.menu_category, function(key, val) {
 			if (jQuery.inArray(val.total_count, itemcount) !== -1) {
 			} else {
 
-					itemcount=val.total_count;
+					itemcount.push(val.total_count);
+					itemcounts=val.total_count;
 					//itemcount[val.cat_id]=val.total_count;
 					//itemcount=array(val.cat_id => val.total_count );
 			}
-			console.log(val.category_name+"-"+itemcount);
+			console.log(val.category_name+"-"+itemcounts);
 	    all_cat_id.push(val.cat_id);
 	    var active_class = '';
 
@@ -2618,6 +2622,7 @@ function menuCategoryResult(data)
 	    }
 	    htm += '<div class="swiper-slide ' + active_class + '"  ><a href="javascript:;" data-scroll="scroll_div_' + val.cat_id + '" onclick="scroll_list(' + val.cat_id + ',this)"  > ' + val.category_name + '</a></div>';
 	    count = parseInt(count) + 1;
+			console.log("this is slider"+count);
 	});
 	var maincatcnt=count;
 	// htm+='</ons-carousel></ons-list>';
@@ -2650,19 +2655,17 @@ function menuCategoryResult(data)
 	        if ($.inArray(val.category_id, all_cat) !== -1) {}
 					else {
 	            all_cat.push(val.category_id);
-
+							console.log("This is div count" +count);
 
 	             if (count > 0) {
-							//if(itemcount <  20)
-							//	{
-//							$.each(itemcount, function(key, val) {  });
-								//if(itemcount)
-										html +='<button id="0if" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+');" data-trn-key="book_now">Load More</button>';
 
-
-							//	}
+										if(val.total_count > 20 )
+										{
+											html +='<button id="0if" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+');" data-trn-key="book_now">Load More</button>';
+										}
 	                html += "</div>";
 	            }
+
 	            if (display_count == 1) {
 	                display_style = 'style = "display:block;"';
 	            }
@@ -2743,17 +2746,24 @@ function menuCategoryResult(data)
 
 					 //if(menucame < itemcount)
 					 //{
-							 html +='<button id="1if" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+');" data-trn-key="book_now">Load More</button>';
+					 if(val.total_count > 20 )
+					 {
+					 	 html +='<button id="1if" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+');" data-trn-key="book_now">Load More</button>';
+					 }
+
 					 //}
 						 html += "</div>";
 				 }
-
 	    });
+
 			console.log(items);
+			console.log(itemcount);
 	    html += '</ons-list>';
-			
+			menustart = parseFloat(menustart) + 20;
+			console.log("MenuStart@End"+menustart);
 	    createElement('menu-list', html);
 	} else {
+		console.log("Elsre Part is called");
 	    var cid;
 	    var categoryid = [];
 	    $.each(data.item, function(key, val) {
@@ -2876,7 +2886,9 @@ function menuCategoryResult(data)
 	{
 		console.log("loadmore is called");
 		menucame=parseInt(menucame)+parseInt(menutcame);
-		menustart = parseFloat(menustart) + 20;
+		console.log(menucame);
+		console.log(menutotal);
+		//menustart = parseFloat(menustart) + 20;
 		var mid = getStorage("merchant_id");
 		var c_day = getStorage("c_day");
 		//if (menucame < menutotal) {
@@ -7260,8 +7272,7 @@ function payCityPay(fireurl) {
 		 }
 		};
 		sNavigator.pushPage("bookingTY.html", options);
-		}
-		else{
+		}else{
 		console.log("Not set");
 		}
 	  //  alert(event.url);
@@ -7282,13 +7293,13 @@ function searchMerchantMap() {
 	var options = {
       animation: 'none',
       onTransitionEnd: function() {
-      	 
+
       }
     };
 	kNavigator.pushPage("searchMap.html", options);
 }
 
- 
+
 
 function displayRestaurantResultsOnMap(data) {
 	//Get all the restaurants info and parse the lat and long
@@ -7299,7 +7310,7 @@ function displayRestaurantResultsOnMap(data) {
 		zoom: 13,
 		center: {lat: 49.217231, lng: -2.140589}
 	  });
-	 
+
 	  $.each(data, function( key, val ) {
 		if(val.latitude) {
 			pLat = parseFloat(val.latitude);
@@ -7325,14 +7336,14 @@ function displayRestaurantResultsOnMap(data) {
 				marker.addListener('click', function() {
 					//Take to the restaurant menu page
 					//
-					alert("This should take to the respective restaurant page. Merchant Id :"+marker.merchant_id);
-					//loadRestaurantCategory(marker.merchant_id); //Error as sNavigator is not defined yet.
+					//alert("This should take to the respective restaurant page. Merchant Id :"+marker.merchant_id);
+					loadRestaurantCategory(marker.merchant_id); //Error as sNavigator is not defined yet.
 				});
 			  }, 500);
 
 		}
 	});
-    
+
 }
 
 
