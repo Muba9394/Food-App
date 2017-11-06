@@ -57,8 +57,7 @@
 
   <script src="js/config.js?ver=1.0"></script>
   <script src="js/paypal.js?ver=1.0"></script>
-  <script src="js/old-openfb.js?ver=1.0"></script>
-  <script src="js/googlemap.js?ver=1.0"></script>
+ 
   <script src="js/tpl.js?ver=1.0"></script>
   <script src="js/countries.js?ver=1.0"></script>
   <script src="js/app.js?ver=1.0"></script>
@@ -179,6 +178,11 @@
         <div class="search-btn"></div>
      </button>
 
+     <br />
+     <button class="button green-btn button--large" onclick="searchMerchantMap();">
+      <span class="trn" data-trn-key="search_restaurant">View on Map</span>
+      <div class="search-btn"><ons-icon icon="fa-globe"></ons-icon></div>
+     </button>
 
     </div>
     </div>
@@ -259,12 +263,7 @@
           <span class="trn" data-trn-key="search_restaurant">Find</span>
           <div class="search-btn"><ons-icon icon="fa-chevron-right"></ons-icon></div>
        </button>
-       <br />
-       <button class="button green-btn button--large" onclick="searchMerchantMap();">
-        <span class="trn" data-trn-key="search_restaurant">Locate on Jersey Map</span>
-        <div class="search-btn"><ons-icon icon="fa-search-plus"></ons-icon></div>
-       </button>
-
+      
     </div>
     </div>
 
@@ -310,20 +309,7 @@
 </ons-navigator>
 </script>
 
-<script type="text/ons-template" id="searchMap.html">
 
-  <ons-page id="page-searchmap" modifier="map-searchpage" >
-
-     <ons-toolbar>
-       <div class="left"><ons-back-button></ons-back-button></div>
-       <div class="center white"><span class="trn" data-trn-key="searchmap" >Restaurants on Map</span></div>
-     </ons-toolbar>
-     <div class="center white"><span id="searchmap-text"></span></div>
-     <div id="searchmap_canvas_div"></div>
-
-  </ons-page>
-
-  </script>
 
 
 
@@ -1800,13 +1786,13 @@
       <img src="css/images/banner.png" alt="" title="">
       <p class="center trn" data-trn-key="please_log_or_reg">Please log in or register to continue with<br>your order</p>
     </div>
-
-   <!--<div class="wrapper center wrapper-white fb-login-wrap">
+<!--
+   <div class="wrapper center wrapper-white fb-login-wrap">
       <button class="button blue-btn button--large fb-loginbutton" id="fb-loginbutton" onclick="myFacebookLogin();">
         <ons-icon icon="fa-facebook"></ons-icon> <span class="trn" data-trn-key="sigin_fb">Sign in with Facebook</span>
       </button>
-   </div>   -->
-
+   </div>
+  -->
    <div class="wrapper center">
       <h4 class="trn" data-trn-key="or_use_your_email">Use your email address</h4>
       <br/>
@@ -2838,6 +2824,22 @@
        </ons-list>
       </ons-scroller>
   </ons-popover>
+</script>
+
+
+<script type="text/ons-template" id="searchMap.html">
+  
+    <ons-page id="page-searchmap" modifier="map-searchpage" >
+  
+       <ons-toolbar>
+         <div class="left"><ons-back-button></ons-back-button></div>
+         <div class="center white"><span class="trn" data-trn-key="searchmap" >Restaurants on Map</span></div>
+       </ons-toolbar>
+  
+       <div id="searchmap_canvas_div"> </div>
+  
+    </ons-page>
+  
 </script>
 
 

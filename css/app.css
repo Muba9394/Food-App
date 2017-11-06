@@ -90,6 +90,9 @@ border:none;
 {
 color:#dd2c33;
 }
+.restauran-title.white{
+	color:#fff !important;
+}
 .restauran-title.restauran-titles.white
 {
 color:#fff;
@@ -918,12 +921,17 @@ margin-top:20px;
 }
 
 #map_canvas_div,
-#map_canvas_div_search,
 #map_canvas_address,
 #map_canvas_track
 {
 height:100px;
 width:100%;
+}
+
+#searchmap_canvas_div
+{
+    width:100%;
+    height:100%
 }
 
 .page__background.page--map-page__background{

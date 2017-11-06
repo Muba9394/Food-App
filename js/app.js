@@ -7,7 +7,6 @@ var networkState;
 
 var easy_category_list='';
 var map;
-var map_search;
 var drag_marker;
 var map_track;
 var track_order_interval;
@@ -16,7 +15,7 @@ var drag_marker_bounce=1;
 var start="0";
 var limit="5";
 var menustart="0";
-var menulimit="10";
+var menulimit="20";
 document.addEventListener("deviceready", onDeviceReady,  false);
 
 
@@ -379,7 +378,6 @@ document.addEventListener("pageinit", function(e) {
 		break;
 
 		case "page-searchmap":
-		$("#mapsearch-text").html('Browse on our map');
 		callAjax("search_take_away_on_map","&start=0&limit=40&type=1&address=null&cuisine=&parish=");
 		break;
 
@@ -2333,6 +2331,8 @@ ons.bootstrap();
 
 
 var menucame=0;
+var menutotal;
+
 function menuCategoryResult(data)
 {
 	//$("#page-booking #frm-booking .hidden_merchant_id").val(data.merchant_id);
@@ -2561,7 +2561,8 @@ function menuCategoryResult(data)
 	} else {
 		onsenAlert(  getTrans("This restaurant has not published their menu yet.",'this_restaurant_no_menu') );
 	}	*/
-	var menutotal=data.category_item_count;
+	 menutotal=data.category_item_count;
+	 menutcame = Object.keys(data).length;
 	$('#merchant_open_close_timing').val(data.selected_date);
 	$("#menucategory-page .restauran-title").text(data.restaurant_name);
 	$("#menucategory-page .rating-stars").attr("data-score", data.ratings.ratings);
@@ -2595,7 +2596,16 @@ function menuCategoryResult(data)
 	var s = a.join(', ');
 	alert(s.toSource); */
 	htm += '<ons-list><div class="swiper-container"><div class="swiper-wrapper">';
+	var itemcount;
 	$.each(data.menu_category, function(key, val) {
+			if (jQuery.inArray(val.total_count, itemcount) !== -1) {
+			} else {
+
+					itemcount=val.total_count;
+					//itemcount[val.cat_id]=val.total_count;
+					//itemcount=array(val.cat_id => val.total_count );
+			}
+			console.log(val.category_name+"-"+itemcount);
 	    all_cat_id.push(val.cat_id);
 	    var active_class = '';
 
@@ -2609,6 +2619,7 @@ function menuCategoryResult(data)
 	    htm += '<div class="swiper-slide ' + active_class + '"  ><a href="javascript:;" data-scroll="scroll_div_' + val.cat_id + '" onclick="scroll_list(' + val.cat_id + ',this)"  > ' + val.category_name + '</a></div>';
 	    count = parseInt(count) + 1;
 	});
+	var maincatcnt=count;
 	// htm+='</ons-carousel></ons-list>';
 	htm += '</div></div><div class="swiper-pagination"></div></ons-list>';
 	/*
@@ -2629,28 +2640,37 @@ function menuCategoryResult(data)
 	var count = 0;
 	var display_count = 1;
 	//var ending_div = '';
+	var items=0;
+
 	if (menustart == 0) {
 	    html += '<ons-list class="restaurant-list ng-scope list ons-list-inner">';
 	    $.each(data.item, function(key, val) {
+				//console.log(Object.keys(data.item).length);
 	        var display_style = 'style = "display:none;"';
-	        if ($.inArray(val.category_id, all_cat) !== -1) {} else {
+	        if ($.inArray(val.category_id, all_cat) !== -1) {}
+					else {
 	            all_cat.push(val.category_id);
-	            if (count > 0) {
+
+
+	             if (count > 0) {
+							//if(itemcount <  20)
+							//	{
+//							$.each(itemcount, function(key, val) {  });
+								//if(itemcount)
+										html +='<button id="0if" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+');" data-trn-key="book_now">Load More</button>';
+
+
+							//	}
 	                html += "</div>";
 	            }
 	            if (display_count == 1) {
 	                display_style = 'style = "display:block;"';
 	            }
-
 	            //html += '<div id = "scroll_div_'+val.category_id+'"  '+display_style+'   data-anchor="scroll_div_'+val.category_id+'" class="scrolling-div" >  <div class="category-heading" >'+ val.category_name +'</div>';
-
 	            html += '<div id = "scroll_div_' + val.category_id + '"  ' + display_style + '   data-anchor="scroll_div_' + val.category_id + '" class="scrolling-div" > ';
 	            count = parseInt(count) + 1;
 	            display_count = parseInt(display_count) + 1;
 	        }
-
-	        // alert(val.category_id + val.item_name );
-
 	        if (data.disabled_ordering == 2) {
 	            html += '<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(2)" >';
 	        } else {
@@ -2716,9 +2736,22 @@ function menuCategoryResult(data)
 	        html += '</ons-col>';
 	        html += '</ons-row>';
 	        html += '</ons-list-item>';
-	    });
+					//console.log(count);
+					//console.log(maincatcnt);
+					items++;
+					if (Object.keys(data.item).length == items) {
 
+					 //if(menucame < itemcount)
+					 //{
+							 html +='<button id="1if" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+');" data-trn-key="book_now">Load More</button>';
+					 //}
+						 html += "</div>";
+				 }
+
+	    });
+			console.log(items);
 	    html += '</ons-list>';
+			
 	    createElement('menu-list', html);
 	} else {
 	    var cid;
@@ -2735,7 +2768,11 @@ function menuCategoryResult(data)
 	        if ($.inArray(val.category_id, all_cat) !== -1) {} else {
 	            all_cat.push(val.category_id);
 	            if (count > 0) {
-	                //html += "</div>";
+								//if(menucame < itemcount)
+								//{
+									html +='<button id="0else" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+');" data-trn-key="book_now">Load More</button>';
+							//	}
+	               // html += "</div>";
 	            }
 	            if (display_count == 1) {
 	                display_style = 'style = "display:block;"';
@@ -2815,29 +2852,36 @@ function menuCategoryResult(data)
 	        html += '</ons-col>';
 	        html += '</ons-row>';
 	        html += '</ons-list-item>';
-	        html += '</div>';
+	        //html += '</div>';
+					if (Object.keys(data.item).length == items) {
 
+					 //if(menucame < itemcount)
+					 //{
+							 html +='<button id="1else" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+');" data-trn-key="book_now">Load More</button>';
+					 //}
+						 html += "</div>";
+				 }
 	        $("#scroll_div_" + cid).append(html);
+
 	    });
 
 	    /* $.each(categoryid, function(key, val) {
 
 	    }); */
-
 	}
-
-	var menutcame = Object.keys(data).length;
-	menucame=parseInt(menucame)+parseInt(menutcame);
-
 	imageLoaded('.img_loaded');
-	menustart = parseFloat(menustart) + 10;
-	var mid = getStorage("merchant_id");
-	var c_day = getStorage("c_day");
-	if (menucame < menutotal) {
-	    callAjax("MenuCategory", "start=" + menustart + "&end=" + menulimit + "&merchant_id=" + mid + "&device_id=" + getStorage("device_id") + "&current_day=" + c_day);
 	}
 
-
+	function loadmore(cid)
+	{
+		console.log("loadmore is called");
+		menucame=parseInt(menucame)+parseInt(menutcame);
+		menustart = parseFloat(menustart) + 20;
+		var mid = getStorage("merchant_id");
+		var c_day = getStorage("c_day");
+		//if (menucame < menutotal) {
+				callAjax("MenuCategory", "start=" + menustart + "&end=" + menulimit + "&category_id="+cid+"&merchant_id=" + mid + "&device_id=" + getStorage("device_id") + "&current_day=" + c_day);
+		//}
 	}
 
 
@@ -5287,7 +5331,7 @@ function login()
 		onsenAlert("Email Id is mandatory");
 	}
 	else if( !isValidEmailAddress( email ) ) {
-		onsenAlert("Invalid Email ID");
+		onsenAlert("Invalid email format");
 	}
 	else{
 	$.validate({
@@ -5484,7 +5528,8 @@ function showHistory()
 
 function showTerms()
 {
-		menu.setMainPage('terms.html', {closeMenu: true});
+		//menu.setMainPage('terms.html', {closeMenu: true});
+		var iabRef = cordova.InAppBrowser.open('https://www.cuisine.je/store/page/terms-amp-conditions', '_self', 'location=no','toolbar=yes');
 
 }
 
@@ -6014,7 +6059,7 @@ function showOrders2()
 		menu.setMainPage('prelogin.html', {closeMenu: true});
 	}
 }
-
+/*
 function initMerchantMap(data)
 {
 	dump(data);
@@ -6025,7 +6070,7 @@ function initMerchantMap(data)
 		$("#merchant-map").hide();
 	}
 }
-
+*/
 /*
 function getCurrentLocation()
 {
@@ -7183,69 +7228,53 @@ function loadMoreReviews1()
 	loadMoreReviews();
 }
 
-
-function payCityPay(fireurl)
-{
-
+function payCityPay(fireurl) {
 	var iabRef = null;
-
-    function iabLoadStart(event) {
-      //  alert(event.type + ' - ' + event.url);
-    }
-
-var successurl;
-    function iabLoadStop(event) {
-			 //setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
-			 setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
-				successurl= getStorage("successurl");
-				console.log(event.url);
-				console.log(successurl);
-				if (event.url == successurl) {
-					iabRef.close();
-    		}
-    }
-
-    function iabLoadError(event) {
-      //  alert(event.type + ' - ' + event.message);
-    }
-
-    function iabClose(event) {
+	function iabLoadStart(event) {
+		//  alert(event.type + ' - ' + event.url);    }
+		var successurl;
+	}
+		function iabLoadStop(event) {
+		//setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
+		setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
+		successurl= getStorage("successurl");
+		console.log(event.url);
+		console.log(successurl);
+		if (event.url == successurl) {
+				iabRef.close();
+			}
+		}
+		function iabLoadError(event) {
+			 //  alert(event.type + ' - ' + event.message);
+		}
+		function iabClose(event) {
 			console.log(successurl);
 			console.log("close event");
 			console.log(event.url);
-			if(event.url == successurl)
-			{
-				console.log("Equals");
-				var options = {
-						animation: 'slide',
-						onTransitionEnd: function() {
-								displayMerchantLogo2(
-									 getStorage("merchant_logo") ,
-									 '' ,
-									 'page-booking-ty'
-								);
-
-								$(".book-ty-msg").html(data.msg);
-						}
-					};
-				sNavigator.pushPage("bookingTY.html", options);
-
-			}
-			else{
-				console.log("Not set");
-			}
-      //  alert(event.url);
-        // iabRef.removeEventListener('loadstart', iabLoadStart);
-      //   iabRef.removeEventListener('loadstop', iabLoadStop);
-        // iabRef.removeEventListener('loaderror', iabLoadError);
-         //iabRef.removeEventListener('exit', iabClose);
-    	}
-
-		 iabRef = cordova.InAppBrowser.open(fireurl, '_blank', 'location=no','toolbar=no','clearcache=yes','zoom=no');
-         iabRef.addEventListener('loadstart', iabLoadStart);
-         iabRef.addEventListener('loadstop', iabLoadStop);
-        // iabRef.removeEventListener('loaderror', iabLoadError);
-         iabRef.addEventListener('exit', iabClose);
+			if(event.url == successurl) {
+			console.log("Equals");
+		var options = {
+			animation: 'slide',onTransitionEnd: function() {
+				displayMerchantLogo2(getStorage("merchant_logo") ,'' ,'page-booking-ty');
+		 $(".book-ty-msg").html(data.msg);
+		 }
+		};
+		sNavigator.pushPage("bookingTY.html", options);
+		}
+		else{
+		console.log("Not set");
+		}
+	  //  alert(event.url);
+			// iabRef.removeEventListener('loadstart', iabLoadStart);
+			   //   iabRef.removeEventListener('loadstop', iabLoadStop);
+					  // iabRef.removeEventListener('loaderror', iabLoadError);
+							//iabRef.removeEventListener('exit', iabClose);
+	}
+	iabRef = cordova.InAppBrowser.open(fireurl, '_blank', 'location=no','toolbar=no','clearcache=yes','zoom=no');
+	iabRef.addEventListener('loadstart', iabLoadStart);
+	iabRef.addEventListener('loadstop', iabLoadStop);
+	// iabRef.removeEventListener('loaderror', iabLoadError);
+	iabRef.addEventListener('exit', iabClose);
 }
 
 
@@ -7253,70 +7282,59 @@ function searchMerchantMap() {
 	var options = {
       animation: 'none',
       onTransitionEnd: function() {
-      	 // showAllOnMap();
+      	 
       }
     };
 	kNavigator.pushPage("searchMap.html", options);
 }
 
+ 
 
 function displayRestaurantResultsOnMap(data) {
 	//Get all the restaurants info and parse the lat and long
-	google_lat = new plugin.google.maps.LatLng(49.217231, -2.140589 ); //Center of JERSEY, Unfortunately its hard coded for our convenience
-	//alert("Merchant"+google_lat);
-	setTimeout(function(){
-        var div = document.getElementById("searchmap_canvas_div");
-        $('#searchmap_canvas_div').css('height', $(window).height() - $('#searchmap_canvas_div').offset().top);
-        map_search = plugin.google.maps.Map.getMap(div, {
-	     'camera': {
-	      'latLng': google_lat,
-	      'zoom': 12
-		 },
-		 'controls': {
-			'compass': true,
-			'myLocationButton': true,
-			'indoorPicker': true,
-			'zoom': true
-		  }
-		});
-        map_search.on(plugin.google.maps.event.MAP_READY, searchMapInit(data));
-		}, 1000); // and timeout for clear transitions
-}
+	//var JERSEY = new plugin.google.maps.LatLng(49.217231, -2.140589 ); //Center of JERSEY
 
-function searchMapInit(data) {
-	map_search.clear();
-	//map_search.off();
-	map_search.setCameraZoom(11);
-	//map_search.setTrafficEnabled(true);
-
-	var mData =[];
-	$.each(data, function( key, val ) {
+	//$('#searchmap_canvas_div').css('height', $(window).height() - $('#searchmap_canvas_div').offset().top);
+	var mapNew = new google.maps.Map(document.getElementById('searchmap_canvas_div'), {
+		zoom: 13,
+		center: {lat: 49.217231, lng: -2.140589}
+	  });
+	 
+	  $.each(data, function( key, val ) {
 		if(val.latitude) {
-			var point = new plugin.google.maps.LatLng(val.latitude , val.longitude);
-			var entry = {'position': point,'title': val.restaurant_name,'icon': {'url': 'https://www.cuisine.je/assets/images/menu-icon.png' }};
-			mData.push(entry);
+			pLat = parseFloat(val.latitude);
+			pLong = parseFloat(val.longitude);
+		//	dump("types: " + (typeof pLat) + ", " + (typeof pLong));
+			var point = new google.maps.LatLng(pLat,pLong);
+		//	var entry = {'position': point,'title': val.restaurant_name,'icon': {'url': 'https://www.cuisine.je/assets/images/menu-icon.png' }};
+		var infowindow = new google.maps.InfoWindow({
+			content: val.restaurant_name
+		  });
+
+			setTimeout(function() {
+				var marker = new google.maps.Marker({
+				  position: point ,//{lat: val.latitude, lng: val.longitude},
+				  title: val.restaurant_name,
+				  icon: {url: 'https://www.cuisine.je/assets/images/menu-icon.png' },
+				  map: mapNew,
+				  animation: google.maps.Animation.DROP,
+				  merchant_id:val.merchant_id //set the merchant id so when we click on it we can take them to the restaurant menu
+				});
+				infowindow.open(mapNew, marker);
+
+				marker.addListener('click', function() {
+					//Take to the restaurant menu page
+					//
+					alert("This should take to the respective restaurant page. Merchant Id :"+marker.merchant_id);
+					//loadRestaurantCategory(marker.merchant_id); //Error as sNavigator is not defined yet.
+				});
+			  }, 500);
+
 		}
 	});
-
-	addSearchMarkers(mData, function(markers) {
-			markers[markers.length - 1].showInfoWindow();
-			markers[markers.length - 1].setAnimation(plugin.google.maps.Animation.BOUNCE);
-		});
+    
 }
 
-function addSearchMarkers(data, callback) {
-	var markers = [];
-	function onMarkerAdded(marker) {
-	  markers.push(marker);
-	  if (markers.length === data.length) {
-		callback(markers);
-	  }
-	}
-	data.forEach(function(markerOptions) {
-		//dump(markerOptions);
-		map_search.addMarker(markerOptions, onMarkerAdded);
-	});
-}
 
 
 function addMarkers(data, callback) {
@@ -7472,7 +7490,7 @@ function onMapInit()
 	map.clear();
 	map.off();
 	map.setCameraTarget(GOOGLE);
-	map.setCameraZoom(17);
+	map.setCameraZoom(14);
 
     map.addMarker({
 	  'position': new plugin.google.maps.LatLng( merchant_latitude , merchant_longtitude ),

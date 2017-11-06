@@ -3,7 +3,7 @@
     xmlns:gap = "http://phonegap.com/ns/1.0"
     xmlns:android = "http://schemas.android.com/apk/res/android"
     id        = "je.cuisine.je"
-    version   = "1.0">
+    version   = "0.0">
     <name>Cuisine.je</name>
     <description>
         Online Table Booking and food ordering service in JERSEY,UK
@@ -24,11 +24,17 @@
     <gap:plugin name="com.paypal.cordova.mobilesdk" source="npm"  />
     <gap:plugin name="cordova-plugin-device" source="npm"/>
 	<gap:plugin name="cordova-plugin-splashscreen" source="npm"/>
-	<!--<gap:plugin name="cordova-plugin-inappbrowser" source="npm"/>
-	<gap:plugin name="cordova-plugin-whitelist" source="npm"/>
+	
+	
+	<!--
+	<gap:plugin name="cordova-plugin-inappbrowser" source="npm"/>
 	<allow-navigation href="*://*.citypay.com/*" />
+	<allow-navigation href="*://*.cuisine.je/*" />
 	<allow-intent href="*://*.citypay.com/*" />
-	<access origin="http://*.citypay.com" />-->
+	<allow-intent href="*://*.cuisine.je/*" />
+	<access origin="http://*.citypay.com" />
+	<gap:plugin name="cordova-plugin-whitelist" source="npm"/>
+	-->
 	<gap:plugin name="cordova-plugin-geolocation" source="npm"/>
 	<gap:plugin name="cordova-plugin-network-information" source="npm" />
 	<gap:plugin name="cordova-plugin-request-location-accuracy" source="npm"  spec="2.2.0" />
@@ -42,15 +48,11 @@
 	<gap:plugin name="cordova-plugin-media" source="npm" spec="3.0.0" />
 	<gap:plugin name="cordova.plugins.diagnostic" source="npm" spec="3.4.2" />
 
-	<gap:plugin name="cordova-plugin-googlemaps"  source="npm" spec="2.0" >
+	<gap:plugin name="cordova-plugin-googlemaps"  source="npm" spec="2.1" >
        <param name="API_KEY_FOR_ANDROID" value="AIzaSyC25RhPHKmvQTz7OzprugQyzWssMlvWKHA" />
        <param name="API_KEY_FOR_IOS" value="AIzaSyC25RhPHKmvQTz7OzprugQyzWssMlvWKHA" />
     </gap:plugin>
-	<!--<gap:plugin spec="https://github.com/mapsplugin/cordova-plugin-googlemaps.git" source="git" >
-       <param name="API_KEY_FOR_ANDROID" value="AIzaSyC25RhPHKmvQTz7OzprugQyzWssMlvWKHA" />
-       <param name="API_KEY_FOR_IOS" value="AIzaSyC25RhPHKmvQTz7OzprugQyzWssMlvWKHA" />
-    </gap:plugin>
-	-->
+	
 	<preference name="AutoHideSplashScreen" value="false" />
     <preference name="SplashScreenDelay" value="10000" />
     <preference name="fullscreen" value="false" />
