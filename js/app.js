@@ -752,7 +752,7 @@ function callAjax(action,params)
 			{
 				case "search":
 				// alert("Search");
-				displayRestaurantResults(data.details.data ,'restaurant-results',1);
+				displayRestaurantResults(data.details.data ,'restaurant-results',1,data.details.total,'loadmore',data.code);
 				//$(".result-msg").text(data.details.total+" Restaurant found");
 				$(".result-msg").text(data.details.total+" "+getTrans("Restaurant found",'restaurant_found') );
 				break;
@@ -781,6 +781,21 @@ function callAjax(action,params)
 				setStorage("merchant_latitude",data.details.coordinates.latitude);
 				setStorage("merchant_longtitude",data.details.coordinates.longtitude);
 				setStorage("merchant_address",data.details.address);
+
+				menuCategoryResult(data.details);
+				break;
+
+				case "MobileLoadMore":
+				/*save merchant logo*/
+				//setStorage("merchant_logo",data.details.logo);
+				//dump(data.details.restaurant_name);
+				//setStorage("merchant_name",data.details.restaurant_name);
+
+				//setStorage("enabled_table_booking",data.details.enabled_table_booking);
+
+				//setStorage("merchant_latitude",data.details.coordinates.latitude);
+				//setStorage("merchant_longtitude",data.details.coordinates.longtitude);
+				//setStorage("merchant_address",data.details.address);
 
 				menuCategoryResult(data.details);
 				break;
@@ -1247,20 +1262,20 @@ function callAjax(action,params)
 
 				case "browseRestaurant":
 				// alert("browseRestaurant");
-				   displayRestaurantResults( data.details.data ,'browse-results',3);
+				   displayRestaurantResults( data.details.data ,'browse-results',2,data.details.total,'loadmore',data.code);
 				   //$(".result-msg").text(data.details.total+" Restaurant found");
 				   $(".result-msg").text(data.details.total+" "+ getTrans("Restaurant found",'restaurant_found')  );
 				   break;
 
 			   case "BrowseByBookTable":
-					displayRestaurantResults(data.details.data ,'restaurant-result',2);
+					displayRestaurantResults(data.details.data ,'restaurant-result',2,data.details.total,'loadmore',data.code);
 				//$(".result-msg").text(data.details.total+" Restaurant found");
 				$(".result-msg").text(data.details.total+" "+getTrans("Restaurant found",'restaurant_found') );
 			   break;
 
 				case "searchRestaurant":
 			    // alert("BrowseByBookTable");
-					displayRestaurantResults(data.details.data ,'browse-results',3);
+					displayRestaurantResults(data.details.data ,'browse-results',3,data.details.total,'loadmore',data.code);
 				//$(".result-msg").text(data.details.total+" Restaurant found");
 				$(".result-msg").text(data.details.total+" "+getTrans("Restaurant found",'restaurant_found') );
 			   break;
@@ -1654,7 +1669,7 @@ function callAjax(action,params)
 					   drag_marker=marker;
 					   drag_marker_bounce=2;
 
-					   marker.addEventListener(plugin.google.maps.event.MARKER_DRAG_END, function(marker) {
+					   marker.on(plugin.google.maps.event.MARKER_DRAG_END, function(marker) {
 							marker.getPosition(function(latLng) {
 								 temp_result=explode(",", latLng.toUrlValue() );
 								 /*alert(temp_result[0]);
@@ -1986,7 +2001,7 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
 
 
 
-    	 htm+='<ons-list-item modifier="tappable" class="list-item-container product list list__item ons-list-item-inner list__item--tappable">';
+    	 htm+='<ons-list-item modifier="tappable" class="list-item-container product list list__item ons-list-item-inner list__item--tappable" >';
     	 htm+='<ons-row class="row product-list ons-row-inner">';
     	     htm+='<ons-col class="col-image border col ons-col-inner">';
     	     if(display_type==2)
@@ -2562,9 +2577,10 @@ function menuCategoryResult(data)
 	} else {
 		onsenAlert(  getTrans("This restaurant has not published their menu yet.",'this_restaurant_no_menu') );
 	}	*/
-	console.log("MenuStartStarting"+menustart);
 	 menutotal=data.category_item_count;
 	 menutcame = Object.keys(data).length;
+	if(menustart == 0)
+ 	{
 	$('#merchant_open_close_timing').val(data.selected_date);
 	$("#menucategory-page .restauran-title").text(data.restaurant_name);
 	$("#menucategory-page .rating-stars").attr("data-score", data.ratings.ratings);
@@ -2590,7 +2606,7 @@ function menuCategoryResult(data)
 	var htm = '';
 	// htm+='<ons-list class="cate-list"> <ons-carousel swipeable style="margin-top: 5px; height: 70px;" overscrollable auto-scroll item-width="auto"> ';
 	var all_cat_id = [];
-	var count = 1;
+	var count = 0;
 	/*	$.each( data.menu_category, function( key, val ) {
 	    a.push(count);
 	    count += parseInt(1);
@@ -2617,12 +2633,12 @@ function menuCategoryResult(data)
 	    //   htm+='<ons-list-item modifier="tappable" class="row" onclick="scroll_list('+val.cat_id+');">'+val.category_name+'</ons-list-item>';
 	    // alert(val.category_name);
 	    // htm += '<ons-carousel-item ng-repeat="i in ['+count+']"><a href="javascript:;" class="menu-type" onclick="scroll_list('+val.cat_id+');" >'+val.category_name+'</a></ons-carousel-item>';
-	    if (count == 1) {
+	    if (count == 0) {
 	        active_class = 'active';
 	    }
 	    htm += '<div class="swiper-slide ' + active_class + '"  ><a href="javascript:;" data-scroll="scroll_div_' + val.cat_id + '" onclick="scroll_list(' + val.cat_id + ',this)"  > ' + val.category_name + '</a></div>';
-	    count = parseInt(count) + 1;
-			console.log("this is slider"+count);
+    	count = parseInt(count) + 1;
+			//console.log("this is slider"+count);
 	});
 	var maincatcnt=count;
 	// htm+='</ons-carousel></ons-list>';
@@ -2639,14 +2655,16 @@ function menuCategoryResult(data)
 	    paginationClickable: true,
 	    spaceBetween: 15
 	})
-
+}
 	var html = '';
 	var all_cat = [];
+	var item_cnt=[];
 	var count = 0;
 	var display_count = 1;
 	//var ending_div = '';
 	var items=0;
-
+	var newcat=0;
+	var n = 0;
 	if (menustart == 0) {
 	    html += '<ons-list class="restaurant-list ng-scope list ons-list-inner">';
 	    $.each(data.item, function(key, val) {
@@ -2655,22 +2673,45 @@ function menuCategoryResult(data)
 	        if ($.inArray(val.category_id, all_cat) !== -1) {}
 					else {
 	            all_cat.push(val.category_id);
-							console.log("This is div count" +count);
-
-	             if (count > 0) {
-
+							item_cnt.push(val.total_count);
+							if (count > 0) {
 										if(val.total_count > 20 )
 										{
-											html +='<button id="0if" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+');" data-trn-key="book_now">Load More</button>';
+										//html +='<button id="if'+all_cat[count-1]+'" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+',20);" data-trn-key="book_now">Load More</button>';
 										}
 	                html += "</div>";
 	            }
 
+
+
+							/*if(newcat != val.category_id)
+							{
+								//alert(val.category_name);
+
+								if(n > 0)
+								{
+									//alert(val.category_name + '---' + val.total_count);
+									if(val.total_count > 20 )
+									{
+										//alert(val.category_id);
+										//alert(val.total_count);
+										html +='<button id="if'+newcat+'" class=" button green-btn button--large trn" onclick="loadmore('+newcat+',20);" data-trn-key="book_now">Load More '+newcat+'</button>';
+										//html+='<button>Name</button>';
+									}
+
+									html += "</div>";
+
+								}
+								newcat=val.category_id;
+								n++;
+							}
+*/
 	            if (display_count == 1) {
 	                display_style = 'style = "display:block;"';
 	            }
 	            //html += '<div id = "scroll_div_'+val.category_id+'"  '+display_style+'   data-anchor="scroll_div_'+val.category_id+'" class="scrolling-div" >  <div class="category-heading" >'+ val.category_name +'</div>';
 	            html += '<div id = "scroll_div_' + val.category_id + '"  ' + display_style + '   data-anchor="scroll_div_' + val.category_id + '" class="scrolling-div" > ';
+							html+='<input type="hidden" value="0" id="hidden'+val.category_id+'"/>';
 	            count = parseInt(count) + 1;
 	            display_count = parseInt(display_count) + 1;
 	        }
@@ -2739,34 +2780,45 @@ function menuCategoryResult(data)
 	        html += '</ons-col>';
 	        html += '</ons-row>';
 	        html += '</ons-list-item>';
-					//console.log(count);
-					//console.log(maincatcnt);
-					items++;
-					if (Object.keys(data.item).length == items) {
 
-					 //if(menucame < itemcount)
-					 //{
+
+					items++;
+					/*if (Object.keys(data.item).length == items) {
+
+
 					 if(val.total_count > 20 )
 					 {
-					 	 html +='<button id="1if" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+');" data-trn-key="book_now">Load More</button>';
+					 	 html +='<button id="1if" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+',20);" data-trn-key="book_now">Load More</button>';
 					 }
-
-					 //}
 						 html += "</div>";
-				 }
+				 }*/
+
 	    });
 
 			console.log(items);
 			console.log(itemcount);
 	    html += '</ons-list>';
-			menustart = parseFloat(menustart) + 20;
-			console.log("MenuStart@End"+menustart);
 	    createElement('menu-list', html);
+
+			$.each(all_cat, function(key, val) {
+				//$.each(item_cnt, function(keys, vals) {
+					//console.log(vals);
+					//	if(vals > 20)
+					//	{
+							$("#scroll_div_" + val ).append('<button id="if'+val+'" class="button green-btn button--large trn" onclick="loadmore('+val+',20);" data-trn-key="book_now">Load More</button>');
+					//	}
+				//		else
+					//	{
+
+				//		}
+				//});
+			});
+			//console.log("Menustart in if"+menustart);
 	} else {
-		console.log("Elsre Part is called");
 	    var cid;
 	    var categoryid = [];
-	    $.each(data.item, function(key, val) {
+			var buts;
+	    $.each(data, function(key, val) {
 	        var html='';
 	        cid = val.category_id;
 	        if (jQuery.inArray(val.category_id, categoryid) !== -1) {
@@ -2777,12 +2829,14 @@ function menuCategoryResult(data)
 	        var display_style = 'style = "display:none;"';
 	        if ($.inArray(val.category_id, all_cat) !== -1) {} else {
 	            all_cat.push(val.category_id);
-	            if (count > 0) {
-								//if(menucame < itemcount)
-								//{
-									html +='<button id="0else" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+');" data-trn-key="book_now">Load More</button>';
-							//	}
-	               // html += "</div>";
+							console.log(val.total_count);
+							console.log("Count"+count);
+	            if (count == 0) {
+								if(val.total_count > 20)
+								{
+									html +='<button id="else'+all_cat+'" class="button green-btn button--large trn" onclick="loadmore('+all_cat+',20);" data-trn-key="book_now">Load More</button>';
+								}
+	                html += "</div>";
 	            }
 	            if (display_count == 1) {
 	                display_style = 'style = "display:block;"';
@@ -2818,9 +2872,9 @@ function menuCategoryResult(data)
 	                            }
 	                        });
 	                    }
-	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="autoAddToCart(' + val.item_id + ',' + item_auto_price + ',' + item_auto_discount + ');"  >';
+	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="autoAddToCart(' + val.item_id + ',' + item_auto_price + ',' + item_auto_discount + ');"  data="else">';
 	                } else {
-	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="loadItemDetails(' + val.item_id + ',' + data.merchant_info.merchant_id + ',' + val.category_id + ');"  >';
+	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="loadItemDetails(' + val.item_id + ',' + data.merchant_id + ',' + val.category_id + ');"  >';
 	                }
 	            }
 	        }
@@ -2863,37 +2917,49 @@ function menuCategoryResult(data)
 	        html += '</ons-row>';
 	        html += '</ons-list-item>';
 	        //html += '</div>';
-					if (Object.keys(data.item).length == items) {
+					if (Object.keys(data).length == items) {
 
-					 //if(menucame < itemcount)
-					 //{
-							 html +='<button id="1else" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+');" data-trn-key="book_now">Load More</button>';
-					 //}
-						 html += "</div>";
+						if(val.total_count > 20 )
+						{
+							 html +='<button id="1else" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+',20);" data-trn-key="book_now">Load More</button>';
+					 	}
+						 //html += "</div>";
 				 }
 	        $("#scroll_div_" + cid).append(html);
 
 	    });
+			$.each(all_cat, function(key, val) {
+				//$.each(item_cnt, function(keys, vals) {
+					//console.log(vals);
+						//if(vals > 20)
+						//{
+							$("#scroll_div_" + val ).append('<button id="if'+val+'" class="button green-btn button--large trn" onclick="loadmore('+val+',20);" data-trn-key="book_now">Load More</button>');
+						//}
+						//else
+						//{
 
-	    /* $.each(categoryid, function(key, val) {
+						//}
+				//});
+			});
+			menucame=Object.keys(data).length;
 
-	    }); */
+			console.log("menustart in end part"+menustart);
 	}
 	imageLoaded('.img_loaded');
 	}
 
-	function loadmore(cid)
+	function loadmore(cid,mstart)
 	{
-		console.log("loadmore is called");
-		menucame=parseInt(menucame)+parseInt(menutcame);
-		console.log(menucame);
-		console.log(menutotal);
-		//menustart = parseFloat(menustart) + 20;
+		var catcnt=$("#hidden"+cid).val();
+		catcnt=parseFloat(catcnt)+20;
+		buts=catcnt;
+		$("#hidden"+cid).val(catcnt);
+		$("#if"+cid).remove();
+		$("#else"+cid).remove();
+		menustart = parseFloat(menustart) + 20;
 		var mid = getStorage("merchant_id");
 		var c_day = getStorage("c_day");
-		//if (menucame < menutotal) {
-				callAjax("MenuCategory", "start=" + menustart + "&end=" + menulimit + "&category_id="+cid+"&merchant_id=" + mid + "&device_id=" + getStorage("device_id") + "&current_day=" + c_day);
-		//}
+		callAjax("MobileLoadMore", "start=" + catcnt + "&end=" + menulimit + "&category_id="+cid+"&merchant_id=" + mid + "&device_id=" + getStorage("device_id") + "&current_day=" + c_day);
 	}
 
 
@@ -5133,15 +5199,16 @@ function table_booking_optn(merchant_id,logo,restaurant_name,hide)
       	  $('#page-booking .hidden_merchant_id').val(merchant_id);
       	  translateValidationForm();
 
-      	  if(getStorage('client_id')=="" || getStorage('client_id')==null){
-		  }
+      	  /*if(getStorage('client_id')=="" || getStorage('client_id')== null){
+					}
 		  else{
 		  callAjax('getProfile',"client_token="+getStorage("client_token"));
-		  }
+		}*/
       }
     };
     sNavigator.pushPage("booking.html", options);
-
+		console.log(getStorage('client_id'));
+		console.log(getStorage('client_id'));
 }
 
 
@@ -7310,7 +7377,7 @@ function displayRestaurantResultsOnMap(data) {
 		zoom: 13,
 		center: {lat: 49.217231, lng: -2.140589}
 	  });
-
+	  var i=1;
 	  $.each(data, function( key, val ) {
 		if(val.latitude) {
 			pLat = parseFloat(val.latitude);
@@ -7318,8 +7385,9 @@ function displayRestaurantResultsOnMap(data) {
 		//	dump("types: " + (typeof pLat) + ", " + (typeof pLong));
 			var point = new google.maps.LatLng(pLat,pLong);
 		//	var entry = {'position': point,'title': val.restaurant_name,'icon': {'url': 'https://www.cuisine.je/assets/images/menu-icon.png' }};
+		var contentString = '<h2>'+val.restaurant_name+'</h2><h3>'+val.cuisine+'</h3><p onclick="loadRestaurantCategory('+val.merchant_id+')">Click here for the menu</p>';
 		var infowindow = new google.maps.InfoWindow({
-			content: val.restaurant_name
+			content: contentString
 		  });
 
 			setTimeout(function() {
@@ -7331,17 +7399,19 @@ function displayRestaurantResultsOnMap(data) {
 				  animation: google.maps.Animation.DROP,
 				  merchant_id:val.merchant_id //set the merchant id so when we click on it we can take them to the restaurant menu
 				});
-				infowindow.open(mapNew, marker);
+				//infowindow.open(mapNew, marker);
 
 				marker.addListener('click', function() {
+					infowindow.open(mapNew, marker);
 					//Take to the restaurant menu page
 					//
 					//alert("This should take to the respective restaurant page. Merchant Id :"+marker.merchant_id);
-					loadRestaurantCategory(marker.merchant_id); //Error as sNavigator is not defined yet.
+					//loadRestaurantCategory(marker.merchant_id); //Error as sNavigator is not defined. Fix this @Mubarak
 				});
-			  }, 500);
+			}, i*200);
 
 		}
+		i++;
 	});
 
 }
@@ -7488,7 +7558,7 @@ function viewTaskMapInit()
 
 
 //https://github.com/mapsplugin/cordova-plugin-googlemaps-doc/blob/master/v2.0.0/class/Map/README.md
-//some methods like setCenter, setZoom have changed to setCameraCenter in version 2.0. Old version is 1.4. raj 23.10.17
+//some methods like setCenter, setZoom have changed to , setCameraTarget, setCameraZoom in version 2.0. Old version is 1.4. raj 23.10.17
 function onMapInit()
 {
 
@@ -7815,10 +7885,10 @@ function checkGPS_AddressMap()
 	         if(!isDebug()){
 		         var geo_loc = new plugin.google.maps.LatLng( s_lat , s_lng );
 
-		         map_search.getCameraPosition(function(camera) {
+		         map.getCameraPosition(function(camera) {
 
-		         	 map_search.setCameraCenter(geo_loc);
-		             map_search.setCameraZoom(camera.zoom);
+					map.setCameraTarget(geo_loc);
+					map.setCameraZoom(camera.zoom);
 			         drag_marker.setPosition(geo_loc);
 			         drag_marker.setTitle( formatted_address );
 		             drag_marker.showInfoWindow();
@@ -7909,26 +7979,26 @@ function MapInit_addressMap()
 	        $('#map_canvas_address').css('height', $(window).height() - $('#map_canvas_address').offset().top);
 	       // $('#map_canvas_address').css('height', '200px');
 
-	        map_search = plugin.google.maps.Map.getMap(div, {
+	        map = plugin.google.maps.Map.getMap(div, {
 			         'camera': {
 			         'latLng': your_location,
 			         'zoom': 17
 			        }
 			      });
 
-		       // map_search.setBackgroundColor('white');
+		       // map.setBackgroundColor('white');
 
-		        map_search.addEventListener(plugin.google.maps.event.MAP_READY, function onMapInit(map) {
+			   map.addEventListener(plugin.google.maps.event.MAP_READY, function onMapInit(map) {
 
-		        	map_search.clear();
-		        	map_search.off();
-		        	map_search.setCameraCenter(your_location);
-		        	map_search.setCameraZoom(17);
+				map.clear();
+				map.off();
+				map.setCameraTarget(your_location);
+				map.setCameraZoom(17);
 
 		        	callAjax("coordinatesToAddress","lat=" + position.coords.latitude + "&lng="+ position.coords.longitude );
 
 
-		        	map_search.addEventListener(plugin.google.maps.event.MAP_CLICK, function onMapClick(latLng) {
+		        	map.addEventListener(plugin.google.maps.event.MAP_CLICK, function onMapClick(latLng) {
 	                     //alert("Map was long clicked.\n" + latLng.toUrlValue());
 	                     var lat_lng= latLng.toUrlValue();
 	                     lat_lng=explode(",",lat_lng);
@@ -7936,7 +8006,7 @@ function MapInit_addressMap()
 	                     alert(lat_lng[1]);*/
 		            });/* even listner*/
 
-		            map_search.addEventListener(plugin.google.maps.event.CAMERA_CHANGE, function onMapCamera(position) {
+		            map.addEventListener(plugin.google.maps.event.CAMERA_CHANGE, function onMapCamera(position) {
 	                    //alert(JSON.stringify(position));
 	                    /*alert( position.target.lat );
 	                    alert( position.target.lng );*/
@@ -7944,7 +8014,7 @@ function MapInit_addressMap()
 	                    //drag_marker.remove();
 
 	                    var new_location = new plugin.google.maps.LatLng( position.target.lat , position.target.lng );
-	                    /*map_search.addMarker({
+	                    /*map.addMarker({
 						  'position': new_location
 						}, function(marker) {
 							drag_marker=marker;
@@ -8168,7 +8238,7 @@ function MapInit_Track()
 
 	        	map.clear();
 	        	map.off();
-	        	map.setCameraCenter(driver_location);
+	        	map.setCameraTarget(driver_location);
 	        	map.setCameraZoom(17);
 
 	        	 map.addMarker({
@@ -8370,7 +8440,7 @@ function reInitTrackMap(data)
 
 		map.clear();
 		map.off();
-		map.setCameraCenter(camera_location);
+		map.setCameraTarget(camera_location);
 		map.setCameraZoom(camera.zoom);
 
 	    var data = [
