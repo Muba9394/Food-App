@@ -7730,7 +7730,7 @@ function viewTaskDirection()
 
          //var destination_location = new plugin.google.maps.LatLng(parseFloat(merchant_latitude) ,parseFloat( merchant_longtitude));
          var destination_location=(merchant_latitude+","+merchant_longtitude);
-         plugin.google.maps.external.launchNavigation({
+         plugin.google.maps.external.launchnavigator({
 	         "from": your_location,
 	         "to": destination_location
 	      });
