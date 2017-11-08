@@ -3,7 +3,7 @@
     xmlns:gap = "http://phonegap.com/ns/1.0"
     xmlns:android = "http://schemas.android.com/apk/res/android"
     id        = "je.cuisine.je"
-    version   = "0.0">
+    version   = "0.1">
     <name>Cuisine.je</name>
     <description>
         Online Table Booking and food ordering service in JERSEY,UK
@@ -42,7 +42,7 @@
 
 	<!--<gap:plugin name="cordova-plugin-fastrde-checkgps" source="npm" spec="1.0.0"  />-->
 	<gap:plugin spec="https://github.com/rodrigo-martinezd/cordova-dialog-gps.git" source="git" />
-  <gap:plugin spec="https://github.com/Muba9394/cordova-plugin-dreams-inappbrowser.git" source="git" />
+  <gap:plugin spec="https://github.com/cuisineje/cordova-plugin-dreams-inappbrowser.git" source="git" />
 
 	<gap:plugin spec="https://github.com/razorpay/razorpay-cordova.git" source="git" />
 	<gap:plugin name="cordova-plugin-media" source="npm" spec="3.0.0" />

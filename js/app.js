@@ -258,7 +258,6 @@ function searchMerchant()
   {
 	  var options = {parish:parish,cuisine:cuisine,closeMenu:true,animation: 'slide'};
 		menu.setMainPage('searchResults.html',options);
-
   } /*else{
   	 onsenAlert(   getTrans('Address is required','address_is_required')  );
   }*/
@@ -2834,7 +2833,7 @@ function menuCategoryResult(data)
 	            if (count == 0) {
 								if(val.total_count > 20)
 								{
-									html +='<button id="else'+all_cat+'" class="button green-btn button--large trn" onclick="loadmore('+all_cat+',20);" data-trn-key="book_now">Load More</button>';
+									//html +='<button id="else'+all_cat+'" class="button green-btn button--large trn" onclick="loadmore('+all_cat+',20);" data-trn-key="book_now">Load More</button>';
 								}
 	                html += "</div>";
 	            }
@@ -7362,11 +7361,20 @@ function searchMerchantMap() {
       onTransitionEnd: function() {
 
       }
-    };
-	kNavigator.pushPage("searchMap.html", options);
+	};
+	menu.setMainPage("searchMap.html",options);
+	//kNavigator.pushPage("searchMap.html", options);
 }
 
+function loadRestuarantCategoryfromMap(mtId) {
+	//var options = {parish:"",cuisine:"",closeMenu:true,animation: 'slide',onTransitionEnd: function() {
+		loadRestaurantCategory(mtId);
+	//}};
 
+	//Its not working.. Issue with sNavigator not loaded .. Need help on this from Mubarak or Vijay
+	//sNavigator.pushPage('menucategory.html',options);
+
+}
 
 function displayRestaurantResultsOnMap(data) {
 	//Get all the restaurants info and parse the lat and long
@@ -7385,9 +7393,31 @@ function displayRestaurantResultsOnMap(data) {
 		//	dump("types: " + (typeof pLat) + ", " + (typeof pLong));
 			var point = new google.maps.LatLng(pLat,pLong);
 		//	var entry = {'position': point,'title': val.restaurant_name,'icon': {'url': 'https://www.cuisine.je/assets/images/menu-icon.png' }};
-		var contentString = '<h2>'+val.restaurant_name+'</h2><h3>'+val.cuisine+'</h3><p onclick="loadRestaurantCategory('+val.merchant_id+')">Click here for the menu</p>';
+		var htm='';
+		if(!empty(val.service)){ // For delivery adn pick up
+			htm+='<ul>';
+				$.each( val.services, function( key_service, val_services ) {
+						htm+='<li>'+val_services+' <i class="green-color ion-android-checkmark-circle"></i></li>';
+				  });
+			htm+='</ul>';
+		  }
+		//var contentString = '<h3>'+val.restaurant_name+'</h3><p>'+val.cuisine+'</p><p>'+ val.address+'</p> <div style="display:flex"> <img src='+val.logo+' height="60" width="60" >'+htm+'</div><p onclick="loadRestuarantCategoryfromMap('+val.merchant_id+')">Click here for the menu</p>';
+		var contentString = '<div id="iw-container">' +
+                    '<div class="iw-title">'+val.restaurant_name+'</div>' +
+                    '<div class="iw-content">' +
+                      '<div class="iw-subTitle">'+val.cuisine+'</div>' +
+                      '<img src="'+val.logo+'" alt="" height="115" width="83">' +
+                      	htm+
+                      //'<div class="iw-subTitle">Contacts</div>' +
+                      '<p>'+ val.address+'<br>'+
+                    '</div>' +
+					'<p onclick="loadRestuarantCategoryfromMap('+val.merchant_id+')">Click here for the menu</p>'
+                    '<div class="iw-bottom-gradient"></div>' +
+                  '</div>';
+		//to do : to also show the book a table option in the info window
 		var infowindow = new google.maps.InfoWindow({
-			content: contentString
+			content: contentString,
+			maxWidth: 300
 		  });
 
 			setTimeout(function() {
@@ -7399,14 +7429,30 @@ function displayRestaurantResultsOnMap(data) {
 				  animation: google.maps.Animation.DROP,
 				  merchant_id:val.merchant_id //set the merchant id so when we click on it we can take them to the restaurant menu
 				});
-				//infowindow.open(mapNew, marker);
+				google.maps.event.addListener(infowindow, 'domready', function() {
 
+					var iwOuter = $('.gm-style-iw');
+					var iwBackground = iwOuter.prev();
+					iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+					iwBackground.children(':nth-child(4)').css({'display' : 'none'});
+					iwOuter.parent().parent().css({left: '115px'});
+					iwBackground.children(':nth-child(1)').attr('style', function(i,s){ return s + 'left: 76px !important;'});
+					iwBackground.children(':nth-child(3)').attr('style', function(i,s){ return s + 'left: 76px !important;'});
+					iwBackground.children(':nth-child(3)').find('div').children().css({'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px', 'z-index' : '1'});
+					var iwCloseBtn = iwOuter.next();
+					iwCloseBtn.css({opacity: '1', right: '38px', top: '3px', border: '7px solid #DD2C33', 'border-radius': '13px', 'box-shadow': '0 0 5px #DD2C33'});
+					if($('.iw-content').height() < 140){
+						$('.iw-bottom-gradient').css({display: 'none'});
+					}
+					iwCloseBtn.mouseout(function(){
+						$(this).css({opacity: '1'});
+					});
+				});
 				marker.addListener('click', function() {
 					infowindow.open(mapNew, marker);
-					//Take to the restaurant menu page
-					//
-					//alert("This should take to the respective restaurant page. Merchant Id :"+marker.merchant_id);
-					//loadRestaurantCategory(marker.merchant_id); //Error as sNavigator is not defined. Fix this @Mubarak
+				});
+				google.maps.event.addListener(mapNew, 'click', function() {
+					infowindow.close();
 				});
 			}, i*200);
 
