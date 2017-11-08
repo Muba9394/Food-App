@@ -7730,11 +7730,17 @@ function viewTaskDirection()
 
          //var destination_location = new plugin.google.maps.LatLng(parseFloat(merchant_latitude) ,parseFloat( merchant_longtitude));
          var destination_location=(merchant_latitude+","+merchant_longtitude);
-         plugin.google.maps.external.launchnavigator({
-	         "from": your_location,
-	         "to": destination_location
-	      });
 
+				//  plugin.google.maps.external.launchnavigator({
+	      //    "from": your_location,
+	      //    "to": destination_location
+	      // });
+				var nav = {
+					"from": your_location,
+					"to": destination_location
+              };
+				console.log(nav);
+				plugin.google.maps.external.launchNavigation(nav);
     	 // end position success
       }, function(error){
     	 toastMsg( error.message );
