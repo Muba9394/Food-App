@@ -3378,23 +3378,47 @@
 
       $("lookupButton").html("Please Wait...");
       var url = "https://api.getaddress.io/find/" + pin + "?api-key=HMMe58k6xEGr5L2TK3ioHQ1599";
-
-      $.getJSON(url, function (data) {
-        if (data == '') {
-          $("#lookupDropdown").hide();
-        }
-        else {
-          $("#lookupDropdown").show();
-          $("#lookupDropdown").empty();
-          $("#lookupDropdown").append("<option value='' disabled selected>Choose one</option>")
-          $.each(data.addresses, function (key, value) {
-            var val = value;
-            val = val.replace(/,/g, "");
-            $("#lookupDropdown").append("<option value='" + value + "'>" + val + "</option>")
-          });
-        }
-        $("lookupButton").html("lookup");
+      $.ajax({
+          url: url,
+          dataType: 'json',
+          success: function( data ) {
+          if(data == '')
+          {
+              $("#lookupDropdown").hide();
+          }
+          else
+            {
+              $("#lookupDropdown").show();
+              $("#lookupDropdown").empty();
+              $("#lookupDropdown").append("<option value='' disabled selected>Choose one</option>")
+              $.each(data.addresses, function (key, value) {
+                var val = value;
+                val = val.replace(/,/g, "");
+                $("#lookupDropdown").append("<option value='" + value + "'>" + val + "</option>")
+              });
+            }
+              $("lookupButton").html("lookup");
+          },
+          error: function( data ) {
+            onsenAlert( "Invalid Pincode" );
+          }
       });
+      // $.getJSON(url, function (data) {
+      //   if (data == '') {
+      //     $("#lookupDropdown").hide();
+      //   }
+      //   else {
+      //     $("#lookupDropdown").show();
+      //     $("#lookupDropdown").empty();
+      //     $("#lookupDropdown").append("<option value='' disabled selected>Choose one</option>")
+      //     $.each(data.addresses, function (key, value) {
+      //       var val = value;
+      //       val = val.replace(/,/g, "");
+      //       $("#lookupDropdown").append("<option value='" + value + "'>" + val + "</option>")
+      //     });
+      //   }
+      //   $("lookupButton").html("lookup");
+      // });
     }
   });
 
@@ -3404,9 +3428,6 @@
     $("#addressOne").val(chngeval[0]);
     $("#city").val(chngeval[4] + "," + chngeval[5]);
     $("#country").val(chngeval[6]);
-
-
-
   });
 </script>
 
