@@ -1732,12 +1732,12 @@
    <div class="wrapper">
       <div class="field-wrapper">
       <input type="text" name="first_name"  class="first_name text-input text-input--underbar has_validation inputTextBox"
-      placeholder="First Name" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
+      placeholder="First Name" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')">
       </div>
 
       <div class="field-wrapper">
       <input type="text" name="last_name"  class="last_name text-input text-input--underbar has_validation inputTextBox"
-      placeholder="Last Name" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
+      placeholder="Last Name" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')">
       </div>
 
       <div class="field-wrapper">
@@ -1746,8 +1746,8 @@
       </div>
 
       <div class="field-wrapper">
-      <input type="text" name="contact_phone"  class="numbers mobile_inputs contact_phone text-input text-input--underbar has_validation"
-      placeholder="Contact phone" value="" data-validation="required" data-validation-error-msg="this field is mandatory!"  pattern='^[0-9]$'>
+      <input type="text" name="contact_phone"  class="numbers mobile_inputs contact_phone text-input text-input--underbar has_validation" id="mbno"
+      placeholder="Mobile Phone" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" onkeyup="this.value=this.value.replace(/[^0-9]/g, '')">
       </div>
 
       <div class="field-wrapper">
