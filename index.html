@@ -121,7 +121,7 @@
 
 	<ons-list-item onclick="showHistory();" class="bottom-menu-item">
       <ons-icon icon="ion-ios-clock"></ons-icon>
-      <span class="trn" data-trn-key="history">Booking History</span>
+      <span class="trn" data-trn-key="history">Table booking History</span>
     </ons-list-item>
 
     <ons-list-item onclick="showAddressBook();" class="bottom-menu-item">
@@ -691,23 +691,23 @@
    <input type="hidden" name="next_step" value="shipping_address">
    <div class="wrapper">
       <div class="field-wrapper">
-      <input type="text" name="first_name"  class="first_name text-input text-input--underbar has_validation"
-      placeholder="First Name" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
+      <input type="text" name="first_name"  class="first_name text-input text-input--underbar has_validation" id="fname"
+      placeholder="First Name" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')">
       </div>
 
       <div class="field-wrapper">
-      <input type="text" name="last_name"  class="last_name text-input text-input--underbar has_validation"
-      placeholder="Last Name" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
+      <input type="text" name="last_name"  class="last_name text-input text-input--underbar has_validation" id="lname"
+      placeholder="Last Name" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')">
       </div>
 
       <div class="field-wrapper">
-      <input type="text" name="contact_phone"  class="mobile_inputs contact_phone text-input text-input--underbar has_validation"
-      placeholder="Mobile Phone" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
+      <input type="text" name="contact_phone"  class="mobile_inputs contact_phone text-input text-input--underbar has_validation"  id="mbno"
+      placeholder="Mobile Phone" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" onkeyup="this.value=this.value.replace(/[^0-9]/g, '')" >
       </div>
 
       <div class="field-wrapper">
       <input type="email" name="email_address"  class="email_address text-input text-input--underbar has_validation"
-      placeholder="Email address" value="" data-validation="email" data-validation-error-msg="this field is mandatory!" >
+      placeholder="Email address" value="" data-validation="email" data-validation-error-msg="this field is mandatory!" id="email">
       </div>
 
       <div class="field-wrapper">
@@ -782,28 +782,12 @@
    <div class="wrapper">
        <ons-row class="row">
            <ons-col class="text-big concat-text trn" width="60%" data-trn-key="shipping_address">
-           Delivery address
+           Choose from the options below
            </ons-col>
        </ons-row>
    </div>
 
    <ons-list>
-
-     <!--  <ons-list-item modifier="chevron" onclick="showPageAdressSelection();" >
-       <span class="trn" data-trn-key="delivery_address">Delivery Address</span>
-       <p class="small-font-dim delivery-address-text"></p>
-       </ons-list-item>
-	    <ons-list>
-
-
-        <ons-list-item modifier="chevron" onclick="popUpAddressBook();" >
-       <span class="trn" data-trn-key="select_from_address">Saved addresses</span>
-       </ons-list-item>
-
-       <ons-list-item modifier="chevron" onclick="showMapAddress('mapaddress');" >
-        <span class="trn" data-trn-key="select_from_address_map">Select on the map (Slow)</span>
-        </ons-list-item>
-      -->
 
        <ons-toolbar-button modifier="chevron" onclick="popUpAddressBook();" >
         <span class="trn" data-trn-key="select_from_address_map"><ons-icon icon="fa-floppy-o"></ons-icon></span>
@@ -813,24 +797,16 @@
         <ons-icon icon="fa-map-marker"></ons-icon>
        </ons-toolbar-button>
 
-
-       <ons-list-item modifier="chevron" onclick="showManualAddressInput();" >
-       <span class="trn" data-trn-key="enter_your_address">Search your address</span>
+     <!--  <ons-list-item modifier="chevron" onclick="showManualAddressInput();" >
+       <span class="trn" data-trn-key="enter_your_address">Postcode search</span>
        </ons-list-item>
-
-	   <!--<ons-list-item modifier="chevron" >
-	   <span class="trn" data-trn-key="delivery_address">Delivery Address</span>
-       <p class="small-font-dim delivery-address-text"></p>
-	   </ons-list-item>    -->
    </ons-list>
+    -->
 
    <div class="manual-address-input">
-        <form id="frm-manual-address" class="frm-manual-address" method="post">
-
+    <form id="frm-manual-address" class="frm-manual-address" method="post">
 
 		 <div class="wrapper" id="postcode_lookup">
-		 </div>
-		 <div class="wrapper" id="postcode_lookup1">
 		 <ons-row class="row ons-row-inner">
 		 <div class="field-wrapper">
 	      <input type="text" name="zipcode_1" id="lookupInput" class="zipcode_1 text-input text-input--underbar" placeholder="Post Code" autocomplete="off" value="" onkeyup="this.value=this.value.replace(/[^a-z A-Z0-9]/g, '')" >
@@ -844,24 +820,17 @@
 	   </div>
 	   <div class="wrapper">
 	      <div class="field-wrapper">
-		 <select class="form-control select-class has_validation selnew" name="location_name_drop" id="lookupDropdown" data-validation="required" data-validation-error-msg="this field is mandatory!">
+		 <select onclick="setManualAddress();" class="form-control select-class has_validation selnew" name="location_name_drop" id="lookupDropdown" data-validation="required" data-validation-error-msg="this field is mandatory!">
 		 <option value="" selected disabled><option>
 		  </select>
 
 	      </div>
 	   </div>
-		<!--<div class="wrapper">
-	      <div class="field-wrapper">
-	     <input type="text" name="location_name"  class="location_name text-input text-input--underbar has_validation"
-	      placeholder="House No." value="" data-validation="required" data-validation-error-msg="this field is mandatory!" id="addressOne">
-		 </div>
-		</div>	-->
-
 
         <div class="wrapper">
 	      <div class="field-wrapper">
 	      <input type="text" name="stree_1"  class="stree_1 text-input text-input--underbar has_validation"
-	      placeholder="Street" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" id="addressOne" onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')">
+	      placeholder="Street" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" id="addressOne" onkeyup="this.value=this.value.replace(/[^a-z A-Z 0-9]/g, '')">
 	      </div>
 	   </div>
 	   <div class="wrapper">
@@ -873,17 +842,19 @@
 	   <div class="wrapper">
 	      <div class="field-wrapper">
 	      <input type="text" name="state_1"  class="state_1 text-input text-input--underbar has_validation"
-	      placeholder="State" value="" readonly data-validation="required" data-validation-error-msg="this field is mandatory!" id="country" onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')">
+	      placeholder="State" value="" readonly data-validation="required" data-validation-error-msg="This field is mandatory!" id="country" onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')">
 	      </div>
 	   </div>
 
-
+<!--
 	   <div class="wrapper">
 	   <button class="button green-btn button--large trn" onclick="setManualAddress();" data-trn-key="submit">
 		Submit
 	   </button>
-	   </div>
-	   </form>
+     </div>
+    -->
+     </form>
+
    </div>
 
 
@@ -902,27 +873,21 @@
    <input type="hidden" name="google_lat" class="google_lat">
    <input type="hidden" name="google_lng" class="google_lng">
 
-   <div class="wrapper" id="del-addrs" style="display:none">
-      <div class="field-wrapper">
-		<input type="text" name="address"  class="delivery-address-text text-input text-input--underbar has_validation"
-      placeholder="Delivery Address" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
-	  </div>
-   </div>
 
    <div class="wrapper">
       <div class="field-wrapper">
       <input type="text" name="contact_phone"  class="mobile_inputs contact_phone text-input text-input--underbar has_validation"
-      placeholder="Contact phone" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
+      placeholder="Contact phone" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" onkeyup="this.value=this.value.replace(/[^0-9]/g, '')">
       </div>
    </div>
 
-   <div class="wrapper">
+  <!-- <div class="wrapper">
       <div class="field-wrapper">
       <input type="text" name="location_name"  class="location_name text-input text-input--underbar"
       placeholder="House No"  >
       </div>
    </div>
-
+  -->
    <div class="wrapper">
       <div class="field-wrapper">
       <input type="text" name="delivery_instruction"  class="delivery_instruction text-input text-input--underbar"
@@ -1752,7 +1717,7 @@
 
       <div class="field-wrapper">
       <input type="password" name="password"  class="password text-input text-input--underbar"
-      placeholder="Password" value="" >
+      placeholder="Password" value="" id="prfpswd">
       </div>
 
    </div>
@@ -1856,7 +1821,7 @@
    <div class="wrapper">
       <div class="field-wrapper">
       <input type="email" name="email_address"  class="email_address text-input text-input--underbar has_validation"
-      placeholder="Email address" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" id="email">
+      placeholder="Email address" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" id="login_email">
       </div>
 
       <div class="field-wrapper">
@@ -1954,7 +1919,7 @@
       </div>
 
       <div class="field-wrapper">
-      <input type="password" name="password"  class="password text-input text-input--underbar has_validation"
+      <input type="password" name="password"  class="password text-input text-input--underbar has_validation" id="pswd"
       placeholder="Password" value="" id="pswd" data-validation="required" data-validation-error-msg="this field is mandatory!" >
       </div>
 
@@ -2057,7 +2022,7 @@
      </ons-toolbar-button>
     </div>
 
-    <div class="center white"><span id="search-text" class="trn" data-trn-key="your_recent_order">Your Booking History</span></div>
+    <div class="center white"><span id="search-text" class="trn" data-trn-key="your_recent_order">My Table Reservations</span></div>
    </ons-toolbar>
 
    <ons-scroller id="recent-history">
@@ -2174,12 +2139,12 @@
    <div class="wrapper">
       <div class="field-wrapper">
       <input type="text" name="street"  class="street text-input text-input--underbar has_validation"
-      placeholder="Street" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')">
+      placeholder="Street" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" onkeyup="this.value=this.value.replace(/[^a-z A-Z0-9@!#$%^&*()]/g, '')">
       </div>
 
       <div class="field-wrapper">
       <input type="text" name="city"  class="city text-input text-input--underbar has_validation"
-      placeholder="City" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" onkeyup="this.value=this.value.replace(/[^a-z A-Z0-9]/g, '')">
+      placeholder="City" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')">
       </div>
 
       <div class="field-wrapper">
@@ -2907,7 +2872,7 @@
 </ons-page>
 </script>
 
-
+<!-- Never used -->
   <script type="text/ons-template" id="address-selection.html">
 <ons-page id="page-address-selection">
 
@@ -2919,17 +2884,17 @@
 
    <ons-list>
        <ons-list-item modifier="chevron" onclick="popUpAddressBook();" >
-       <span class="trn" data-trn-key="select_from_address">Select from your address book</span>
+       <span class="trn" data-trn-key="select_from_address">My saved addresses</span>
        </ons-list-item>
 
 
        <ons-list-item modifier="chevron" onclick="showMapAddress('mapaddress');" >
-       <span class="trn" data-trn-key="select_from_address_map">Select your address from map</span>
+       <span class="trn" data-trn-key="select_from_address_map">Choose from the Map</span>
        </ons-list-item>
 
 
        <ons-list-item modifier="chevron" onclick="showManualAddressInput();" >
-       <span class="trn" data-trn-key="enter_your_address">Enter your address</span>
+       <span class="trn" data-trn-key="enter_your_address">Manual Address</span>
        </ons-list-item>
 
    </ons-list>
@@ -3356,7 +3321,7 @@
 
 
 
-  <ons-toolbar id="flash_msg" class="navigation-bar" style="position: absolute; z-index: 10000; left: 0px; right: 0px; top: 30px; margin-top:200px; display:none;">
+  <ons-toolbar id="flash_msg" class="navigation-bar" style="position: absolute; z-index: 10000; left: 10px; right: 0px; top: 30px; margin-top:200px; display:none;">
     <div class="center push-title navigation-bar__title navigation-bar__center button green-btn">
       <span class="cart-circle2">
         <ons-icon icon="fa-shopping-cart" class="cart carticon animate"></ons-icon>
@@ -3369,66 +3334,7 @@
 <script src="https://getaddress.io/js/jquery.getAddress-2.0.0.min.js"></script>
 <script>
 
-  $(document).on('click', '#lookupButton', function () {
-    var pin = $("#lookupInput").val();
-    if (pin == '') {
-      alert("Please enter a valid Jersey post code, starts with JE....");
-    }
-    else {
 
-      $("lookupButton").html("Please Wait...");
-      var url = "https://api.getaddress.io/find/" + pin + "?api-key=HMMe58k6xEGr5L2TK3ioHQ1599";
-      $.ajax({
-          url: url,
-          dataType: 'json',
-          success: function( data ) {
-          if(data == '')
-          {
-              $("#lookupDropdown").hide();
-          }
-          else
-            {
-              $("#lookupDropdown").show();
-              $("#lookupDropdown").empty();
-              $("#lookupDropdown").append("<option value='' disabled selected>Choose one</option>")
-              $.each(data.addresses, function (key, value) {
-                var val = value;
-                val = val.replace(/,/g, "");
-                $("#lookupDropdown").append("<option value='" + value + "'>" + val + "</option>")
-              });
-            }
-              $("lookupButton").html("lookup");
-          },
-          error: function( data ) {
-            onsenAlert( "Invalid Pincode" );
-          }
-      });
-      // $.getJSON(url, function (data) {
-      //   if (data == '') {
-      //     $("#lookupDropdown").hide();
-      //   }
-      //   else {
-      //     $("#lookupDropdown").show();
-      //     $("#lookupDropdown").empty();
-      //     $("#lookupDropdown").append("<option value='' disabled selected>Choose one</option>")
-      //     $.each(data.addresses, function (key, value) {
-      //       var val = value;
-      //       val = val.replace(/,/g, "");
-      //       $("#lookupDropdown").append("<option value='" + value + "'>" + val + "</option>")
-      //     });
-      //   }
-      //   $("lookupButton").html("lookup");
-      // });
-    }
-  });
-
-  $(document).on('change', '#lookupDropdown', function () {
-    var chngeval = this.value;
-    chngeval = chngeval.split(',');
-    $("#addressOne").val(chngeval[0]);
-    $("#city").val(chngeval[4] + "," + chngeval[5]);
-    $("#country").val(chngeval[6]);
-  });
 </script>
 
 <script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAspbfu1o8_mGN_hWDah_YTqXdXiPg6DkE"></script>

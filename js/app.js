@@ -1,4 +1,5 @@
 var ajax_url= krms_config.ApiUrl ;
+var cuisine_url= krms_config.cuisineUrl ;
 var dialog_title_default= krms_config.DialogDefaultTitle;
 var search_address;
 var ajax_request;
@@ -15,7 +16,7 @@ var drag_marker_bounce=1;
 var start="0";
 var limit="5";
 var menustart="0";
-var menulimit="20";
+var menulimit="10";
 document.addEventListener("deviceready", onDeviceReady,  false);
 
 
@@ -354,8 +355,8 @@ document.addEventListener("pageinit", function(e) {
 	      $(".state").attr("placeholder", getTrans('State','state') );
 	      $(".zipcode").attr("placeholder", getTrans('Post Code','zipcode') );
 	      $(".contact_phone").attr("placeholder", getTrans('Contact phone','contact_phone') );
-	      $(".location_name").attr("placeholder", getTrans('Apartment suite, unit number, or company name','location_name2') );
-	      $(".delivery_instruction").attr("placeholder", getTrans('Delivery instructions','delivery_instruction') );
+	   //   $(".location_name").attr("placeholder", getTrans('Apartment suite, unit number, or company name','location_name2') );
+	      $(".delivery_instruction").attr("placeholder", getTrans('Delivery Instructions','delivery_instruction') );
 
 	      translatePage();
 	      translateValidationForm();
@@ -476,7 +477,7 @@ document.addEventListener("pageinit", function(e) {
 
 		case "page-login":
 		case "page-prelogin":
-		  initFacebook();
+		 // initFacebook();
 		  translatePage();
 		  translateValidationForm();
 
@@ -751,7 +752,7 @@ function callAjax(action,params)
 			{
 				case "search":
 				// alert("Search");
-				displayRestaurantResults(data.details.data ,'restaurant-results',1,data.details.total,'loadmore',data.code);
+				displayRestaurantResults(data.details.data ,'restaurant-results',1);
 				//$(".result-msg").text(data.details.total+" Restaurant found");
 				$(".result-msg").text(data.details.total+" "+getTrans("Restaurant found",'restaurant_found') );
 				break;
@@ -1274,7 +1275,7 @@ function callAjax(action,params)
 
 				case "searchRestaurant":
 			    // alert("BrowseByBookTable");
-					displayRestaurantResults(data.details.data ,'browse-results',3,data.details.total,'loadmore',data.code);
+					displayRestaurantResults(data.details.data ,'browse-results',3);
 				//$(".result-msg").text(data.details.total+" Restaurant found");
 				$(".result-msg").text(data.details.total+" "+getTrans("Restaurant found",'restaurant_found') );
 			   break;
@@ -1656,7 +1657,7 @@ function callAjax(action,params)
 			        map.addMarker({
 					  'position': your_location ,
 					  'title': marker_title,
-					  'snippet': getTrans( "Press on marker 2 seconds to drag" ,'press_marker'),
+					  'snippet': getTrans( "Hold on for 2 seconds and drag" ,'press_marker'),
 					  'draggable': true
 					}, function(marker) {
 
@@ -1668,15 +1669,27 @@ function callAjax(action,params)
 					   drag_marker=marker;
 					   drag_marker_bounce=2;
 
-					   marker.on(plugin.google.maps.event.MARKER_DRAG_END, function(marker) {
+					   marker.on(plugin.google.maps.event.MARKER_DRAG_END, onMarkerDragEnd);
+					  /*  function() {
 							marker.getPosition(function(latLng) {
 								 temp_result=explode(",", latLng.toUrlValue() );
 								 /*alert(temp_result[0]);
 								 alert(temp_result[1]);*/
-								 drag_marker=marker;
+							/*	 drag_marker=marker;
 								 callAjax("dragMarker","lat=" + temp_result[0] + "&lng="+ temp_result[1] );
 							});
-					   });
+					   }); */
+
+					   function onMarkerDragEnd() {
+						// the first argument `latLng` is marker.getPosition() value.
+
+						// if you want to manipulate on the marker,
+						// you can get marker instance through `this`
+						var marker = this;
+						var temp_result=marker.getPosition() ;
+						drag_marker = marker;
+						callAjax("dragMarker","lat=" + temp_result['lat'] + "&lng="+ temp_result['lng']);
+					  }
 
 					}); /*marker*/
 			    break;
@@ -2656,7 +2669,7 @@ function menuCategoryResult(data)
 	})
 }
 	var html = '';
-	var all_cat = [];
+	var all_cat=[];
 	var item_cnt=[];
 	var count = 0;
 	var display_count = 1;
@@ -2664,17 +2677,38 @@ function menuCategoryResult(data)
 	var items=0;
 	var newcat=0;
 	var n = 0;
+/*
+	var networkState = navigator.connection.type;
+
+    var states = {};
+    states[Connection.UNKNOWN]  = 'Unknown connection';
+    states[Connection.ETHERNET] = 'Ethernet connection';
+    states[Connection.WIFI]     = 'WiFi connection';
+    states[Connection.CELL_2G]  = 'Cell 2G connection';
+    states[Connection.CELL_3G]  = 'Cell 3G connection';
+    states[Connection.CELL_4G]  = 'Cell 4G connection';
+    states[Connection.CELL]     = 'Cell generic connection';
+    states[Connection.NONE]     = 'No network connection';
+
+    alert('Connection type: ' + states[networkState]);
+*/
 	if (menustart == 0) {
+
 	    html += '<ons-list class="restaurant-list ng-scope list ons-list-inner">';
 	    $.each(data.item, function(key, val) {
 				//console.log(Object.keys(data.item).length);
 	        var display_style = 'style = "display:none;"';
 	        if ($.inArray(val.category_id, all_cat) !== -1) {}
 					else {
+
+							/*all_cat={
+								"cid": val.category_id,
+								"cnt": val.total_count
+              };*/
 	            all_cat.push(val.category_id);
 							item_cnt.push(val.total_count);
 							if (count > 0) {
-										if(val.total_count > 20 )
+										if(val.total_count > 10 )
 										{
 										//html +='<button id="if'+all_cat[count-1]+'" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+',20);" data-trn-key="book_now">Load More</button>';
 										}
@@ -2798,13 +2832,12 @@ function menuCategoryResult(data)
 			console.log(itemcount);
 	    html += '</ons-list>';
 	    createElement('menu-list', html);
-
 			$.each(all_cat, function(key, val) {
 				//$.each(item_cnt, function(keys, vals) {
 					//console.log(vals);
 					//	if(vals > 20)
 					//	{
-							$("#scroll_div_" + val ).append('<button id="if'+val+'" class="button green-btn button--large trn" onclick="loadmore('+val+',20);" data-trn-key="book_now">Load More</button>');
+							$("#scroll_div_" + val ).append('<button id="if'+val+'" class="button green-btn button--large trn" onclick="loadmore('+val+',10);" data-trn-key="book_now">Load More</button>');
 					//	}
 				//		else
 					//	{
@@ -2827,11 +2860,11 @@ function menuCategoryResult(data)
 	        }
 	        var display_style = 'style = "display:none;"';
 	        if ($.inArray(val.category_id, all_cat) !== -1) {} else {
-	            all_cat.push(val.category_id);
+	            all_cat.push(	val.category_id);
 							console.log(val.total_count);
 							console.log("Count"+count);
 	            if (count == 0) {
-								if(val.total_count > 20)
+								if(val.total_count > 10)
 								{
 									//html +='<button id="else'+all_cat+'" class="button green-btn button--large trn" onclick="loadmore('+all_cat+',20);" data-trn-key="book_now">Load More</button>';
 								}
@@ -2918,9 +2951,9 @@ function menuCategoryResult(data)
 	        //html += '</div>';
 					if (Object.keys(data).length == items) {
 
-						if(val.total_count > 20 )
+						if(val.total_count > 10 )
 						{
-							 html +='<button id="1else" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+',20);" data-trn-key="book_now">Load More</button>';
+							 html +='<button id="1else" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+',10);" data-trn-key="book_now">Load More</button>';
 					 	}
 						 //html += "</div>";
 				 }
@@ -2932,7 +2965,7 @@ function menuCategoryResult(data)
 					//console.log(vals);
 						//if(vals > 20)
 						//{
-							$("#scroll_div_" + val ).append('<button id="if'+val+'" class="button green-btn button--large trn" onclick="loadmore('+val+',20);" data-trn-key="book_now">Load More</button>');
+							$("#scroll_div_" + val ).append('<button id="if'+val+'" class="button green-btn button--large trn" onclick="loadmore('+val+',10);" data-trn-key="book_now">Load More</button>');
 						//}
 						//else
 						//{
@@ -2950,12 +2983,12 @@ function menuCategoryResult(data)
 	function loadmore(cid,mstart)
 	{
 		var catcnt=$("#hidden"+cid).val();
-		catcnt=parseFloat(catcnt)+20;
+		catcnt=parseFloat(catcnt)+10;
 		buts=catcnt;
 		$("#hidden"+cid).val(catcnt);
 		$("#if"+cid).remove();
 		$("#else"+cid).remove();
-		menustart = parseFloat(menustart) + 20;
+		menustart = parseFloat(menustart) + 10;
 		var mid = getStorage("merchant_id");
 		var c_day = getStorage("c_day");
 		callAjax("MobileLoadMore", "start=" + catcnt + "&end=" + menulimit + "&category_id="+cid+"&merchant_id=" + mid + "&device_id=" + getStorage("device_id") + "&current_day=" + c_day);
@@ -3608,13 +3641,23 @@ jQuery(document).ready(function() {
 	$( document ).on( "click", ".setAddress", function() {
 		var address=$(this).data("address");
 		var address_split=address.split("|");
-		dump(address_split);
+		//dump(address_split);
 		if ( address_split.length>0){
+			//Disable the lookdown from lookup postal code
+			$(".lookupDropdown").hide();
 			$(".street").val( address_split[0] );
 			$(".city").val( address_split[1] );
 			$(".state").val( address_split[2] );
 			$(".zipcode").val( address_split[3] );
-			$(".location_name").val( address_split[4] );
+			//$(".location_name").val( address_split[4] );
+			//Now set it to the other fields too
+
+			$(".stree_1").val( address_split[0] );
+			$(".city_1").val( address_split[1] );
+			$(".state_1").val( address_split[2] );
+			$(".zipcode_1").val( address_split[3] );
+			//$(".location_name").val( address_split[4] );
+
 
 			var number='';
 			if (!empty(address_split[5])){
@@ -3635,11 +3678,11 @@ jQuery(document).ready(function() {
 			$(".formatted_address").val( '' );
 
 			dialogAddressBook.hide();
-			$("#del-addrs").show();
+			//$("#del-addrs").show();
 			//sNavigator.popPage({cancelIfRunning: true}); //back button
 
 		} else {
-			onsenAlert(  getTrans("Error: cannot set address book",'cannot_set_address')  );
+			onsenAlert(  getTrans("Error: Cannot set address book",'cannot_set_address')  );
 			dialogAddressBook.hide();
 		}
 	});
@@ -4644,6 +4687,34 @@ function checkOut()
 
 function clientRegistration()
 {
+	var pswd = $("#pswd").val();
+	var fname = $("#fname").val();
+	var lname = $("#lname").val();
+	var email=$("#email").val();
+	var mbno=$("#mbno").val();
+	function isValidEmailAddress(email) {
+		var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+		return pattern.test(email);
+	};
+	if($('#frm-signup input[type="text"]').val() =='')
+	{
+		onsenAlert("All fields are mandatory");
+    }
+	else if(email == ''){
+			onsenAlert("Email ID is mandatory");
+	}
+	else if( !isValidEmailAddress( email ) ) {
+		onsenAlert("Invalid Email ID");
+	}
+	else if(pswd.length < 8)
+	{
+		onsenAlert("Password must be above 8 characters  length");
+	}
+	else if(email=="")
+	{
+		onsenAlert("Email field should not be empty.");
+	}
+	else{
 	$.validate({
 	    form : '#frm-checkoutsignup',
 	    borderColorOnError:"#FF0000",
@@ -4670,13 +4741,19 @@ function clientRegistration()
 	    }
 	});
 }
+}
 
 function clientShipping()
 {
+	$(".street").val( $(".stree_1").val()  );
+	$(".city").val( $(".city_1").val()  );
+	$(".state").val( $(".state_1").val()  );
+	$(".zipcode").val( $(".zipcode_1").val()  );
+
 	//if ( empty( $(".street").val() )){
 	if (empty($(".city").val() )){
 
-		onsenAlert(getTrans("Delivery address is required",'delivery_address_required')  );
+		onsenAlert(getTrans("Parish/Town is missing",'delivery_address_required')  );
 		// toastMsg( getTrans() );
 		return;
 	}
@@ -4895,7 +4972,7 @@ function initMobileScroller()
       var merchant_id  = $("#frm-booking .hidden_merchant_id").val();
       var base_url     = ajax_url;
       //var url          = base_url+"/get_merchant_timings";
-      var url          = "https://www.cuisine.je/mobileapp/api/get_merchant_timings";
+      var url          = ajax_url+"/get_merchant_timings";
       var html         = '';
       $.ajax({
 		        url: url, // point to server-side PHP script
@@ -4936,7 +5013,7 @@ function search_table_timing()
 	  }
 	  var base_url     = ajax_url;
 	  var merchant_id  = $("#frm-booking .hidden_merchant_id").val();
-	  var url  = "https://www.cuisine.je/mobileapp/api/check_seat_availability";
+	  var url  = ajax_url+"/check_seat_availability";
 	  $('#timing_slots').html('');
 	  $('#booking_details_div').css('display','none');
 	  $.ajax({
@@ -5382,6 +5459,16 @@ function showProfile()
 
 function saveProfile()
 {
+	var propswd=$("#prfpswd").val();
+	if(propswd == '')
+	{
+		onsenAlert("Password should not be empty");
+	}
+	else if(propswd.length < 6)
+	{
+		onsenAlert("Password must be above 6 characters  length");
+	}
+	else {
 	$.validate({
 	    form : '#frm-profile',
 	    borderColorOnError:"#FF0000",
@@ -5395,10 +5482,11 @@ function saveProfile()
 	    }
 	});
 }
+}
 
 function login()
 {
-	var email=$("#email").val();
+	var email=$("#login_email").val();
 	function isValidEmailAddress(email) {
 		var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
 		return pattern.test(email);
@@ -5555,7 +5643,7 @@ function signup()
 	}
 	else if(pswd.length < 6)
 	{
-		onsenAlert("Password must be above 6 characteristics length");
+		onsenAlert("Password must be above 6 characters  length");
 	}
 	else if(email=="")
 	{
@@ -5607,8 +5695,7 @@ function showHistory()
 function showTerms()
 {
 		//menu.setMainPage('terms.html', {closeMenu: true});
-		var iabRef = cordova.InAppBrowser.open('https://www.cuisine.je/store/page/terms-amp-conditions', '_self', 'location=no','toolbar=yes');
-
+		var iabRef = cordova.InAppBrowser.open(cuisine_url+'/store/page/terms-amp-conditions', '_self', 'location=no','toolbar=yes');
 }
 
 function showAddressBook()
@@ -5772,7 +5859,7 @@ function displayBookingHistoryDetails(data)
 	//$("#page-orderdetails .title").html("Total : "+ data.total);
 	//$("#page-orderdetails #search-text").html("Order Details #"+data.order_id);
 	$.each( data, function( key, val ) {
-	$("#page-booking-history #search-text").html( getTrans('Booking History ','booking_details') + " #"+val.booking_id);
+	$("#page-booking-history #search-text").html( getTrans('Table Reservation','booking_details') + " #"+val.booking_id);
 
 
 
@@ -5794,35 +5881,35 @@ function displayBookingHistoryDetails(data)
 
 	html+='<ons-list-item class="list__item ons-list-item-inner">';
 	html+='<ons-row class="row ons-row-inner">';
-	html+='<ons-col class=" col ons-col-inner">Booking Name</ons-col>';
+	html+='<ons-col class=" col ons-col-inner">Booked by</ons-col>';
 	html+='<ons-col class="text-right col ons-col-inner">'+val.booking_name+'</ons-col>';
 	html+='</ons-row>';
 	html+='</ons-list-item>';
 
 	html+='<ons-list-item class="list__item ons-list-item-inner">';
 	html+='<ons-row class="row ons-row-inner">';
-	html+='<ons-col class=" col ons-col-inner">Restarunt Name</ons-col>';
+	html+='<ons-col class=" col ons-col-inner">Restaurant</ons-col>';
 	html+='<ons-col class="text-right col ons-col-inner">'+val.restaurant_name+'</ons-col>';
 	html+='</ons-row>';
 	html+='</ons-list-item>';
 
 	html+='<ons-list-item class="list__item ons-list-item-inner">';
 	html+='<ons-row class="row ons-row-inner">';
-	html+='<ons-col class=" col ons-col-inner">Number Of Guests</ons-col>';
+	html+='<ons-col class=" col ons-col-inner">Guests</ons-col>';
 	html+='<ons-col class="text-right col ons-col-inner">'+val.number_guest+'</ons-col>';
 	html+='</ons-row>';
 	html+='</ons-list-item>';
 
 	html+='<ons-list-item class="list__item ons-list-item-inner">';
 	html+='<ons-row class="row ons-row-inner">';
-	html+='<ons-col class=" col ons-col-inner">Date Of Booking</ons-col>';
+	html+='<ons-col class=" col ons-col-inner">Table booked for</ons-col>';
 	html+='<ons-col class="text-right col ons-col-inner">'+val.date_booking+'</ons-col>';
 	html+='</ons-row>';
 	html+='</ons-list-item>';
 
 	html+='<ons-list-item class="list__item ons-list-item-inner">';
 	html+='<ons-row class="row ons-row-inner">';
-	html+='<ons-col class=" col ons-col-inner">Time</ons-col>';
+	html+='<ons-col class=" col ons-col-inner">Booking Time</ons-col>';
 	html+='<ons-col class="text-right col ons-col-inner">'+val.booking_time+'</ons-col>';
 	html+='</ons-row>';
 	html+='</ons-list-item>';
@@ -5946,8 +6033,8 @@ function deleteAddressBook()
 
 function popUpAddressBook()
 {
-	$(".manual-address-input").hide();
-	$("#del-addrs").hide();
+	//$(".manual-address-input").hide();
+	//$("#del-addrs").hide();
 	if (typeof dialogAddressBook === "undefined" || dialogAddressBook==null || dialogAddressBook=="" ) {
 		ons.createDialog('dialogAddressBook.html').then(function(dialog) {
 	        dialog.show();
@@ -6424,7 +6511,7 @@ function itemNotAvailable(options)
 	switch (options)
 	{
 		case 1:
-		toastMsg( getTrans("item not available",'item_not_available') );
+		toastMsg( getTrans("Item not available",'item_not_available') );
 		break;
 
 		case 2:
@@ -7314,7 +7401,7 @@ function payCityPay(fireurl) {
 	}
 		function iabLoadStop(event) {
 		//setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
-		setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
+		setStorage("successurl",cuisine_url+"/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
 		successurl= getStorage("successurl");
 		console.log(event.url);
 		console.log(successurl);
@@ -7394,7 +7481,7 @@ function displayRestaurantResultsOnMap(data) {
 			var point = new google.maps.LatLng(pLat,pLong);
 		//	var entry = {'position': point,'title': val.restaurant_name,'icon': {'url': 'https://www.cuisine.je/assets/images/menu-icon.png' }};
 		var htm='';
-		if(!empty(val.service)){ // For delivery adn pick up
+		if(!empty(val.service)){ // For delivery and pick up
 			htm+='<ul>';
 				$.each( val.services, function( key_service, val_services ) {
 						htm+='<li>'+val_services+' <i class="green-color ion-android-checkmark-circle"></i></li>';
@@ -7424,7 +7511,7 @@ function displayRestaurantResultsOnMap(data) {
 				var marker = new google.maps.Marker({
 				  position: point ,//{lat: val.latitude, lng: val.longitude},
 				  title: val.restaurant_name,
-				  icon: {url: 'https://www.cuisine.je/assets/images/menu-icon.png' },
+				  icon: {url: cuisine_url+'/assets/images/menu-icon.png' },
 				  map: mapNew,
 				  animation: google.maps.Animation.DROP,
 				  merchant_id:val.merchant_id //set the merchant id so when we click on it we can take them to the restaurant menu
@@ -7730,17 +7817,11 @@ function viewTaskDirection()
 
          //var destination_location = new plugin.google.maps.LatLng(parseFloat(merchant_latitude) ,parseFloat( merchant_longtitude));
          var destination_location=(merchant_latitude+","+merchant_longtitude);
+		//from the new plugin for launching the navigation
+		launchnavigator.navigate(destination_location, {
+			start: your_location
+		});
 
-				//  plugin.google.maps.external.launchnavigator({
-	      //    "from": your_location,
-	      //    "to": destination_location
-	      // });
-				var nav = {
-					"from": your_location,
-					"to": destination_location
-              };
-				console.log(nav);
-				plugin.google.maps.external.launchNavigation(nav);
     	 // end position success
       }, function(error){
     	 toastMsg( error.message );
@@ -7824,10 +7905,56 @@ function showPageAdressSelection()
 
 function showManualAddressInput()
 {
-	$("#del-addrs").hide();
-	$(".manual-address-input").toggle();
+	//$("#del-addrs").hide();
+	//$(".manual-address-input").toggle();
 
 }
+
+$(document).on('click', '#lookupButton', function () {
+    var pin = $("#lookupInput").val();
+    if (pin == '') {
+      alert("Please enter a valid Jersey post code, starts with JE....");
+    }
+    else {
+
+      $("lookupButton").html("Please Wait...");
+      var url = "https://api.getaddress.io/find/" + pin + "?api-key=HMMe58k6xEGr5L2TK3ioHQ1599";
+      $.ajax({
+          url: url,
+          dataType: 'json',
+          success: function( data ) {
+          if(data == '')
+          {
+              $("#lookupDropdown").hide();
+          }
+          else
+            {
+              $("#lookupDropdown").show();
+              $("#lookupDropdown").empty();
+              $("#lookupDropdown").append("<option value='' disabled selected>Pickup from this list</option>")
+              $.each(data.addresses, function (key, value) {
+                var val = value;
+                val = val.replace(/,/g, "");
+                $("#lookupDropdown").append("<option value='" + value + "'>" + val + "</option>")
+              });
+            }
+              $("lookupButton").html("lookup");
+          },
+          error: function( data ) {
+            onsenAlert( "Invalid Postcode" );
+          }
+      });
+
+    }
+  });
+
+  $(document).on('change', '#lookupDropdown', function () {
+    var chngeval = this.value;
+    chngeval = chngeval.split(',');
+    $(".stree_1").val(chngeval[0]+chngeval[1]+chngeval[2]+chngeval[3]);
+    $(".city_1").val(chngeval[4] + "," + chngeval[5]);
+    $(".state_1").val(chngeval[6]);
+  });
 
 function setManualAddress()
 {
@@ -7842,18 +7969,18 @@ function setManualAddress()
 	       $(".state").val( $(".state_1").val()  );
 	       $(".zipcode").val( $(".zipcode_1").val()  );
 
-	       var complete_address = $(".stree_1").val();
-	       complete_address+=" "+ $(".city_1").val();
-	       complete_address+=" "+ $(".state_1").val();
-	       complete_address+=" "+ $(".zipcode_1").val();
+	       var complete_address = $(".street").val();
+	       complete_address+=" "+ $(".city").val();
+	       complete_address+=" "+ $(".state").val();
+	       complete_address+=" "+ $(".zipcode").val();
 
            $(".google_lat").val( '' );
 		   $(".google_lng").val( '' );
 		   $(".formatted_address").val( '' );
 
 	       $(".delivery-address-text").val( complete_address );
-			$(".manual-address-input").toggle();
-			$("#del-addrs").show();
+		//	$(".manual-address-input").toggle();
+		//	$("#del-addrs").show();
 	       //sNavigator.popPage({cancelIfRunning: true});
 	       return false;
 	    }
@@ -7862,7 +7989,7 @@ function setManualAddress()
 
 function showMapAddress(map_address_action)
 {
-	$("#del-addrs").hide();
+	//$("#del-addrs").hide();
 	setStorage("map_address_action",map_address_action)
 
 	var options = {
@@ -8132,12 +8259,18 @@ function useThisLocation()
 			$(".state").val( getStorage("map_address_result_state") );
 			$(".zipcode").val( getStorage("map_address_result_zip") );
 
+			//Fill these too
+			$(".stree_1").val( getStorage("map_address_result_address") );
+			$(".city_1").val( getStorage("map_address_result_city") );
+			$(".state_1").val( getStorage("map_address_result_state") );
+			$(".zipcode_1").val( getStorage("map_address_result_zip") );
+
 			$(".google_lat").val( getStorage("google_lat") );
 			$(".google_lng").val( getStorage("google_lng") );
 			$(".formatted_address").val( getStorage("map_address_result_formatted_address") );
 
 			$(".delivery-address-text").val( getStorage("map_address_result_formatted_address") );
-			$("#del-addrs").show();
+			//$("#del-addrs").show();
 		    //sNavigator.popPage({cancelIfRunning: true}); //back button
 		    sNavigator.popPage({cancelIfRunning: true}); //back button
 		//	return false;

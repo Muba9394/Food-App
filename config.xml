@@ -39,6 +39,7 @@
 	<gap:plugin name="cordova-plugin-network-information" source="npm" />
 	<gap:plugin name="cordova-plugin-request-location-accuracy" source="npm"  spec="2.2.0" />
 	<gap:plugin name="cordova-plugin-x-toast" source="npm" spec="2.6.0" />
+	<plugin name="uk.co.workingedge.phonegap.plugin.launchnavigator" source="npm" />
 
 	<!--<gap:plugin name="cordova-plugin-fastrde-checkgps" source="npm" spec="1.0.0"  />-->
 	<gap:plugin spec="https://github.com/rodrigo-martinezd/cordova-dialog-gps.git" source="git" />
