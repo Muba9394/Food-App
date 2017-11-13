@@ -2058,14 +2058,20 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
 					if (empty(val.services)) {
 
 					}
-    	          else if(!empty(val.service)){
-					htm+='<ul>';
-    	          	  $.each( val.services, function( key_service, val_services ) {
-    	           	   	  htm+='<li>'+val_services+' <i class="green-color ion-android-checkmark-circle"></i></li>';
-    	           	   });
-					htm+='</ul>';
-    	          }
 
+
+    	          else if(!empty(val.service)){
+									if(val.table_booking_option=='')
+									{
+									}
+									else{
+										htm+='<ul>';
+					    	          	  $.each( val.services, function( key_service, val_services ) {
+					    	           	   	  htm+='<li>'+val_services+' <i class="green-color ion-android-checkmark-circle"></i></li>';
+					    	           	   });
+										htm+='</ul>';
+    	          }
+							}
 
     	          htm+='<p class="cod">'+val.payment_options.cod+'</p>';
 	    	           if(!empty(val.distance)){
@@ -2102,13 +2108,13 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
 		    	            	if(val.table_booking_option=='yes')
 		    	            	{
 		    	            		htm+='<div class="booking-btn" data="menu" onclick="loadRestaurantCategory('+val.merchant_id+')" > View Menu </div>';
-						   		}
-						   		else
+						   					}
+						   			else
 		    	            	{
-									var btn_txt = 'Book a Table';
-									if($("#search-text").text() == "Take Away")  btn_txt = 'Take Away';
-									htm+='<div class="booking-btn" onclick="table_booking_optn('+val.merchant_id+','+rest_logo+','+rest_name+')" > '+btn_txt+' </div>';
-						   		}
+												var btn_txt = 'Book a Table';
+												if($("#search-text").text() == "Take Away")  btn_txt = 'Take Away';
+												htm+='<div class="booking-btn" onclick="table_booking_optn('+val.merchant_id+','+rest_logo+','+rest_name+')" > '+btn_txt+' </div>';
+						   				}
 					    	}
     	           htm+='</div>';
     	     htm+='</ons-col>';
@@ -2363,232 +2369,6 @@ var menutotal;
 
 function menuCategoryResult(data)
 {
-	//$("#page-booking #frm-booking .hidden_merchant_id").val(data.merchant_id);
-	 //alert(data.toSource());
-	/*	$("#menucategory-page .restauran-title").text(data.restaurant_name);
-	$("#menucategory-page .rating-stars").attr("data-score",data.ratings.ratings);
-	initRating();
-	$("#menucategory-page .logo-wrap").html('<img src="'+data.logo+'" />')
-
-	if ( data.open){
-		$("#merchant_open").val(2);
-	} else $("#merchant_open").val(1);
-
-	if (data.merchant_close_store){
-		$("#close_store").val(2);
-	} else $("#close_store").val(1);
-
-	if (data.has_menu_category==2){
-		var htm='';
-		htm+='<ons-list><ons-page> <ons-carousel swipeable style="margin-top: 5px; height: 70px;" overscrollable auto-scroll item-width="70px"> ';
-		var a = [];
-		var count = 1 ;  */
-								/* No need this part 	$.each( data.menu_category, function( key, val ) {
-								    a.push(count);
-								    count += parseInt(1);
-								});
-								var s = a.join(', ');
-								alert(s.toSource); */
-
-	/* 	$.each( data.menu_category, function( key, val ) {
-           //  htm+='<ons-list-item modifier="tappable" class="row" onclick="loadmenu('+val.cat_id+','+val.merchant_id+');">'+val.category_name+'</ons-list-item>';
-        //   htm+='<ons-list-item modifier="tappable" class="row" onclick="scroll_list('+val.cat_id+');">'+val.category_name+'</ons-list-item>';
-       	// alert(val.category_name);
-         htm += '<ons-carousel-item ng-repeat="i in ['+count+']"><a href="javascript:;"  onclick="scroll_list('+val.cat_id+');" ><div style="background-color: #ccc; width: 60px; height: 60px; margin: 5px; border-radius: 6px;">'+val.category_name+'</div></a></ons-carousel-item>';
-
-		});
-		htm+='</ons-carousel></ons-page></ons-list>';
-		createElement('category-list',htm);
-		var html  = '<ons-list-item class="restaurant-list" >';
-		 html += data. div_formation;
-		//html = '<ons-page>  <ons-toolbar>    <div class="center">Carousel</div>  </ons-toolbar>  <ons-carousel swipeable overscrollable auto-scroll fullscreen var="carousel">    <ons-carousel-item style="background-color: gray;">      <div class="item-label">GRAY</div>    </ons-carousel-item>    <ons-carousel-item style="background-color: #085078;">      <div class="item-label">BLUE</div>    </ons-carousel-item>    <ons-carousel-item style="background-color: #373B44;">      <div class="item-label">DARK</div>    </ons-carousel-item>    <ons-carousel-item style="background-color: #D38312;">      <div class="item-label">ORANGE</div>    </ons-carousel-item>    <ons-carousel-cover>      <div class="cover-label">Swipe left or right</div>    </ons-carousel-cover>  </ons-carousel></ons-page>';
-		html  += '</ons-list-item>';
-		createElement('menu-list',html);
-	} else {
-		onsenAlert(  getTrans("This restaurant has not published their menu yet.",'this_restaurant_no_menu') );
-	}
-
-	*/
-
-
-	// alert(data.div_formation.toSource());
-	// alert(data.enabled_table_booking);
-
-
-
-
-
-
-	/* Commented on 06-03-2017
-
-	$("#menucategory-page .restauran-title").text(data.restaurant_name);
-	$("#menucategory-page .rating-stars").attr("data-score",data.ratings.ratings);
-	initRating();
-	$("#menucategory-page .logo-wrap").html('<img src="'+data.logo+'" />');
-	if(data.enabled_table_booking==2)
-	{
-		$("#menucategory-page .tbl-book").html('<button id="tbl-booking" class="white-btn" onclick="table_booking_optn('+data.merchant_id+',\''+data.logo+'\',\''+data.restaurant_name+'\')" > Book a Table </button>');
-	}
-	if ( data.open){
-		$("#merchant_open").val(2);
-	} else $("#merchant_open").val(1);
-
-	if (data.merchant_close_store){
-		$("#close_store").val(2);
-	} else $("#close_store").val(1);
-
-	if (data.has_menu_category==2){
-		var htm='';
-		// htm+='<ons-list class="cate-list"> <ons-carousel swipeable style="margin-top: 5px; height: 70px;" overscrollable auto-scroll item-width="auto"> ';
-		var a = [];
-		var count = 1 ;
-		/*	$.each( data.menu_category, function( key, val ) {
-		    a.push(count);
-		    count += parseInt(1);
-		});
-		var s = a.join(', ');
-		alert(s.toSource); */
-		/*
-		htm += '<ons-list><div class="swiper-container"><div class="swiper-wrapper">';
-		$.each( data.menu_category, function( key, val ) {
-			var active_class = '';
-           //  htm+='<ons-list-item modifier="tappable" class="row" onclick="loadmenu('+val.cat_id+','+val.merchant_id+');">'+val.category_name+'</ons-list-item>';
-        //   htm+='<ons-list-item modifier="tappable" class="row" onclick="scroll_list('+val.cat_id+');">'+val.category_name+'</ons-list-item>';
-       	// alert(val.category_name);
-        // htm += '<ons-carousel-item ng-repeat="i in ['+count+']"><a href="javascript:;" class="menu-type" onclick="scroll_list('+val.cat_id+');" >'+val.category_name+'</a></ons-carousel-item>';
-        if(count==1) { active_class = 'active';  }
-        htm += '<div class="swiper-slide '+active_class+'"  ><a href="javascript:;" data-scroll="scroll_div_'+val.cat_id+'" onclick="scroll_list('+val.cat_id+',this)"  > '+val.category_name+'</a></div>';
-        count = parseInt(count)+1;
-		});
-		// htm+='</ons-carousel></ons-list>';
-		htm += '</div></div><div class="swiper-pagination"></div></ons-list>';
-		//alert(htm);
-		createElement('category-list',htm);
-
-
-  var swiper = new Swiper('.swiper-container', {
-        pagination: '.swiper-pagination',
-        slidesPerView: 'auto',
-        paginationClickable: true,
-        spaceBetween: 15
-    })
-
-  alert("Hi");
-  alert(data.has_price.toSource());
-	if (data.has_price==2){
-		html+='<ons-list-header class="list-header trn" data-trn-key="price">Price</ons-list-header>';
-		var x=0
-		$.each( data.prices, function( key, val ) {
-			if (data.discount>0){
-				var discount_price='<price class="discount">'+val.pretty_price;
-				discount_price+='</price>';
-				discount_price+='<price>'+val.discounted_price_pretty+'</price>';
-				if (x==0){
-					html+=privatePriceRowWithRadio2('price',
-					val.price+'|'+val.size ,
-					val.size,
-					discount_price,
-					'checked="checked"');
-				} else {
-					html+=privatePriceRowWithRadio2('price',
-					val.price+'|'+val.size,
-					val.size,
-					discount_price);
-				}
-			} else {
-				if (x==0){
-					html+=privatePriceRowWithRadio('price',
-					val.price+'|'+val.size ,
-					val.size,
-					val.pretty_price,
-					'checked="checked"');
-				} else {
-					html+=privatePriceRowWithRadio('price',
-					val.price+'|'+val.size,
-					val.size,
-					val.pretty_price);
-				}
-			}
-			x++;
-		});
-	}
-
-	if (!empty(data.cooking_ref)){
-		html+='<ons-list-header class="list-header trn" data-trn-key="cooking_ref">Cooking Preference</ons-list-header>';
-		$.each( data.cooking_ref, function( key, val ) {
-			html+=privateRowWithRadio('cooking_ref',val,val);
-		});
-	}
-
-	if (!empty(data.ingredients)){
-		html+='<ons-list-header class="list-header trn" data-trn-key="ingredients">Ingredients</ons-list-header>';
-		$.each( data.ingredients, function( key, val ) {
-			html+=privateRowWithCheckbox('ingredients','ingredients',val,val);
-		});
-	}
-
-	var show_addon_description=getStorage("show_addon_description");
-
-	if (!empty(data.addon_item)){
-		$.each( data.addon_item, function( key, val ) {
-			html+='<ons-list-header class="list-header require_addon_'+val.subcat_id+' ">'+val.subcat_name+'</ons-list-header>';
-
-			html+='<input type="hidden" name="require_addon_'+val.subcat_id+'" class="require_addon" value="'+val.require_addons+'" data-id="'+val.subcat_id+'" data-name="'+val.subcat_name+'" >'
-
-			if (!empty(val.sub_item)){
-				$.each( val.sub_item, function( key2, val2 ) {
-					  if (val.multi_option == "custom"){
-	                     html+=subItemRowWithCheckbox(
-	                                 val.subcat_id,
-	                                 'sub_item',
-	                                 val2.sub_item_id+"|"+val2.price +"|"+val2.sub_item_name,
-	                                 val2.sub_item_name,
-	                                 val2.pretty_price ,
-	                                 val.multi_option_val,
-	                                 val2.item_description
-	                                 );
-
-					  } else if ( val.multi_option == "multiple") {
-					  	 html+=subItemRowWithCheckboxQty(
-					  	             val.subcat_id,
-					  	            'sub_item',
-	                                 val2.sub_item_id+"|"+val2.price +"|"+val2.sub_item_name,
-	                                 val2.sub_item_name,
-	                                 val2.pretty_price );
-
-
-	                     if(show_addon_description==1){
-		                     if(!empty(val2.item_description)){
-		                        html+='<div class="addon_description small-font-dim">'+val2.item_description+'</div>';
-		                     }
-	                     }
-
-					  } else {
-                          html+=subItemRowWithRadio(
-                                   val.subcat_id,
-                                   "sub_item",
-                                   //val2.sub_item_id+"|"+val2.price + "|"+val2.sub_item_name  ,
-                                   val2.sub_item_id+"|"+val2.price + "|"+val2.sub_item_name + "|" + val.two_flavor_position  ,
-                                   val2.sub_item_name,
-                                   val2.pretty_price,
-                                   false,
-                                   val2.item_description
-                                   );
-					  }
-				});
-			}
-		});
-	}
-
-
-		var html  = '<ons-list-item class="restaurant-list" >';
-		 html += data.div_formation;
-		//html = '<ons-page>  <ons-toolbar>    <div class="center">Carousel</div>  </ons-toolbar>  <ons-carousel swipeable overscrollable auto-scroll fullscreen var="carousel">    <ons-carousel-item style="background-color: gray;">      <div class="item-label">GRAY</div>    </ons-carousel-item>    <ons-carousel-item style="background-color: #085078;">      <div class="item-label">BLUE</div>    </ons-carousel-item>    <ons-carousel-item style="background-color: #373B44;">      <div class="item-label">DARK</div>    </ons-carousel-item>    <ons-carousel-item style="background-color: #D38312;">      <div class="item-label">ORANGE</div>    </ons-carousel-item>    <ons-carousel-cover>      <div class="cover-label">Swipe left or right</div>    </ons-carousel-cover>  </ons-carousel></ons-page>';
-		html  += '</ons-list-item>';
-		createElement('menu-list',html);
-	} else {
-		onsenAlert(  getTrans("This restaurant has not published their menu yet.",'this_restaurant_no_menu') );
-	}	*/
 	 menutotal=data.category_item_count;
 	 menutcame = Object.keys(data).length;
 	if(menustart == 0)
@@ -2632,12 +2412,12 @@ function menuCategoryResult(data)
 			if (jQuery.inArray(val.total_count, itemcount) !== -1) {
 			} else {
 
-					itemcount.push(val.total_count);
+					itemcount.push(val.total_count); // Duplicates are being removed, have to check this
 					itemcounts=val.total_count;
 					//itemcount[val.cat_id]=val.total_count;
 					//itemcount=array(val.cat_id => val.total_count );
 			}
-			console.log(val.category_name+"-"+itemcounts);
+			console.log("Category ID "+val.cat_id+" Name:"+val.category_name+" Items:"+itemcounts);
 	    all_cat_id.push(val.cat_id);
 	    var active_class = '';
 
@@ -2673,7 +2453,6 @@ function menuCategoryResult(data)
 	var item_cnt=[];
 	var count = 0;
 	var display_count = 1;
-	//var ending_div = '';
 	var items=0;
 	var newcat=0;
 	var n = 0;
@@ -2698,47 +2477,16 @@ function menuCategoryResult(data)
 	    $.each(data.item, function(key, val) {
 				//console.log(Object.keys(data.item).length);
 	        var display_style = 'style = "display:none;"';
-	        if ($.inArray(val.category_id, all_cat) !== -1) {}
+	        if ($.inArray(val.category_id, all_cat) != -1) {}
 					else {
 
-							/*all_cat={
-								"cid": val.category_id,
-								"cnt": val.total_count
-              };*/
 	            all_cat.push(val.category_id);
 							item_cnt.push(val.total_count);
 							if (count > 0) {
-										if(val.total_count > 10 )
-										{
-										//html +='<button id="if'+all_cat[count-1]+'" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+',20);" data-trn-key="book_now">Load More</button>';
-										}
 	                html += "</div>";
 	            }
 
 
-
-							/*if(newcat != val.category_id)
-							{
-								//alert(val.category_name);
-
-								if(n > 0)
-								{
-									//alert(val.category_name + '---' + val.total_count);
-									if(val.total_count > 20 )
-									{
-										//alert(val.category_id);
-										//alert(val.total_count);
-										html +='<button id="if'+newcat+'" class=" button green-btn button--large trn" onclick="loadmore('+newcat+',20);" data-trn-key="book_now">Load More '+newcat+'</button>';
-										//html+='<button>Name</button>';
-									}
-
-									html += "</div>";
-
-								}
-								newcat=val.category_id;
-								n++;
-							}
-*/
 	            if (display_count == 1) {
 	                display_style = 'style = "display:block;"';
 	            }
@@ -2748,6 +2496,7 @@ function menuCategoryResult(data)
 	            count = parseInt(count) + 1;
 	            display_count = parseInt(display_count) + 1;
 	        }
+
 	        if (data.disabled_ordering == 2) {
 	            html += '<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(2)" >';
 	        } else {
@@ -2755,7 +2504,7 @@ function menuCategoryResult(data)
 	                html += '<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(1)" >';
 	            } else {
 	                var single_add_item = getStorage("single_add_item");
-	                dump("=>" + single_add_item);
+	              //  dump("=>" + single_add_item);
 	                if (val.single_item == 2 && single_add_item == 2) {
 	                    item_auto_price = "0|";
 	                    item_auto_discount = "0";
@@ -2816,36 +2565,25 @@ function menuCategoryResult(data)
 
 
 					items++;
-					/*if (Object.keys(data.item).length == items) {
-
-
-					 if(val.total_count > 20 )
-					 {
-					 	 html +='<button id="1if" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+',20);" data-trn-key="book_now">Load More</button>';
-					 }
-						 html += "</div>";
-				 }*/
-
 	    });
-
-			console.log(items);
-			console.log(itemcount);
 	    html += '</ons-list>';
 	    createElement('menu-list', html);
-			$.each(all_cat, function(key, val) {
-				//$.each(item_cnt, function(keys, vals) {
-					//console.log(vals);
-					//	if(vals > 20)
-					//	{
-							$("#scroll_div_" + val ).append('<button id="if'+val+'" class="button green-btn button--large trn" onclick="loadmore('+val+',10);" data-trn-key="book_now">Load More</button>');
-					//	}
-				//		else
-					//	{
+			Array.prototype.associate = function (keys) {
+				var result = {};
 
-				//		}
-				//});
-			});
-			//console.log("Menustart in if"+menustart);
+				this.forEach(function (el, i) {
+					result[keys[i]] = el;
+				});
+				return result;
+			};
+			var itms=item_cnt.associate(all_cat);
+			$.each(itms, function(key, val) {
+
+						if(val > 10)
+						{
+							$("#scroll_div_" + key ).append('<button id="if'+key+'" class="button green-btn button--large trn" onclick="loadmore('+key+','+menulimit+');" data-trn-key="book_now">Load More</button>');
+						}
+				});
 	} else {
 	    var cid;
 	    var categoryid = [];
@@ -2859,29 +2597,19 @@ function menuCategoryResult(data)
 	            categoryid.push(val.category_id);
 	        }
 	        var display_style = 'style = "display:none;"';
-	        if ($.inArray(val.category_id, all_cat) !== -1) {} else {
+	        if ($.inArray(val.category_id, all_cat) != -1) {} else {
 	            all_cat.push(	val.category_id);
-							console.log(val.total_count);
-							console.log("Count"+count);
+							item_cnt.push(val.total_count);
 	            if (count == 0) {
-								if(val.total_count > 10)
-								{
-									//html +='<button id="else'+all_cat+'" class="button green-btn button--large trn" onclick="loadmore('+all_cat+',20);" data-trn-key="book_now">Load More</button>';
-								}
 	                html += "</div>";
-	            }
+	            	}
 	            if (display_count == 1) {
 	                display_style = 'style = "display:block;"';
 	            }
 
-	            //html += '<div id = "scroll_div_'+val.category_id+'"  '+display_style+'   data-anchor="scroll_div_'+val.category_id+'" class="scrolling-div" >  <div class="category-heading" >'+ val.category_name +'</div>';
-
-	            //html += '<div id = "scroll_div_'+val.category_id+'"  '+display_style+'   data-anchor="scroll_div_'+val.category_id+'" class="scrolling-div" > ';
-
 	            count = parseInt(count) + 1;
 	            display_count = parseInt(display_count) + 1;
 	        }
-	        // alert(val.category_id + val.item_name );
 
 	        if (data.disabled_ordering == 2) {
 	            html += '<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(2)" >';
@@ -2890,7 +2618,7 @@ function menuCategoryResult(data)
 	                html += '<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(1)" >';
 	            } else {
 	                var single_add_item = getStorage("single_add_item");
-	                dump("=>" + single_add_item);
+	               // dump("=>" + single_add_item);
 	                if (val.single_item == 2 && single_add_item == 2) {
 	                    item_auto_price = "0|";
 	                    item_auto_discount = "0";
@@ -2948,34 +2676,24 @@ function menuCategoryResult(data)
 	        html += '</ons-col>';
 	        html += '</ons-row>';
 	        html += '</ons-list-item>';
-	        //html += '</div>';
-					if (Object.keys(data).length == items) {
-
-						if(val.total_count > 10 )
-						{
-							 html +='<button id="1else" class="button green-btn button--large trn" onclick="loadmore('+all_cat[count-1]+',10);" data-trn-key="book_now">Load More</button>';
-					 	}
-						 //html += "</div>";
-				 }
 	        $("#scroll_div_" + cid).append(html);
 
 	    });
-			$.each(all_cat, function(key, val) {
-				//$.each(item_cnt, function(keys, vals) {
-					//console.log(vals);
-						//if(vals > 20)
-						//{
-							$("#scroll_div_" + val ).append('<button id="if'+val+'" class="button green-btn button--large trn" onclick="loadmore('+val+',10);" data-trn-key="book_now">Load More</button>');
-						//}
-						//else
-						//{
+			Array.prototype.associate = function (keys) {
+				var result = {};
 
-						//}
-				//});
+				this.forEach(function (el, i) {
+					result[keys[i]] = el;
+				});
+				return result;
+			};
+			var itms=item_cnt.associate(all_cat);// load more working fine dont alter anything. This is ddone by Khan
+			$.each(itms, function(key, val) {
+						if(val > 10)
+						{
+							$("#scroll_div_" + key ).append('<button id="if'+key+'" class="button green-btn button--large trn" onclick="loadmore('+key+','+menulimit+');" data-trn-key="book_now">Load More</button>');
+						}
 			});
-			menucame=Object.keys(data).length;
-
-			console.log("menustart in end part"+menustart);
 	}
 	imageLoaded('.img_loaded');
 	}
@@ -4706,9 +4424,13 @@ function clientRegistration()
 	else if( !isValidEmailAddress( email ) ) {
 		onsenAlert("Invalid Email ID");
 	}
+	else if(pswd == "")
+	{
+		onsenAlert("Password field should not be empty.");
+	}
 	else if(pswd.length < 8)
 	{
-		onsenAlert("Password must be above 8 characters  length");
+		onsenAlert("Password must be above 8 characters  length.");
 	}
 	else if(email=="")
 	{
