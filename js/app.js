@@ -477,7 +477,7 @@ document.addEventListener("pageinit", function(e) {
 
 		case "page-login":
 		case "page-prelogin":
-		 // initFacebook();
+		  initFacebook();
 		  translatePage();
 		  translateValidationForm();
 
@@ -4444,9 +4444,9 @@ function clientRegistration()
 	{
 		onsenAlert("Password field should not be empty.");
 	}
-	else if(pswd.length < 6)
+	else if(pswd.length < 8)
 	{
-		onsenAlert("Password must be above 6 characters  length.");
+		onsenAlert("Password must be above 8 characters  length.");
 	}
 	else if(email=="")
 	{
@@ -5216,9 +5216,9 @@ function saveProfile()
 	{
 		onsenAlert("Password should not be empty");
 	}
-	else if(propswd.length < 6)
+	else if(propswd.length < 8)
 	{
-		onsenAlert("Password must be above 6 characters  length");
+		onsenAlert("Password must be above 8 characters  length");
 	}
 	else {
 	$.validate({
@@ -5402,9 +5402,9 @@ function signup()
 	else if( !isValidEmailAddress( email ) ) {
 		onsenAlert("Invalid Email ID");
 	}
-	else if(pswd.length < 6)
+	else if(pswd.length < 8)
 	{
-		onsenAlert("Password must be above 6 characters  length");
+		onsenAlert("Password must be above 8 characters  length");
 	}
 	else if(email=="")
 	{
