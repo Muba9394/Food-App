@@ -1573,7 +1573,7 @@ textarea.text-input--underbar {
   	text-indent: -9999em;
 	-webkit-box-sizing: border-box;
 	box-sizing:border-box;
-	border: solid 2px rgba(220, 230, 235, 0.5);
+	/*border: solid 2px rgba(220, 230, 235, 0.5);*/
 	border-top-color:#dd2c33;
 	animation: spin 1s infinite linear;
 	/*-webkit-animation: spin 1s infinite linear;*/

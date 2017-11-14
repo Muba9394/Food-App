@@ -4652,7 +4652,7 @@ ons.ready(function() {
        	   	   dump('fillavatar');
 	       	   $(".profile-pic-wrap").show();
 	       	   $(".avatar").attr("src", getStorage("avatar") );
-	       	   $(".avatar-right").html(  getStorage("client_name_cookie") );
+	       	   $(".avatar-right").html( "Hi, "+ getStorage("client_name_cookie") );
 	       	   $(".avatar-wrap-menu div").addClass("img_loaded");
        	   }
        } else {
@@ -7158,7 +7158,7 @@ function payCityPay(fireurl) {
 	}
 		function iabLoadStop(event) {
 		//setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
-		setStorage("successurl",cuisine_url+"/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
+		setStorage("successurl",cuisine_url+"/store/paymentProcessing/id/"+getStorage('order_id')+"/citypay_success/true");
 		successurl= getStorage("successurl");
 		console.log(event.url);
 		console.log(successurl);
