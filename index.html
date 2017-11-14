@@ -932,121 +932,6 @@
 </script>
 
 
-  <!--Table Booking Popup-->
-  <script type="text/ons-template" id="bookingDialog.html">
-  <ons-dialog var="dialogBooking" style="width:90%;height:450px;" cancelable  >
-
-
-
-<ons-page id="page-booking" class="onsen-display">
-   <ons-toolbar>
-     <div class="left"><ons-back-button></ons-back-button></div>
-     <div class="center white"><span id="search-text" class="trn" data-trn-key="book_a_table">Book a table</span></div>
-     <div class="right">
-     </div>
-   </ons-toolbar>
-<form id="frm-booking" class="frm-booking" method="post" >
-   <div class="wrapper">
-
-   <div id="top_end_table_booking">
-
-   <div class="field-wrapper">
-
-        <select class="form-control text-input text-input--underbar has_validation" name="no_of_guests" id="no_of_guests">
-                          <option value="" disabled selected>Number of Guests</option>
-						  <option value="1">1 Person </option>
-                          <option value="2">2 Person </option>
-                          <option value="3">3 Person </option>
-                          <option value="4">4 Person </option>
-                          <option value="5">5 Person </option>
-                          <option value="6">6 Person </option>
-                          <option value="7">7 Person </option>
-                          <option value="8">8 Person </option>
-                          <option value="9">9 Person </option>
-                          <option value="10">10 Person </option>
-                          <option value="11">11 Person </option>
-                          <option value="12">12 Person </option>
-                          <option value="13">13 Person </option>
-                          <option value="14">14 Person </option>
-                          <option value="15">15 Person </option>
-                          <option value="16">16 Person </option>
-                          <option value="17">17 Person </option>
-                          <option value="18">18 Person </option>
-                          <option value="19">19 Person </option>
-                          <option value="20">20 Person </option>
-        </select>
-      </div>
-
-   <div class="field-wrapper">
-      <input type="text" name="date_booking" id="date_booking" class="date_booking text-input text-input--underbar has_validation"
-      placeholder="Date Of Booking" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
-   </div>
-
-
-       <div class="field-wrapper">
-          <select name="booking_time" id="booking_time" class="booking_time text-input text-input--underbar has_validation"
-           data-validation="required" data-validation-error-msg="this field is mandatory!"  onchange="search_table_timing();">
-           </select>
-       </div>
-
-            <section id="diplay_timing_slots" >
-
-            </section>
-       <button class="button green-btn button--large trn search_table_timing" onclick="search_table_timing();" data-trn-key="search">
-      Search
-      <div class="search-btn"><ons-icon icon="fa-chevron-right"></ons-icon></div>
-       </button>
-  </div>
-  <div id="hide_book_a_table" style="display:none;">
-
-      <input value="" name="user_selected_time" id="user_selected_time" type="hidden">
-
-       <div class="field-wrapper">
-          <input type="text" name="booking_date_time" id="booking_date_time" readonly class="text-input text-input--underbar has_validation"
-          placeholder="01/01/1970 12:00" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
-       </div>
-
-       <div class="field-wrapper">
-          <input type="text" name="txt_no_of_guests" id="txt_no_of_guests" readonly class="text-input text-input--underbar has_validation"
-          placeholder="1" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
-       </div>
-
-       <div class="field-wrapper">
-          <input type="text" name="booking_name"  class="booking_name text-input text-input--underbar has_validation"
-          placeholder="Name" value="" data-validation="required" data-validation-error-msg="this field is mandatory!"  onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')">
-       </div>
-
-       <div class="field-wrapper">
-          <input type="text" name="email"  class="email text-input text-input--underbar has_validation"
-          placeholder="Email Address" value="" data-validation="email" data-validation-error-msg="You have not given a correct e-mail address!" >
-       </div>
-
-       <div class="field-wrapper">
-          <input type="text" name="mobile"  class="mobile_inputs mobile text-input text-input--underbar has_validation"
-          placeholder="Mobile Number" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" onkeyup="this.value=this.value.replace(/[^0-9]/g, '')">
-       </div>
-
-       <div class="field-wrapper">
-          <input type="text" name="booking_notes"  class="booking_notes text-input text-input--underbar"
-          placeholder="Your Instructions" value="" >
-       </div>
-
-       <input type="hidden" id="hidden_merchant_id" class="hidden_merchant_id" value="" >
-       <div class="wrapper">
-       <button class="button green-btn button--large trn" onclick="submitBooking();" data-trn-key="book_now">
-    	Book Now!
-    	<div class="search-btn"><ons-icon icon="fa-chevron-right"></ons-icon></div>
-       </button>
-	   </div>
-  </div>
-
-  </div>
-
-   </form>
-</ons-page>
-  </ons-dialog>
-</script>
-  <!--End here-->
 
   <script type="text/ons-template" id="paymentOption.html">
 <ons-page id="page-paymentoption" class="onsen-display">
@@ -1330,7 +1215,7 @@
       placeholder="Time of Booking" value="" data-validation="required" data-validation-error-msg="This field is mandatory!" >
    </div>
    <div class="field-wrapper">
-      <input type="text" name="booking_name"  class="booking_name text-input text-input--underbar has_validation"
+      <input type="text" name="booking_namea"  class="booking_name text-input text-input--underbar has_validation"
       placeholder="Name" value="" data-validation="required" data-validation-error-msg="This field is mandatory!" onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')">
    </div>
 

@@ -1281,11 +1281,7 @@ function callAjax(action,params)
 			   break;
 
 				case "getProfile":
-					if(data.msg == "not login")
-					{
-						onsenAlert("Sorry your session has Expired");
-					}
-					else{
+
 				  $(".first_name").val( data.details.first_name );
 				  $(".last_name").val( data.details.last_name );
 				  $(".email_address").val( data.details.email_address );
@@ -1293,9 +1289,9 @@ function callAjax(action,params)
 
 				  $(".avatar").attr("src", data.details.avatar );
 
-				  $("#frm-booking input[name='booking_name']").val(data.details.first_name+" "+data.details.last_name);
-				  $("#frm-booking input[name='email']").val(data.details.email_address);
-				  $("#frm-booking input[name='mobile']").val(data.details.contact_phone);
+				  $("#hide_book_a_table input[name='booking_name']").val(data.details.first_name+" "+data.details.last_name);
+				  $("#hide_book_a_table input[name='email']").val(data.details.email_address);
+				  $("#hide_book_a_table input[name='mobile']").val(data.details.contact_phone);
 
 				  dump('set avatar');
 				  setStorage("avatar",data.details.avatar);
@@ -1303,7 +1299,7 @@ function callAjax(action,params)
 				  imageLoaded('.img_loaded');
 
 				  initIntelInputs();
-				}
+
 				  break;
 
 
@@ -2057,7 +2053,8 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
     	           	   }
 
 	    	           htm+='<p class="concat-textx type">'+val.cuisine+'</p>';
-					   htm+='<span class="notification '+val.tag_raw+' ">'+val.is_open+'</span><br>';
+
+					   		htm+='<span class="notification '+val.tag_raw+' ">'+val.is_open+'</span><br>';
 					  if($.trim(val.is_open)=="pre-order")
 					   {
 					   		setStorage("merchant_is_open",val.is_open);
@@ -2084,8 +2081,13 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
 										htm+='</ul>';
     	          }
 							}
-
+							if(val.table_booking_option=='')
+							{
+							}
+							else{
     	          htm+='<p class="cod">'+val.payment_options.cod+'</p>';
+							}
+
 
 	    	           // if(!empty(val.distance)){
 	    	           // 	   htm+='<p class="time-tag">'+val.distance+'</p>';
@@ -4677,17 +4679,17 @@ function initMobileScroller()
 
 	if ( $('.date_booking').exists()){
 
-		/* var now = new Date(),
-        minDate = new Date('2017',now.getMonth(),now.getDate()),
-        maxDate = new Date('2017',now.getMonth()+1, now.getDate()); */
+		var now = new Date(),
+		minDate = new Date(now.getFullYear() - 110, 0, 1),
+		maxDate = new Date(now.getFullYear() - 18, 11, 31);
 
 		$('.date_booking').mobiscroll().date({
 			theme: 'android-holo-light',
 			mode: "scroller",
 			display: "modal",
-			dateFormat : "yy-mm-dd",
-		/*	min: minDate,
-        	max: maxDate, */
+			dateFormat : "dd-mm-yy",
+			min: minDate,
+      max: maxDate,
 			onSelect: __datetimeOnSelectDelegate
 
 		});
@@ -4745,6 +4747,13 @@ function initMobileScroller()
 
 function search_table_timing()
 {
+		if(getStorage("client_id") == null || getStorage("client_id") == "")
+		{
+
+		}
+		else{
+		callAjax('getProfile',"client_token="+getStorage("client_token"));
+		}
 		$('#diplay_timing_slots').html('');
 	  var no_of_guests = $.trim($('#no_of_guests option:selected').val());
 	  var date_booking = $('#date_booking').val();
@@ -4990,8 +4999,8 @@ function loadBookingForm()
 
 function table_booking_optn(merchant_id,logo,restaurant_name,hide)
 {
-	setStorage("merc_logo",logo);
-	setStorage("res_name",restaurant_name);
+	setStorage("merchant_logo",logo);
+	setStorage("merchant_name",restaurant_name);
 	if(hide)
 	{
 		$("#merchnt-pop-menu").hide();
@@ -5043,10 +5052,10 @@ function submitBooking()
 	    onError : function() {
 	    },
 	    onSuccess : function() {
-			if(getStorage("client_id")=='')
+			if(getStorage("client_id")==null || getStorage("client_id")=="")
 			{
 				var params = $( "#frm-booking").serialize();
-				params+="&merchant_id=" +  merchant_id ;
+				params+="&merchant_id=" +  merchant_id +"&client_id=";
 				callAjax("bookATableNewconcept",params);
 				return false;
 			}
@@ -5055,7 +5064,6 @@ function submitBooking()
 				var params = $( "#frm-booking").serialize();
 				params+="&merchant_id=" +  merchant_id +"&client_id="+getStorage("client_id");
 				callAjax("bookATableNewconcept",params);
-
 				return false;
 			}
 	    }
@@ -7231,7 +7239,7 @@ function displayRestaurantResultsOnMap(data) {
 			htm+='</ul>';
 		  }
 		//var contentString = '<h3>'+val.restaurant_name+'</h3><p>'+val.cuisine+'</p><p>'+ val.address+'</p> <div style="display:flex"> <img src='+val.logo+' height="60" width="60" >'+htm+'</div><p onclick="loadRestuarantCategoryfromMap('+val.merchant_id+')">Click here for the menu</p>';
-		
+
 		var contentString = '<div id="iw-container">' +
                     '<div class="iw-title">'+val.restaurant_name+'</div>' +
                     '<div class="iw-content">' +
