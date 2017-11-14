@@ -7207,6 +7207,7 @@ function displayRestaurantResultsOnMap(data) {
 			htm+='</ul>';
 		  }
 		//var contentString = '<h3>'+val.restaurant_name+'</h3><p>'+val.cuisine+'</p><p>'+ val.address+'</p> <div style="display:flex"> <img src='+val.logo+' height="60" width="60" >'+htm+'</div><p onclick="loadRestuarantCategoryfromMap('+val.merchant_id+')">Click here for the menu</p>';
+
 		var contentString = '<div id="iw-container">' +
                     '<div class="iw-title">'+val.restaurant_name+'</div>' +
                     '<div class="iw-content">' +
@@ -7221,8 +7222,7 @@ function displayRestaurantResultsOnMap(data) {
                   '</div>';
 		//to do : to also show the book a table option in the info window
 		var infowindow = new google.maps.InfoWindow({
-			content: contentString,
-			maxWidth: 300
+			content: contentString
 		  });
 
 			setTimeout(function() {
