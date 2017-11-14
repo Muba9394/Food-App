@@ -1281,6 +1281,11 @@ function callAjax(action,params)
 			   break;
 
 				case "getProfile":
+					if(data.msg == "not login")
+					{
+						onsenAlert("Sorry your session has Expired");
+					}
+					else{
 				  $(".first_name").val( data.details.first_name );
 				  $(".last_name").val( data.details.last_name );
 				  $(".email_address").val( data.details.email_address );
@@ -1298,7 +1303,7 @@ function callAjax(action,params)
 				  imageLoaded('.img_loaded');
 
 				  initIntelInputs();
-
+				}
 				  break;
 
 
@@ -1880,7 +1885,14 @@ function callAjax(action,params)
 			      break;
 
 			    case "getProfile":
-			      dump('show login form')
+			      dump('show login form');
+						console.log(getStorage("client_token"));
+						if(data.msg == "not login")
+						{
+							onsenAlert("Sorry your session has Expired");
+							logout("prof");
+						}
+						//onsenAlert("Sorry your session has been expired");
 			      menu.setMainPage('prelogin.html', {closeMenu: true});
 			      break;
 
@@ -2074,18 +2086,19 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
 							}
 
     	          htm+='<p class="cod">'+val.payment_options.cod+'</p>';
-	    	           if(!empty(val.distance)){
-	    	           	   htm+='<p class="time-tag">'+val.distance+'</p>';
-	    	           }
 
-	    	           if(val.service!=3){
-	    	           	   if(!empty(val.delivery_estimation)){
-	    	           	      htm+='<p>'+val.delivery_estimation+'</p>';
-	    	           	   }
-	    	           	   if(!empty(val.delivery_distance)){
-	    	           	      htm+='<p>'+val.delivery_distance+'</p>';
-	    	           	   }
-	    	           }
+	    	           // if(!empty(val.distance)){
+	    	           // 	   htm+='<p class="time-tag">'+val.distance+'</p>';
+	    	           // }
+                   //
+	    	           // if(val.service!=3){
+	    	           // 	   if(!empty(val.delivery_estimation)){
+	    	           // 	      htm+='<p>'+val.delivery_estimation+'</p>';
+	    	           // 	   }
+	    	           // 	   if(!empty(val.delivery_distance)){
+	    	           // 	      htm+='<p>'+val.delivery_distance+'</p>';
+	    	           // 	   }
+	    	           // }
 
 
 	    	           if ( val.offers.length>0){
@@ -4977,6 +4990,8 @@ function loadBookingForm()
 
 function table_booking_optn(merchant_id,logo,restaurant_name,hide)
 {
+	setStorage("merc_logo",logo);
+	setStorage("res_name",restaurant_name);
 	if(hide)
 	{
 		$("#merchnt-pop-menu").hide();
@@ -5182,7 +5197,7 @@ function showProfile()
 	if (isLogin()){
 		menu.setMainPage('profile.html', {closeMenu: true});
 	} else {
-		menu.setMainPage('prelogin.html', {closeMenu: true})
+		menu.setMainPage('prelogin.html', {closeMenu: true});
 	}
 }
 
@@ -5261,13 +5276,22 @@ $(document).on('keypress','.numbers',function(e){
 
 
 
-function logout()
+function logout(prof)
 {
+	if(prof)
+	{
 	removeStorage("client_token");
 	removeStorage("client_id");
+	}
+	else{
+		removeStorage("client_token");
+		removeStorage("client_id");
 	onsenAlert(  getTrans("You are now logged out",'you_are_now_logout') );
 	menu.setMainPage('select_dining.html', {closeMenu: true});
 }
+}
+
+
 
 function isLogin()
 {
@@ -7207,7 +7231,7 @@ function displayRestaurantResultsOnMap(data) {
 			htm+='</ul>';
 		  }
 		//var contentString = '<h3>'+val.restaurant_name+'</h3><p>'+val.cuisine+'</p><p>'+ val.address+'</p> <div style="display:flex"> <img src='+val.logo+' height="60" width="60" >'+htm+'</div><p onclick="loadRestuarantCategoryfromMap('+val.merchant_id+')">Click here for the menu</p>';
-
+		
 		var contentString = '<div id="iw-container">' +
                     '<div class="iw-title">'+val.restaurant_name+'</div>' +
                     '<div class="iw-content">' +

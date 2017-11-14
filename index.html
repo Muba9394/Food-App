@@ -1013,7 +1013,7 @@
 
        <div class="field-wrapper">
           <input type="text" name="booking_name"  class="booking_name text-input text-input--underbar has_validation"
-          placeholder="Name" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
+          placeholder="Name" value="" data-validation="required" data-validation-error-msg="this field is mandatory!"  onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')">
        </div>
 
        <div class="field-wrapper">
@@ -1023,7 +1023,7 @@
 
        <div class="field-wrapper">
           <input type="text" name="mobile"  class="mobile_inputs mobile text-input text-input--underbar has_validation"
-          placeholder="Mobile Number" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
+          placeholder="Mobile Number" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" onkeyup="this.value=this.value.replace(/[^0-9]/g, '')">
        </div>
 
        <div class="field-wrapper">

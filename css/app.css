@@ -1119,6 +1119,9 @@ background:#ec391c;
 .notification.assigned{
 background:#fc8344;
 }
+.notification.closed{
+background:#d9534f;
+}
 .notification.started{
 background:#ba68c8;
 }
