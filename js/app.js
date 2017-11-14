@@ -4679,19 +4679,26 @@ function initMobileScroller()
 
 	if ( $('.date_booking').exists()){
 
+		// var today = new Date(),
+    //     currYear = today.getFullYear(),
+    //     currMonth = today.getMonth(),
+    //     maxDate = new Date(currYear, currMonth + 6, today.getDate()),
+    //     closedDays = ['w0', 'w6', '1/1', '1/2', '12/25', '12/26'],
+    //     booked = [new Date(currYear, currMonth, 26), new Date(currYear, currMonth + 1, 10), new Date(currYear, currMonth + 2, 25)],
+    //     invalid = closedDays.concat(booked);
+
 		var now = new Date(),
-		minDate = new Date(now.getFullYear() - 110, 0, 1),
-		maxDate = new Date(now.getFullYear() - 18, 11, 31);
+        until = new Date(now.getFullYear() + 10, now.getMonth());
 
 		$('.date_booking').mobiscroll().date({
 			theme: 'android-holo-light',
 			mode: "scroller",
 			display: "modal",
-			dateFormat : "dd-mm-yy",
-			min: minDate,
-      max: maxDate,
+			dateFormat : "yy-mm-dd",
+			 min: now,
+			 minWidth: 100,
+			 max: until,
 			onSelect: __datetimeOnSelectDelegate
-
 		});
 	}
 
