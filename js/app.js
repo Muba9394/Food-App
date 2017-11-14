@@ -456,7 +456,7 @@ document.addEventListener("pageinit", function(e) {
 		  break;
 
 			case "page-terms":
-			  callAjax('getTerms',
+			  callAjax('termsAndconditions',
 			  "client_token="+getStorage("client_token")+"&client_id="+getStorage("client_id")
 			  );
 			  translatePage();
@@ -1268,7 +1268,7 @@ function callAjax(action,params)
 				   break;
 
 			   case "BrowseByBookTable":
-					displayRestaurantResults(data.details.data ,'restaurant-result',2,data.details.total,'loadmore',data.code);
+					displayRestaurantResults(data.details.data ,'restaurant-result',2);
 				//$(".result-msg").text(data.details.total+" Restaurant found");
 				$(".result-msg").text(data.details.total+" "+getTrans("Restaurant found",'restaurant_found') );
 			   break;
@@ -1397,7 +1397,7 @@ function callAjax(action,params)
 				  displayBookingHistory(data.details);
 				  break;
 
-					case "getTerms":
+					case "termsAndconditions":
 					  displayTerms(data.details);
 					  break;
 
@@ -2391,7 +2391,7 @@ function menuCategoryResult(data)
 	    $("#close_store").val(2);
 	} else $("#close_store").val(1);
 	if (!data.menu_category) {
-	    onsenAlert(getTrans("Error: Restaurant has no menu", 'Restaurant has no menu'));
+	    onsenAlert(getTrans("Restaurant has no menu", 'Restaurant has no menu'));
 	    return;
 	}
 
@@ -2679,6 +2679,7 @@ function menuCategoryResult(data)
 	        $("#scroll_div_" + cid).append(html);
 
 	    });
+			console.log(item_cnt);
 			Array.prototype.associate = function (keys) {
 				var result = {};
 
@@ -4428,9 +4429,9 @@ function clientRegistration()
 	{
 		onsenAlert("Password field should not be empty.");
 	}
-	else if(pswd.length < 8)
+	else if(pswd.length < 6)
 	{
-		onsenAlert("Password must be above 8 characters  length.");
+		onsenAlert("Password must be above 6 characters  length.");
 	}
 	else if(email=="")
 	{
@@ -4690,6 +4691,7 @@ function initMobileScroller()
 }
 	function __datetimeOnSelectDelegate(textDate, inst)
 	{
+			$("#diplay_timing_slots").empty();
       var booking_date = $(this).val();
       var merchant_id  = $("#frm-booking .hidden_merchant_id").val();
       var base_url     = ajax_url;
@@ -4705,6 +4707,10 @@ function initMobileScroller()
 		        success: function(php_script_response)
 		        {
 	          	  $('#table_booking_time').html('');
+								if(php_script_response == '<option value="" disabled selected>Select Time slot </option>')
+								{
+									$('#booking_time').html('<option value="" disabled selected>Sorry no slots available for the day</option>');
+								}
 		        /*  $.each(php_script_response, function( key, value )
 		          {
 		          	 if(key!="msg")
@@ -4717,8 +4723,9 @@ function initMobileScroller()
 		          {
 		          	html += '<option value="">'+php_script_response.msg+'</option>';
 		          } */
-				  $('#booking_time').html(php_script_response);
-
+							else{
+				  		$('#booking_time').html(php_script_response);
+						}
 		        }
 		      });
 }
@@ -5416,8 +5423,8 @@ function showHistory()
 
 function showTerms()
 {
-		//menu.setMainPage('terms.html', {closeMenu: true});
-		var iabRef = cordova.InAppBrowser.open(cuisine_url+'/store/page/terms-amp-conditions', '_self', 'location=no','toolbar=yes');
+		menu.setMainPage('terms.html', {closeMenu: true});
+		//var iabRef = cordova.InAppBrowser.open(cuisine_url+'/store/page/terms-amp-conditions', '_self', 'location=no','toolbar=yes');
 }
 
 function showAddressBook()
@@ -5474,19 +5481,8 @@ function displayBookingHistory(data)
 //for terms and conditions
 function displayTerms(data)
 {
-	var htm='<ons-list>';
+	var htm=data;
 
-			 //htm+='<ons-list-item modifier="tappable" class="list-item-container" onclick="showOrderDetails('+val.order_id+');" >';
-			 htm+='<ons-list-item modifier="tappable" class="list-item-container"  >';
-					 htm+='<ons-row class="row">';
-							htm+='<ons-col class="col-orders concat-text">';
-								htm+="Updated soon";
-							htm+='</ons-col>';
-							htm+='<ons-col class="col-order-stats center" width="98px">';
-							htm+='</ons-col>';
-					 htm+='</ons-row>';
-				 htm+='</ons-list-item>';
-	htm+='</ons-list>';
 	/*var htm='<ons-list>';
 	$.each( data, function( key, val ) {
 	     //htm+='<ons-list-item modifier="tappable" class="list-item-container" onclick="showOrderDetails('+val.order_id+');" >';
@@ -7640,7 +7636,7 @@ $(document).on('click', '#lookupButton', function () {
     else {
 
       $("lookupButton").html("Please Wait...");
-      var url = "https://api.getaddress.io/find/" + pin + "?api-key=HMMe58k6xEGr5L2TK3ioHQ1599";
+      var url = "https://api.getaddress.io/find/" + pin + "?api-key=iew8IndDYEuCA4ef5_5oRw11062";
       $.ajax({
           url: url,
           dataType: 'json',

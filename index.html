@@ -985,7 +985,7 @@
 
        <div class="field-wrapper">
           <select name="booking_time" id="booking_time" class="booking_time text-input text-input--underbar has_validation"
-           data-validation="required" data-validation-error-msg="this field is mandatory!" >
+           data-validation="required" data-validation-error-msg="this field is mandatory!"  onchange="search_table_timing();">
            </select>
        </div>
 
@@ -1399,17 +1399,17 @@
 
        <div class="field-wrapper">
           <select name="booking_time" id="booking_time" class="booking_time text-input text-input--underbar has_validation"
-           data-validation="required" data-validation-error-msg="This field is mandatory!" >
+           data-validation="required" data-validation-error-msg="This field is mandatory!" onchange="search_table_timing();">
            </select>
        </div>
 
             <section id="diplay_timing_slots" >
 
             </section>
-       <button class="button green-btn button--large trn search_table_timing" onclick="search_table_timing();" data-trn-key="search">
-      Search
-      <div class="search-btn"><ons-icon icon="fa-chevron-right"></ons-icon></div>
-       </button>
+      <!--   <button class="button green-btn button--large trn search_table_timing" onclick="search_table_timing();" data-trn-key="search">
+       Search
+       <div class="search-btn"><ons-icon icon="fa-chevron-right"></ons-icon></div>
+       </button>-->
   </div>
   <div id="hide_book_a_table" style="display:none;">
 
@@ -1622,12 +1622,11 @@
     </div>
 
     <div class="center white"><span id="search-text" class="trn" data-trn-key="browse_resto">Restaurant List </span></div>
-   <!--
+
     <div class="right">
          <ons-toolbar-button onclick="showFilterOptions(2);" ><ons-icon icon="fa-filter"></ons-toolbar-button>
       </div>
    There is a bug here.. select a cuisine type here and a new restaurant will be added even though it exists in the list
-    -->
    </ons-toolbar>
 
    <div class="results-header arrow_box"><span class="result-msg trn" data-trn-key="processing">Processing...</span></div>
