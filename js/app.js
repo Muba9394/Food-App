@@ -414,7 +414,7 @@ document.addEventListener("pageinit", function(e) {
 		  break;
 
 		case "page-browse":
-		  callAjax('browseRestaurant','');
+			callAjax("browseRestaurant","&start="+start+"&limit="+limit+"&type=1&address="+ getStorage("search_address")+"&cuisine="+getStorage("cuisine")+"&parish="+getStorage("parish"));
 		  translatePage();
 		  break;
 
@@ -751,9 +751,7 @@ function callAjax(action,params)
 			switch (action)
 			{
 				case "search":
-				// alert("Search");
 				displayRestaurantResults(data.details.data ,'restaurant-results',1);
-				//$(".result-msg").text(data.details.total+" Restaurant found");
 				if(data.details.total > 1)
 				{
 				$(".result-msg").text(data.details.total+" "+getTrans("Restaurant(s) can deliver",'restaurant_found') );
@@ -1419,7 +1417,9 @@ function callAjax(action,params)
 				  break;
 
 				case "getOrderHistory":
+
 				  displayOrderHistory(data.details);
+
 				  break;
 
 				case "getBookingHistory":
@@ -2169,6 +2169,7 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
 
 		//if it is take away-Mubarak
 		if(loadmore){
+
 		if(start == 0)
 		{
 		createElement(target_id,htm);
@@ -5250,18 +5251,23 @@ function saveProfile()
 	if(propswd == '')
 	{
 		onsenAlert("Password should not be empty");
+		return false;
 	}
-	else if(propswd.length < 8)
+	if(propswd.length < 8)
 	{
 		onsenAlert("Password must be 8 characters or above");
+		return false;
 	}
-	else {
+	else
+	{
+
 	$.validate({
 	    form : '#frm-profile',
 	    borderColorOnError:"#FF0000",
 	    onError : function() {
 	    },
 	    onSuccess : function() {
+				alert("Inside Success"+propswd.length);
 	      var params = $( "#frm-profile").serialize();
 	      params+="&client_token="+ getStorage("client_token");
 	      callAjax("saveProfile",params);
@@ -6953,6 +6959,7 @@ function cancelRedeem()
 
 function backtoHome()
 {
+	$(".country-list").hide();
 	var options = {
   	  closeMenu:true,
       animation: 'slide'
