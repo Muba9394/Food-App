@@ -1274,7 +1274,7 @@ function callAjax(action,params)
 
 				case "browseRestaurant":
 				// alert("browseRestaurant");
-				   displayRestaurantResults( data.details.data ,'browse-results',2,data.details.total,'loadmore',data.code);
+				   displayRestaurantResults( data.details.data ,'browse-results',2,data.details.total,'loadmore',data.code,'browse');
 				   //$(".result-msg").text(data.details.total+" Restaurant found");
 					 	if(data.details.total > 1){
 				   		$(".result-msg").text(data.details.total+" "+ getTrans("Restaurant(s) can deliver",'restaurant_found')  );
@@ -2036,7 +2036,7 @@ function setHomeCallback()
 
 
 var came=0;
-function displayRestaurantResults(data , target_id , display_type,counttotal,loadmore,code)
+function displayRestaurantResults(data , target_id , display_type,counttotal,loadmore,code,browse)
 {
 	var htm='';
 	//alert(Object.keys(data).length);
@@ -2187,14 +2187,26 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
 			// for getting the length
 		var tots= 	Object.keys(data).length;
 		came=parseInt(came)+parseInt(tots);
-
-		if(came < counttotal){
-		callAjax("search_take_away","&start="+start+"&limit="+limit+"&type=1&address="+ getStorage("search_address")+"&cuisine="+getStorage("cuisine")+"&parish="+getStorage("parish"));
-		}
-		else if(came == counttotal)
+		if(browse)
 		{
+			if(came < counttotal){
+			callAjax("browseRestaurant","&start="+start+"&limit="+limit+"&type=1&address="+ getStorage("search_address")+"&cuisine="+getStorage("cuisine")+"&parish="+getStorage("parish"));
+			}
+			else if(came == counttotal)
+			{
 
+			}
 		}
+		else {
+			if(came < counttotal){
+			callAjax("search_take_away","&start="+start+"&limit="+limit+"&type=1&address="+ getStorage("search_address")+"&cuisine="+getStorage("cuisine")+"&parish="+getStorage("parish"));
+			}
+			else if(came == counttotal)
+			{
+
+			}
+		}
+
 
 
 	}
@@ -5260,14 +5272,12 @@ function saveProfile()
 	}
 	else
 	{
-
 	$.validate({
 	    form : '#frm-profile',
 	    borderColorOnError:"#FF0000",
 	    onError : function() {
 	    },
 	    onSuccess : function() {
-				alert("Inside Success"+propswd.length);
 	      var params = $( "#frm-profile").serialize();
 	      params+="&client_token="+ getStorage("client_token");
 	      callAjax("saveProfile",params);
