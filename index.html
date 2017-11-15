@@ -1346,8 +1346,8 @@
 </script>
 
   <script type="text/ons-template" id="bookingTY.html">
-<ons-page id="page-booking-ty" class="onsen-display">
-   <ons-toolbar>
+<ons-page id="page-booking-ty" class="onsen-display" on-device-backbutton="backtoHome()">
+   <ons-toolbar onclick="setHome();">
      <div class="left"><ons-back-button></ons-back-button></div>
      <div class="center white"><span id="search-text">Booking</span></div>
      <div class="right">
