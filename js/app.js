@@ -754,12 +754,26 @@ function callAjax(action,params)
 				// alert("Search");
 				displayRestaurantResults(data.details.data ,'restaurant-results',1);
 				//$(".result-msg").text(data.details.total+" Restaurant found");
-				$(".result-msg").text(data.details.total+" "+getTrans("Restaurant found",'restaurant_found') );
+				if(data.details.total > 1)
+				{
+				$(".result-msg").text(data.details.total+" "+getTrans("Restaurant(s) can deliver",'restaurant_found') );
+				}
+				else
+				{
+				$(".result-msg").text(data.details.total+" "+getTrans("Restaurant can deliver",'restaurant_found') );
+				}
 				break;
 
 				case "search_take_away":
 					displayRestaurantResults(data.details.data ,'restaurant-results',1,data.details.total,'loadmore',data.code);
-					$(".result-msg").text(data.details.total+" "+getTrans("Restaurant found",'restaurant_found') );
+					if(data.details.total > 1)
+					{
+					$(".result-msg").text(data.details.total+" "+getTrans("Restaurant(s) can deliver",'restaurant_found') );
+					}
+					else{
+						$(".result-msg").text(data.details.total+" "+getTrans("Restaurant can deliver",'restaurant_found') );
+					}
+
 				break;
 
 				case "search_take_away_on_map":
@@ -1264,20 +1278,34 @@ function callAjax(action,params)
 				// alert("browseRestaurant");
 				   displayRestaurantResults( data.details.data ,'browse-results',2,data.details.total,'loadmore',data.code);
 				   //$(".result-msg").text(data.details.total+" Restaurant found");
-				   $(".result-msg").text(data.details.total+" "+ getTrans("Restaurant found",'restaurant_found')  );
+					 	if(data.details.total > 1){
+				   		$(".result-msg").text(data.details.total+" "+ getTrans("Restaurant(s) can deliver",'restaurant_found')  );
+				 		}
+						else{
+							$(".result-msg").text(data.details.total+" "+ getTrans("Restaurant can deliver",'restaurant_found')  );
+						}
 				   break;
 
 			   case "BrowseByBookTable":
 					displayRestaurantResults(data.details.data ,'restaurant-result',2);
 				//$(".result-msg").text(data.details.total+" Restaurant found");
-				$(".result-msg").text(data.details.total+" "+getTrans("Restaurant found",'restaurant_found') );
+				if(data.details.total > 1){
+					$(".result-msg").text(data.details.total+" "+ getTrans("Restaurant(s) for book a table",'restaurant_found')  );
+				}
+				else{
+					$(".result-msg").text(data.details.total+" "+ getTrans("Restaurant  for book a table",'restaurant_found')  );
+				}
 			   break;
 
 				case "searchRestaurant":
 			    // alert("BrowseByBookTable");
 					displayRestaurantResults(data.details.data ,'browse-results',3);
-				//$(".result-msg").text(data.details.total+" Restaurant found");
-				$(".result-msg").text(data.details.total+" "+getTrans("Restaurant found",'restaurant_found') );
+					if(data.details.total > 1){
+						$(".result-msg").text(data.details.total+" "+ getTrans("Restaurant(s) can deliver",'restaurant_found')  );
+					}
+					else{
+						$(".result-msg").text(data.details.total+" "+ getTrans("Restaurant can deliver",'restaurant_found')  );
+					}
 			   break;
 
 				case "getProfile":
@@ -4446,7 +4474,7 @@ function clientRegistration()
 	}
 	else if(pswd.length < 8)
 	{
-		onsenAlert("Password must be above 8 characters  length.");
+		onsenAlert("Password must be 8 characters or above");
 	}
 	else if(email=="")
 	{
@@ -5225,7 +5253,7 @@ function saveProfile()
 	}
 	else if(propswd.length < 8)
 	{
-		onsenAlert("Password must be above 8 characters  length");
+		onsenAlert("Password must be 8 characters or above");
 	}
 	else {
 	$.validate({
@@ -5411,7 +5439,7 @@ function signup()
 	}
 	else if(pswd.length < 8)
 	{
-		onsenAlert("Password must be above 8 characters  length");
+		onsenAlert("Password must be 8 characters or above");
 	}
 	else if(email=="")
 	{
@@ -7206,8 +7234,9 @@ function searchMerchantMap() {
 
       }
 	};
-	menu.setMainPage("searchMap.html",options);
-	//kNavigator.pushPage("searchMap.html", options);
+	//menu.setMainPage("searchMap.html",options);
+	//sNavigator.pushPage("searchMap.html", options);
+	menu.setMainPage('searchMap.html',options);
 }
 
 function loadRestuarantCategoryfromMap(mtId) {
