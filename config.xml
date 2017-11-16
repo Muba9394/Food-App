@@ -24,8 +24,8 @@
     <gap:plugin name="com.paypal.cordova.mobilesdk" source="npm"  />
     <gap:plugin name="cordova-plugin-device" source="npm"/>
 	<gap:plugin name="cordova-plugin-splashscreen" source="npm"/>
-	
-	
+
+
 	<!--
 	<gap:plugin name="cordova-plugin-inappbrowser" source="npm"/>
 	<allow-navigation href="*://*.citypay.com/*" />
@@ -36,6 +36,7 @@
 	<gap:plugin name="cordova-plugin-whitelist" source="npm"/>
 	-->
 	<gap:plugin name="cordova-plugin-geolocation" source="npm"/>
+  <gap:plugin name="cordova-plugin-android-permissions" source="npm"/>
 	<gap:plugin name="cordova-plugin-network-information" source="npm" />
 	<gap:plugin name="cordova-plugin-request-location-accuracy" source="npm"  spec="2.2.0" />
 	<gap:plugin name="cordova-plugin-x-toast" source="npm" spec="2.6.0" />
@@ -53,7 +54,11 @@
        <param name="API_KEY_FOR_ANDROID" value="AIzaSyC25RhPHKmvQTz7OzprugQyzWssMlvWKHA" />
        <param name="API_KEY_FOR_IOS" value="AIzaSyC25RhPHKmvQTz7OzprugQyzWssMlvWKHA" />
     </gap:plugin>
-	
+
+    <feature name="Geolocation">
+        <param name="android-package" value="org.apache.cordova.GeoBroker" />
+    </feature>
+    
 	<preference name="AutoHideSplashScreen" value="false" />
     <preference name="SplashScreenDelay" value="10000" />
     <preference name="fullscreen" value="false" />

@@ -24,8 +24,31 @@ document.addEventListener("deviceready", onDeviceReady,  false);
 
 function onDeviceReady() {
 
-	navigator.splashscreen.hide();
+/*var permissions = cordova.plugins.permissions;
 
+	navigator.splashscreen.hide();
+	var list = [
+  permissions.ACCESS_COARSE_LOCATION
+];
+
+permissions.hasPermission(list, callback, null);
+
+function error() {
+  console.warn('Camera or Accounts permission is not turned on');
+}
+
+function success( status ) {
+  if( !status.hasPermission ) {
+
+    permissions.requestPermissions(
+      list,
+      function(status) {
+        if( !status.hasPermission ) error();
+      },
+      error);
+  }
+}
+*/
 	if ( !empty(krms_config.pushNotificationSenderid)) {
 
 	    var push = PushNotification.init({
@@ -349,7 +372,13 @@ document.addEventListener("pageinit", function(e) {
 	     break;
 
 	   case "page-shipping":
-
+		 		if(!isLogin())
+				{
+					$("#guest").show();
+					$("#addressbook").hide();
+					$("#addrs_deflt").hide();
+					$("#guest_checkout").val("2");
+				}
 	      $(".street").attr("placeholder", getTrans('Street','street') );
 	      $(".city").attr("placeholder", getTrans('City','city') );
 	      $(".state").attr("placeholder", getTrans('State','state') );
@@ -382,6 +411,10 @@ document.addEventListener("pageinit", function(e) {
 		break;
 
 		case "page-home":
+		if(isLogin())
+		{
+			$("#welcome_msg").html( "Welcome back, "+ getStorage("client_name_cookie") );
+		}
 			geoComplete();
 
 			search_address=getStorage("search_address");
@@ -1331,11 +1364,12 @@ function callAjax(action,params)
 
 				case "registerUsingFb":
 				case "login":
+
 				  setStorage("client_token",data.details.token);
 				  setStorage("client_id",data.details.client_id);
 				  setStorage("avatar",data.details.avatar);
-                  setStorage("client_name_cookie",data.details.client_name_cookie);
-
+          setStorage("client_name_cookie",data.details.client_name_cookie);
+					onsenAlert("Logged in successfully");
 				  switch (data.details.next_steps)
 				  {
 				  	 case "delivery":
@@ -1893,6 +1927,10 @@ function callAjax(action,params)
 				  showCartNosOrder();
 				  break;
 
+					case "Clearcart":
+					  sNavigator.popPage({cancelIfRunning: true});
+					  break;
+
 				case "getPaymentOptions":
 				  if ( data.details==3){
 				  	  onsenAlert(data.msg);
@@ -2141,7 +2179,7 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
 									// var rest_names= rest_name.replace("'", '');
 
 
-	    	           		if(display_type==3||display_type==1)
+	    	           		if(display_type==3||display_type==1||display_type==2)
 	    	           		{
 	    	    						htm+='<div class="booking-btn" data="book" onclick="loadRestaurantCategory('+val.merchant_id+')" > View Menu </div>';
 	    	           		}
@@ -3252,6 +3290,10 @@ jQuery(document).ready(function() {
 		editOrderInit();
 	});
 
+	$( document ).on( "click", ".cart-empty", function() {
+		cartempty();
+	});
+
 	$( document ).on( "click", ".order-apply-changes", function() {
 		applyCartChanges();
 	});
@@ -4309,6 +4351,15 @@ function editOrderInit()
 	});
 }
 
+
+function cartempty()
+{
+	cart = [] ;
+	var cartnum=$("#menucategory-page .cart-num").html("0");
+	callAjax("Clearcart","merchant_id="+ getStorage('merchant_id')+ "&clearcart=clear&device_id=123546");
+	//sNavigator.popPage({cancelIfRunning: true});
+}
+
 function applyCartChanges()
 {
 	$("#page-cart .numeric_only").hide();
@@ -5320,12 +5371,30 @@ function login()
               params += split_params[i]+"&";
           }
 	      params+="&device_id="+ getStorage("device_id");
-	      callAjax("login",params);
+	     callAjax("login",params);
 	      return false;
 	    }
 	});
 	}
 }
+
+function guestcheckout()
+{
+	$("#addressbook").hide();
+	$("#guest").show();
+	$("#guest").css("display", "block");
+	var options = {
+		animation: 'slide',
+		onTransitionEnd: function() {
+				displayMerchantLogo2( getStorage("merchant_logo") ,
+					 getStorage("order_total") ,
+					 'page-shipping');
+				}
+	};
+	sNavigator.pushPage("shipping.html", options);
+}
+
+
 $(document).on('keypress','.numbers',function(e){
      //if the letter is not digit then display error and don't type anything
      if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
@@ -6977,6 +7046,16 @@ function backtoHome()
    menu.setMainPage('select_dining.html',options);
 }
 
+function hidepop()
+{
+	$(".country-list").hide();
+	var options = {
+  	  closeMenu:true,
+      animation: 'slide'
+   };
+  sNavigator.popPage({cancelIfRunning: true});
+}
+
 function exitKApp()
 {
 	ons.notification.confirm({
@@ -7236,7 +7315,7 @@ function payCityPay(fireurl) {
 					  // iabRef.removeEventListener('loaderror', iabLoadError);
 							//iabRef.removeEventListener('exit', iabClose);
 	}
-	iabRef = cordova.InAppBrowser.open(fireurl, '_blank', 'location=no','toolbar=no','clearcache=yes','zoom=no');
+	iabRef = cordova.InAppBrowser.open(fireurl, '_blank', 'location=no','toolbar=no','clearcache=yes','zoom=no','EnableViewPortScale=no');
 	iabRef.addEventListener('loadstart', iabLoadStart);
 	iabRef.addEventListener('loadstop', iabLoadStop);
 	// iabRef.removeEventListener('loaderror', iabLoadError);

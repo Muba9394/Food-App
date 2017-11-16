@@ -156,7 +156,7 @@
       <div class="left">
         <ons-toolbar-button ng-click="menu.toggleMenu()"><ons-icon icon="fa-bars"></ons-icon></ons-toolbar-button>
       </div>
-
+      <div class="center white"><span id="welcome_msg"></span></div>
     </ons-toolbar>
 <div class="container-sm">
     <div class="home-header">
@@ -208,7 +208,6 @@
       <div class="left">
         <ons-toolbar-button ng-click="menu.toggleMenu()"><ons-icon icon="fa-bars"></ons-icon></ons-toolbar-button>
       </div>
-
     </ons-toolbar>
 <div class="container-sm">
     <div class="home-header">
@@ -588,6 +587,7 @@
        <ons-row class="row">
            <ons-col class="text-big concat-text trn" width="60%" data-trn-key="your_order">Your Order</ons-col>
            <ons-col class="text-right" >
+              <button class="cart-empty button button--quiet green trn" data-trn-key="cart-empty">Clear Order</button>
               <button class="edit-order button button--quiet green trn" data-trn-key="edit_order">Edit Order</button>
               <button class="order-apply-changes button button--quiet green trn" data-trn-key="apply_changes">
               Apply Changes</button>
@@ -653,7 +653,7 @@
 
 
   <script type="text/ons-template" id="checkoutSignup.html">
-<ons-page id="page-checkoutsignup" class="onsen-display">
+<ons-page id="page-checkoutsignup" class="onsen-display" on-device-backbutton="hidepop()" >
    <ons-toolbar>
      <div class="left"><ons-back-button></ons-back-button></div>
      <div class="center white"><span id="search-text" class="trn" data-trn-key="cart">Cart</span></div>
@@ -684,6 +684,13 @@
               Sign in
               </button>
            </ons-col>
+       </ons-row>
+       <ons-row class="row">
+       <ons-col class="text-center" >
+          <button class="button button--quiet green trn" onclick="guestcheckout();" data-trn-key="sign_in">
+          Continue as Guest
+          </button>
+       </ons-col>
        </ons-row>
    </div>
 
@@ -789,7 +796,7 @@
 
    <ons-list>
 
-       <ons-toolbar-button modifier="chevron" onclick="popUpAddressBook();" >
+       <ons-toolbar-button modifier="chevron" onclick="popUpAddressBook();" id="addressbook">
         <span class="trn" data-trn-key="select_from_address_map"><ons-icon icon="fa-floppy-o"></ons-icon></span>
        </ons-toolbar-button>
 
@@ -872,9 +879,22 @@
    <input type="hidden" name="formatted_address" class="formatted_address">
    <input type="hidden" name="google_lat" class="google_lat">
    <input type="hidden" name="google_lng" class="google_lng">
+ <div class="wrapper">
+   <div id="guest" style="display:none">
+     <div class="field-wrapper">
+     <input name="stfirst_name" class="first_name text-input text-input--underbar has_validation" id="fname" placeholder="First Name" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')" type="text">
+     </div>
 
+     <div class="field-wrapper">
+     <input name="stlast_name" class="last_name text-input text-input--underbar has_validation" id="lname" placeholder="Last Name" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')" type="text">
+     </div>
 
-   <div class="wrapper">
+     <div class="field-wrapper">
+      <input name="email_address" class="email_address text-input text-input--underbar has_validation" placeholder="Email address" value="" data-validation="email" data-validation-error-msg="You have not given a correct e-mail address!" id="email" type="email">
+     </div>
+     <input type="hidden" name="guest_checkout" id="guest_checkout" value=""/>
+    </div>
+
       <div class="field-wrapper">
       <input type="text" name="contact_phone"  class="mobile_inputs contact_phone text-input text-input--underbar has_validation"
       placeholder="Contact phone" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" onkeyup="this.value=this.value.replace(/[^0-9]/g, '')">
@@ -895,7 +915,7 @@
       </div>
    </div>
 
-   <div class="wrapper">
+   <div class="wrapper" id="addrs_deflt" style="display:none">
 	   <div class="field-wrapper">
 	     <label class="switch">
 			  <input type="checkbox" value="2" class="switch__input save_address" name="save_address" >
@@ -995,7 +1015,7 @@
    <div class="wrapper order-change-wrapper">
       <div class="field-wrapper">
       <input type="number" name="order_change"  class="numeric_only order_change text-input text-input--underbar"
-      placeholder="change? For how much?" value="" min="0" inputmode="numeric" pattern="[0-9]*"  >
+      placeholder="Change? For how much?" value="" min="0" inputmode="numeric" pattern="[0-9]*"  >
       </div>
    </div>
 
@@ -1447,7 +1467,7 @@
 
       <div class="field-wrapper">
       <input type="text" name="review"  class="review text-input text-input--underbar has_validation"
-      placeholder="Your reviews" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
+      placeholder="Your review" value="" data-validation="required" data-validation-error-msg="this field is mandatory!" >
       </div>
 
 
@@ -1678,7 +1698,7 @@
 
    <ons-toolbar>
     <div class="left"><ons-back-button></ons-back-button></div>
-    <div class="center white"><span id="search-text" class="trn" data-trn-key="login">Sign In</span></div>
+    <div class="center white"><span id="search-text" class="trn" data-trn-key="login">Log In</span></div>
    </ons-toolbar>
 
 <!--
@@ -1769,7 +1789,7 @@
 </script>
 
   <script type="text/ons-template" id="signup.html">
-<ons-page id="page-signup">
+<ons-page id="page-signup" on-device-backbutton="backtoHome()">
 
    <ons-toolbar>
     <div class="left"><ons-back-button></ons-back-button></div>
