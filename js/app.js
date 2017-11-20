@@ -16,7 +16,7 @@ var drag_marker_bounce=1;
 var start="0";
 var limit="5";
 var menustart="0";
-var menulimit="10";
+var menulimit="5";
 document.addEventListener("deviceready", onDeviceReady,  false);
 
 
@@ -24,7 +24,7 @@ document.addEventListener("deviceready", onDeviceReady,  false);
 
 function onDeviceReady() {
 
-/*var permissions = cordova.plugins.permissions;
+var permissions = cordova.plugins.permissions;
 
 	navigator.splashscreen.hide();
 	var list = [
@@ -48,7 +48,7 @@ function success( status ) {
       error);
   }
 }
-*/
+
 	if ( !empty(krms_config.pushNotificationSenderid)) {
 
 	    var push = PushNotification.init({
@@ -103,6 +103,20 @@ function success( status ) {
 	    });
 
 	}
+
+	checkConnection(); // Based on the connection, it sets the menu limit for performance loading of menus
+}
+
+function checkConnection() {
+    var networkState = navigator.connection.type;
+   
+	if(networkState == Connection.WIFI)
+		menulimit = 20;
+	else if(networkState == Connection.CELL_4G)
+		menulimit = 7;
+	else	
+		menulimit = 4;
+
 }
 
 /*document.addEventListener("offline", onOffline, false);
@@ -122,7 +136,7 @@ document.addEventListener("offline", noNetConnection, false);
 
 function noNetConnection()
 {
-	toastMsg( getTrans("Internet connection lost","net_connection_lost") );
+	toastMsg( getTrans("Internet connection lost.","net_connection_lost") );
 }
 
 
@@ -326,13 +340,13 @@ document.addEventListener("pageinit", function(e) {
 
 		case "page-booking":
 		  translatePage();
-		  $(".number_guest").attr("placeholder", getTrans("Number Of Guests","number_of_guest") );
+		  $(".number_guest").attr("placeholder", getTrans("Number of Guests","number_of_guest") );
 		  initIntelInputs();
 		  break;
 
 	   case "page-paymentoption":
 	     translatePage();
-	     $(".order_change").attr("placeholder", getTrans('change? For how much?','order_change') );
+	     $(".order_change").attr("placeholder", getTrans('Require change? Let us know ','order_change') );
 		 break;
 
 	  case "page-addressbook-details":
@@ -787,11 +801,11 @@ function callAjax(action,params)
 				displayRestaurantResults(data.details.data ,'restaurant-results',1);
 				if(data.details.total > 1)
 				{
-				$(".result-msg").text(data.details.total+" "+getTrans("Restaurant(s) can deliver",'restaurant_found') );
+				$(".result-msg").text(data.details.total+" "+getTrans("restaurants can deliver",'restaurant_found') );
 				}
 				else
 				{
-				$(".result-msg").text(data.details.total+" "+getTrans("Restaurant can deliver",'restaurant_found') );
+				$(".result-msg").text(data.details.total+" "+getTrans("restaurant can deliver",'restaurant_found') );
 				}
 				break;
 
@@ -799,10 +813,10 @@ function callAjax(action,params)
 					displayRestaurantResults(data.details.data ,'restaurant-results',1,data.details.total,'loadmore',data.code);
 					if(data.details.total > 1)
 					{
-					$(".result-msg").text(data.details.total+" "+getTrans("Restaurant(s) can deliver",'restaurant_found') );
+					$(".result-msg").text(data.details.total+" "+getTrans("restaurants can deliver",'restaurant_found') );
 					}
 					else{
-						$(".result-msg").text(data.details.total+" "+getTrans("Restaurant can deliver",'restaurant_found') );
+						$(".result-msg").text(data.details.total+" "+getTrans("restaurant can deliver",'restaurant_found') );
 					}
 
 				break;
@@ -1095,7 +1109,7 @@ function callAjax(action,params)
 
 			   	   if (data.details.voucher_enabled=="yes"){
 			   	   	   $(".voucher-wrap").show();
-			   	   	   $(".voucher_code").attr("placeholder", getTrans("Enter Voucher here",'enter_voucher_here') );
+			   	   	   $(".voucher_code").attr("placeholder", getTrans("Enter your voucher",'enter_voucher_here') );
 			   	   } else {
 			   	   	   $(".voucher-wrap").hide();
 			   	   }
@@ -1295,6 +1309,7 @@ function callAjax(action,params)
 				    sNavigator.pushPage("bookingTY.html", options);
 				    break;
 				case "merchantReviews":
+
 				   displayReviews(data.details);
 				   break;
 
@@ -1310,32 +1325,31 @@ function callAjax(action,params)
 				   displayRestaurantResults( data.details.data ,'browse-results',2,data.details.total,'loadmore',data.code,'browse');
 				   //$(".result-msg").text(data.details.total+" Restaurant found");
 					 	if(data.details.total > 1){
-				   		$(".result-msg").text(data.details.total+" "+ getTrans("Restaurant(s) can deliver",'restaurant_found')  );
+				   		$(".result-msg").text(data.details.total+" "+ getTrans("restaurants can deliver",'restaurant_found')  );
 				 		}
 						else{
-							$(".result-msg").text(data.details.total+" "+ getTrans("Restaurant can deliver",'restaurant_found')  );
+							$(".result-msg").text(data.details.total+" "+ getTrans("restaurant can deliver",'restaurant_found')  );
 						}
 				   break;
 
 			   case "BrowseByBookTable":
-					displayRestaurantResults(data.details.data ,'restaurant-result',2);
+			   	displayBookTableResults(data.details.data ,'restaurant-result',2);
 				//$(".result-msg").text(data.details.total+" Restaurant found");
 				if(data.details.total > 1){
-					$(".result-msg").text(data.details.total+" "+ getTrans("Restaurant(s) for book a table",'restaurant_found')  );
+					$(".result-msg").text(data.details.total+" "+ getTrans("restaurants for book a table",'restaurant_found')  );
 				}
 				else{
-					$(".result-msg").text(data.details.total+" "+ getTrans("Restaurant  for book a table",'restaurant_found')  );
+					$(".result-msg").text(data.details.total+" "+ getTrans("restaurant  for book a table",'restaurant_found')  );
 				}
 			   break;
 
 				case "searchRestaurant":
-			    // alert("BrowseByBookTable");
-					displayRestaurantResults(data.details.data ,'browse-results',3);
+			    	displayRestaurantResults(data.details.data ,'browse-results',3);
 					if(data.details.total > 1){
-						$(".result-msg").text(data.details.total+" "+ getTrans("Restaurant(s) can deliver",'restaurant_found')  );
+						$(".result-msg").text(data.details.total+" "+ getTrans("restaurants can deliver",'restaurant_found')  );
 					}
 					else{
-						$(".result-msg").text(data.details.total+" "+ getTrans("Restaurant can deliver",'restaurant_found')  );
+						$(".result-msg").text(data.details.total+" "+ getTrans("restaurant can deliver",'restaurant_found')  );
 					}
 			   break;
 
@@ -1677,7 +1691,7 @@ function callAjax(action,params)
 
 			    case "addToCart":
 			    //onsenAlert(  getTrans("Item added to cart",'item_added_to_cart') );
-			    toastMsg( getTrans("Item added to cart",'item_added_to_cart') );
+			    toastMsg( getTrans("Food added to cart",'item_added_to_cart') );
 			    break;
 
 
@@ -1995,7 +2009,7 @@ function callAjax(action,params)
 			    case "saveContactNumber":
 			    case "coordinatesToAddress":
 			    case "trackOrderMap":
-			       toastMsg(data.msg);
+			       onsenAlert(data.msg);
 			    break;
 
 			    case "getMerchantCClist":
@@ -2021,7 +2035,7 @@ function callAjax(action,params)
 
 		} else {
 			//onsenAlert( getTrans("Network error has occurred please try again!",'network_error') );
-			toastMsg( getTrans("Network error has occurred please try again!",'network_error') );
+			toastMsg( getTrans("Network error. Please try again!",'network_error') );
 		}
 	}
    });
@@ -2072,6 +2086,63 @@ function setHomeCallback()
 	refreshConnection();
 }
 
+function displayBookTableResults(data , target_id , display_type)
+{
+	var htm='';
+	//alert(Object.keys(data).length);
+    $.each( data, function( key, val ) {
+    	 //dump(val);
+    	 var rest_logo = '';
+    	 rest_logo = "'"+val.logo+"'";
+		 	 var rest_name = "";
+    	 rest_name = "'"+val.restaurant_name+"'";
+
+    	 htm+='<ons-list-item modifier="tappable" class="list-item-container product list list__item ons-list-item-inner list__item--tappable" >';
+    	 htm+='<ons-row class="row product-list ons-row-inner">';
+    	     htm+='<ons-col class="col-image border col ons-col-inner">';
+    	     if(display_type==2)
+    	           	   {
+    	          htm+='<div class="logo-wrap2" onclick="loadRestaurantCategory('+val.merchant_id+')" >';
+    	      }else
+    	      {
+    	      	  htm+='<div class="logo-wrap2" onclick="loadRestaurantCategory('+val.merchant_id+');" >';
+    	      }
+			htm+='<div class="img_loaded" >';
+				htm+='<img src="'+val.logo+'" />';
+			htm+='</div>';
+
+			htm+='</div>';
+
+
+    	     htm+='</ons-col>';
+
+    	     htm+='<ons-col class="col-description product-desc border col ons-col-inner">';
+    	           htm+='<div>';
+
+			if(display_type==2)	{
+				htm+='<p class="restauran-title concat-text" onclick="loadRestaurantCategory('+val.merchant_id+','+rest_logo+','+rest_name+')" >'+val.restaurant_name+'</p>';
+			}
+			else {
+				htm+='<p class="restauran-title concat-text" onclick="loadRestaurantCategory('+val.merchant_id+');" >'+val.restaurant_name+'</p>';
+			}
+
+    	    htm+='<p class="concat-textx type">'+val.cuisine+'</p>';
+			var btn_txt = 'Book a Table';
+			htm+='<div class="booking-btn" onclick="table_booking_optn('+val.merchant_id+','+rest_logo+','+rest_name+')" > '+btn_txt+' </div>';
+						  
+					    	
+    	htm+='</div>';
+    	htm+='</ons-col>';
+    	htm+='</ons-row>';
+    	htm+='</ons-list-item>';
+
+
+    });
+
+	createElement(target_id,htm);
+	imageLoaded('.img_loaded');
+}
+
 
 var came=0;
 function displayRestaurantResults(data , target_id , display_type,counttotal,loadmore,code,browse)
@@ -2097,11 +2168,11 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
     	      {
     	      	  htm+='<div class="logo-wrap2" onclick="loadRestaurantCategory('+val.merchant_id+');" >';
     	      }
-    	            htm+='<div class="img_loaded" >';
-    	             htm+='<img src="'+val.logo+'" />';
-    	            htm+='</div>';
+			htm+='<div class="img_loaded" >';
+				htm+='<img src="'+val.logo+'" />';
+			htm+='</div>';
 
-    	          htm+='</div>';
+			htm+='</div>';
 
 
     	     htm+='</ons-col>';
@@ -2189,13 +2260,13 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
 		    	            	if(val.table_booking_option=='yes')
 		    	            	{
 		    	            		htm+='<div class="booking-btn" data="menu" onclick="loadRestaurantCategory('+val.merchant_id+')" > View Menu </div>';
-						   					}
+						   		}
 						   			else
 		    	            	{
 												var btn_txt = 'Book a Table';
 												if($("#search-text").text() == "Take Away")  btn_txt = 'Take Away';
 												htm+='<div class="booking-btn" onclick="table_booking_optn('+val.merchant_id+','+rest_logo+','+rest_name+')" > '+btn_txt+' </div>';
-						   				}
+						   		}
 					    	}
     	           htm+='</div>';
     	     htm+='</ons-col>';
@@ -2347,7 +2418,7 @@ function cuisineResults(data)
 	htm+='</ons-list>';
 	createElement('filter-option-lists',htm);
 
-	$(".restaurant_name").attr("placeholder",  getTrans("Enter Restaurant name",'enter_resto_name') );
+	$(".restaurant_name").attr("placeholder",  getTrans("Restaurant name",'enter_resto_name') );
 
 	translatePage();
 }
@@ -2399,7 +2470,7 @@ function cuisineReslts(data)
 
 	createElement('filter-options-lists',htm);
 
-	$(".restaurant_name").attr("placeholder",  getTrans("Enter Restaurant name",'enter_resto_name') );
+	$(".restaurant_name").attr("placeholder",  getTrans("Restaurant name",'enter_resto_name') );
 
 	translatePage();
 }
@@ -2450,7 +2521,7 @@ function cuisineResult(data)
 	htm+='</ons-list>';
 	createElement('filter-options-list',htm);
 
-	$(".restaurant_name").attr("placeholder",  getTrans("Enter Restaurant name",'enter_resto_name') );
+	$(".restaurant_name").attr("placeholder",  getTrans("Restaurant name",'enter_resto_name') );
 
 	translatePage();
 }
@@ -2485,7 +2556,7 @@ function menuCategoryResult(data)
 	    $("#close_store").val(2);
 	} else $("#close_store").val(1);
 	if (!data.menu_category) {
-	    onsenAlert(getTrans("Restaurant has no menu", 'Restaurant has no menu'));
+	    onsenAlert(getTrans("Restaurant has not uploaded their menu", 'Restaurant has no menu'));
 	    return;
 	}
 
@@ -2550,21 +2621,7 @@ function menuCategoryResult(data)
 	var items=0;
 	var newcat=0;
 	var n = 0;
-/*
-	var networkState = navigator.connection.type;
 
-    var states = {};
-    states[Connection.UNKNOWN]  = 'Unknown connection';
-    states[Connection.ETHERNET] = 'Ethernet connection';
-    states[Connection.WIFI]     = 'WiFi connection';
-    states[Connection.CELL_2G]  = 'Cell 2G connection';
-    states[Connection.CELL_3G]  = 'Cell 3G connection';
-    states[Connection.CELL_4G]  = 'Cell 4G connection';
-    states[Connection.CELL]     = 'Cell generic connection';
-    states[Connection.NONE]     = 'No network connection';
-
-    alert('Connection type: ' + states[networkState]);
-*/
 	if (menustart == 0) {
 
 	    html += '<ons-list class="restaurant-list ng-scope list ons-list-inner">';
@@ -3011,7 +3068,7 @@ function loadItemDetails(item_id,mtid,cat_id)
 {
 
     if ( $("#close_store").val()==2 || $("#merchant_open").val()==1 ){
-		onsenAlert( getTrans("This Restaurant Is Closed Now.  Please Check The Opening Times",'restaurant_close') );
+		onsenAlert( getTrans("Closed. Please check the top right menu for information.",'restaurant_close') );
 		return;
 	}
 
@@ -3319,7 +3376,7 @@ jQuery(document).ready(function() {
 		 	}
 		 });
 		 if (multi<total_check){
-		 	onsenAlert( getTrans('Sorry but you can select only','sorry_but_you_can_select') + " "+multi+" "  +
+		 	onsenAlert( getTrans('Please select only','sorry_but_you_can_select') + " "+multi+" "  +
 		 	 getTrans('addon','addon') );
 		 	this_obj.attr("checked",false);
 		 	return;
@@ -3499,7 +3556,7 @@ jQuery(document).ready(function() {
 			//sNavigator.popPage({cancelIfRunning: true}); //back button
 
 		} else {
-			onsenAlert(  getTrans("Error: Cannot set address book",'cannot_set_address')  );
+			onsenAlert(  getTrans("Error: Cannot save your address book",'cannot_set_address')  );
 			dialogAddressBook.hide();
 		}
 	});
@@ -3664,7 +3721,7 @@ function addToCart()
 		if ( $(".two_flavors").val()==2 ){
 			var sub_item_selected=$(".sub_item:checked").length;
 			if ( sub_item_selected<2){
-   	   	  	  onsenAlert(  getTrans("You must select price for left and right flavor",'two_flavor_required') );
+   	   	  	  onsenAlert(  getTrans("Please select price for left and right flavor",'two_flavor_required') );
    	   	      return;
    	   	   }
 
@@ -3743,7 +3800,7 @@ function addToCart()
 		} else {
 
 			sNavigator.popPage({cancelIfRunning: true}); //back button
-			toastMsg(  getTrans("Item added to cart",'item_added_to_cart') );
+			toastMsg(  getTrans("Food added to cart",'item_added_to_cart') );
 		}
 
 		showCartNosOrder();
@@ -4481,7 +4538,7 @@ function checkOut()
 
 	if ( tr_type =="pickup"){
 		if ( $(".delivery_time").val()==""){
-			onsenAlert(  getTrans("Pickup time is required",'pickup_time_is_required') );
+			onsenAlert(  getTrans("Please give the collection time",'pickup_time_is_required') );
 			return;
 		}
 	}
@@ -4489,7 +4546,7 @@ function checkOut()
 	if ( $(".required_time").val()==2){
 		if ( $(".delivery_time").val() ==""){
 			if ( $(".delivery_asap:checked").length<=0){
-				onsenAlert( tr_type+ " "+ getTrans('time is required','time_is_required') );
+				onsenAlert( tr_type+ " "+ getTrans('Time is required','time_is_required') );
 				return;
 			}
 		}
@@ -4555,7 +4612,7 @@ function clientRegistration()
 	      if ($('.iagree-wrap').is(':visible')) {
 		      var iagree = $(".iagree:checked").val();
 		      if(empty(iagree)){
-		      	 onsenAlert( getTrans("You must agree to terms & conditions",'agree_terms') );
+		      	 onsenAlert( getTrans("Please select and agree terms & conditions",'agree_terms') );
 		      	 return;
 		      }
 	      }
@@ -4583,7 +4640,7 @@ function clientShipping()
 	//if ( empty( $(".street").val() )){
 	if (empty($(".city").val() )){
 
-		onsenAlert(getTrans("Parish/Town is missing",'delivery_address_required')  );
+		onsenAlert(getTrans("Address is not complete.Try again",'delivery_address_required')  );
 		// toastMsg( getTrans() );
 		return;
 	}
@@ -4653,7 +4710,7 @@ function placeOrder()
 		if ( selected_payment=="pyr"){
 			dump( $('.payment_provider_name:checked').length );
 			if ( $('.payment_provider_name:checked').length <= 0){
-				onsenAlert( getTrans("Please select payment provider",'please_select_payment_provider') );
+				onsenAlert( getTrans("Please select a payment method",'please_select_payment_provider') );
 				return;
 			}
 		}
@@ -4716,7 +4773,7 @@ function placeOrder()
       	  getStorage("transaction_type") + extra_params );
 
 	} else {
-		onsenAlert( getTrans("Please select payment method",'please_select_payment_method') );
+		onsenAlert( getTrans("Please select a payment method",'please_select_payment_method') );
 	}
 }
 
@@ -4770,23 +4827,14 @@ function initMobileScroller()
 
 
 	if ( $('.date_booking').exists()){
-
-		// var today = new Date(),
-    //     currYear = today.getFullYear(),
-    //     currMonth = today.getMonth(),
-    //     maxDate = new Date(currYear, currMonth + 6, today.getDate()),
-    //     closedDays = ['w0', 'w6', '1/1', '1/2', '12/25', '12/26'],
-    //     booked = [new Date(currYear, currMonth, 26), new Date(currYear, currMonth + 1, 10), new Date(currYear, currMonth + 2, 25)],
-    //     invalid = closedDays.concat(booked);
-
-		var now = new Date(),
-        until = new Date(now.getFullYear() + 10, now.getMonth());
-
+		var now = new Date();
+		var until = new Date(now.getFullYear(), now.getMonth() +3,now.getDate);
+		
 		$('.date_booking').mobiscroll().date({
-			theme: 'android-holo-light',
+			theme: 'android-holo',
 			mode: "scroller",
 			display: "modal",
-			dateFormat : "yy-mm-dd",
+			dateFormat : "dd.mm.yy",
 			 min: now,
 			 minWidth: 100,
 			 max: until,
@@ -4794,18 +4842,11 @@ function initMobileScroller()
 		});
 	}
 
-	/*if ( $('.booking_time').exists()){
-		$('.booking_time').mobiscroll().time({
-			theme: 'android-holo-light',
-			mode: "scroller",
-			display: "modal",
-			dateFormat : "yy-mm-dd"
-		});
-	}*/
+	
 }
 	function __datetimeOnSelectDelegate(textDate, inst)
 	{
-			$("#diplay_timing_slots").empty();
+	  $("#diplay_timing_slots").empty();
       var booking_date = $(this).val();
       var merchant_id  = $("#frm-booking .hidden_merchant_id").val();
       var base_url     = ajax_url;
@@ -4821,25 +4862,14 @@ function initMobileScroller()
 		        success: function(php_script_response)
 		        {
 	          	  $('#table_booking_time').html('');
-								if(php_script_response == '<option value="" disabled selected>Select Time slot </option>')
-								{
-									$('#booking_time').html('<option value="" disabled selected>Sorry no slots available for the day</option>');
-								}
-		        /*  $.each(php_script_response, function( key, value )
-		          {
-		          	 if(key!="msg")
-		          	 {
-		          	 	html += '<option value="'+key+'">'+value+'</option>';
-		          	 }
-		          });
-
-		          if(php_script_response.msg!='')
-		          {
-		          	html += '<option value="">'+php_script_response.msg+'</option>';
-		          } */
-							else{
-				  		$('#booking_time').html(php_script_response);
-						}
+					if(php_script_response == '<option value="" disabled selected>Select a time slot </option>')
+					{
+						$('#booking_time').html('<option value="" disabled selected>No slots available for the chosen date</option>');
+					}
+		       		else{
+						  $('#booking_time').html(php_script_response);
+						  //$('#booking_time').html('<option value="" disabled selected>Error!! Invalid date</option>');
+					}
 		        }
 		      });
 }
@@ -4887,15 +4917,15 @@ function search_table_timing()
 
 								var disabled_type = '';
 
-								var seats_available = value.seating_capacity+" seat Available";
+								var seats_available = value.seating_capacity+" seat available";
 							   if(value.seating_capacity>1)
 							   {
-								  seats_available = value.seating_capacity+" seats Available";
+								  seats_available = value.seating_capacity+" seats available";
 							   }
 
 							   if(value.seating_capacity==0)
 							   {
-								   seats_available = "No Seats Available";
+								   seats_available = "Not available";
 								   disabled_type = 'disabled';
 							   }
 
@@ -4910,11 +4940,8 @@ function search_table_timing()
 						</div> */
 
 				  }
-				  else
-				  {
-
-					  toastMsg( getTrans("Sorry ! Please select a valid slot","invalid_slot") );
-					  // $('.booking_error_message').html("Sorry ! Please select a valid slot ");
+				  else  {
+					toastMsg( getTrans("Please select a valid slot","invalid_slot") );
 				  }
 			  }
 	  })
@@ -4947,11 +4974,11 @@ if(no_of_guests>seat_available)
 {
 if(seat_available==0)
 {
-	onsenAlert("Sorry ! No Seats Available");
+	onsenAlert("Oops ! We are fully booked");
 }
 else
 {
-	onsenAlert("Sorry ! Only "+seat_available+" seats Available","invalid_seatings");
+	onsenAlert("Only "+seat_available+" seats left","invalid_seatings");
 }
 }
 else
@@ -5081,13 +5108,13 @@ function loadBookingForm()
       	  initMobileScroller();
 
       	  /*translate booking form*/
-      	  $(".number_guest").attr("placeholder", getTrans('Number Of Guests','number_of_guest') );
-      	  $(".date_booking").attr("placeholder", getTrans('Date Of Booking','date_of_booking') );
-      	  $(".booking_time").attr("placeholder", getTrans('Time Of Booking','time_of_booking') );
+      	  $(".number_guest").attr("placeholder", getTrans('Number of Guests','number_of_guest') );
+      	  $(".date_booking").attr("placeholder", getTrans('Date of Booking','date_of_booking') );
+      	  $(".booking_time").attr("placeholder", getTrans('Time of Booking','time_of_booking') );
       	  $(".booking_name").attr("placeholder", getTrans('Name','name') );
       	  $(".email").attr("placeholder", getTrans('Email Address','email_address') );
       	  $(".mobile").attr("placeholder", getTrans('Mobile Number','mobile_number') );
-      	  $(".booking_notes").attr("placeholder", getTrans('Your Instructions','your_instructions') );
+      	  $(".booking_notes").attr("placeholder", getTrans('Booking notes, if any','your_instructions') );
       	  $('.hidden_merchant_id').val(getStorage("merchant_id"));
       	  translateValidationForm();
 
@@ -5117,13 +5144,13 @@ function table_booking_optn(merchant_id,logo,restaurant_name,hide)
       	  initMobileScroller();
 
       	  /*translate booking form*/
-      	  $(".number_guest").attr("placeholder", getTrans('Number Of Guests','number_of_guest') );
-      	  $(".date_booking").attr("placeholder", getTrans('Date Of Booking','date_of_booking') );
-      	  $(".booking_time").attr("placeholder", getTrans('Time Of Booking','time_of_booking') );
+      	  $(".number_guest").attr("placeholder", getTrans('Number of Guests','number_of_guest') );
+      	  $(".date_booking").attr("placeholder", getTrans('Date of Booking','date_of_booking') );
+      	  $(".booking_time").attr("placeholder", getTrans('Time of Booking','time_of_booking') );
       	  $(".booking_name").attr("placeholder", getTrans('Name','name') );
       	  $(".email").attr("placeholder", getTrans('Email Address','email_address') );
       	  $(".mobile").attr("placeholder", getTrans('Mobile Number','mobile_number') );
-      	  $(".booking_notes").attr("placeholder", getTrans('Your Instructions','your_instructions') );
+      	  $(".booking_notes").attr("placeholder", getTrans('Booking notes, if any','your_instructions') );
       	  $('#page-booking .hidden_merchant_id').val(merchant_id);
       	  translateValidationForm();
 
@@ -5215,7 +5242,7 @@ function showReviewForm()
       	  );
 
       	  translatePage();
-      	  $(".rating").attr("placeholder", getTrans('Your Rating 1 to 5','your_rating') );
+      	  $(".rating").attr("placeholder", getTrans('Your rating 1 to 5','your_rating') );
           $(".review").attr("placeholder", getTrans('Your reviews','your_reviews') );
           translateValidationForm();
 
@@ -5414,7 +5441,7 @@ function logout(prof)
 	else{
 		removeStorage("client_token");
 		removeStorage("client_id");
-	onsenAlert(  getTrans("You are now logged out",'you_are_now_logout') );
+	onsenAlert(  getTrans("Logged out",'you_are_now_logout') );
 	menu.setMainPage('select_dining.html', {closeMenu: true});
 }
 }
@@ -5514,21 +5541,21 @@ function signup()
 	};
 	if($('#frm-signup input[type="text"]').val() =='')
 	{
-		onsenAlert("All fields are mandatory");
+		onsenAlert("All fields are required");
     }
 	else if(email == ''){
-			onsenAlert("Email ID is mandatory");
+			onsenAlert("Email ID is required");
 	}
 	else if( !isValidEmailAddress( email ) ) {
-		onsenAlert("Invalid Email ID");
+		onsenAlert("Invalid Email format");
 	}
 	else if(pswd.length < 8)
 	{
-		onsenAlert("Password must be 8 characters or above");
+		onsenAlert("Password length should be 8 or above");
 	}
 	else if(email=="")
 	{
-		onsenAlert("Email field should not be empty.");
+		onsenAlert("Email is empty. Try again");
 	}
 	else{
 	$.validate({
@@ -5541,7 +5568,7 @@ function signup()
 	      if ($('.iagree-wrap').is(':visible')) {
 		      var iagree = $(".iagree:checked").val();
 		      if(empty(iagree)){
-		      	 onsenAlert( getTrans("You must agree to terms & conditions",'agree_terms') );
+		      	 onsenAlert( getTrans("Please agree and select terms & conditions",'agree_terms') );
 		      	 return;
 		      }
 	      }
@@ -5672,7 +5699,7 @@ function displayOrderHistoryDetails(data)
 	//$("#page-orderdetails .title").html("Total : "+ data.total);
 	//$("#page-orderdetails #search-text").html("Order Details #"+data.order_id);
 	$("#page-orderdetails .title").html( getTrans('Total','total') + " : "+ data.total);
-	$("#page-orderdetails #search-text").html( getTrans('Order Details','order_details') + " #"+data.order_id);
+	$("#page-orderdetails #search-text").html( getTrans('Order detail','order_details') + " #"+data.order_id);
 
 
 	var htm='<ons-list-header class="center trn" data-trn-key="items" >Items</ons-list-header>';
@@ -6199,7 +6226,7 @@ function onRequestSuccess()
 function onRequestFailure(error){
 	//alert("Accuracy request failed: error code="+error.code+"; error message="+error.message);
     if(error.code == 4){
-    	toastMsg( getTrans("You have choosen not to turn on location accuracy",'turn_off_location') );
+    	toastMsg( getTrans("You chose not to turn on location accuracy",'turn_off_location') );
     	getCurrentLocation();
     } else {
     	toastMsg( error.message );
@@ -6216,7 +6243,7 @@ function getCurrentLocationOld()
    },
    function fail(){
       //GPS is disabled!
-      var m_1= getTrans('Your GPS is disabled, this app needs to be enabled to work.','your_gps');
+      var m_1= getTrans('Your GPS is disabled, we need it to improve accuracy on the map','your_gps');
       var m_2= getTrans('Use GPS for location.','use_gps_for_location');
       var m_3= getTrans('Improve location accuracy','improve_location_accuracy');
       var b_1= getTrans('Cancel','cancel');
@@ -6491,15 +6518,15 @@ function translateValidationForm()
 		switch (validation_type)
 		{
 			case "number":
-			$(this).attr("data-validation-error-msg",getTrans("The input value was not a correct number",'validation_numeric') );
+			$(this).attr("data-validation-error-msg",getTrans("The input is not a number",'validation_numeric') );
 			break;
 
 			case "required":
-			$(this).attr("data-validation-error-msg",getTrans("this field is mandatory!",'validaton_mandatory') );
+			$(this).attr("data-validation-error-msg",getTrans("This information is required!",'validaton_mandatory') );
 			break;
 
 			case "email":
-			$(this).attr("data-validation-error-msg",getTrans("You have not given a correct e-mail address!",'validation_email') );
+			$(this).attr("data-validation-error-msg",getTrans("Invalid email format!",'validation_email') );
 			break;
 		}
 
@@ -6607,7 +6634,7 @@ function applyVoucher()
 
         callAjax("applyVoucher",params);
 	} else {
-		onsenAlert(  getTrans('invalid voucher code','invalid_voucher_code') );
+		onsenAlert(  getTrans('Invalid voucher code','invalid_voucher_code') );
 	}
 }
 
@@ -6902,7 +6929,7 @@ function autoAddToCart(item_id,price,discount)
 {
 
     if ( $("#close_store").val()==2 || $("#merchant_open").val()==1 ){
-		onsenAlert( getTrans("This Restaurant Is Closed Now.  Please Check The Opening Times",'restaurant_close') );
+		onsenAlert( getTrans("Closed. Please check the top right menu for information.",'restaurant_close') );
 		return;
 	}
 
@@ -6936,7 +6963,7 @@ function autoAddToCart(item_id,price,discount)
 		callAjax("addToCart", "cart="+ JSON.stringify(cart_value) + "&device_id=" + getStorage("device_id") );
 	} else {
 	    //sNavigator.popPage({cancelIfRunning: true}); //back button
-	    toastMsg(  getTrans("Item added to cart",'item_added_to_cart') );
+	    toastMsg(  getTrans("Food added to cart",'item_added_to_cart') );
 	}
 	showCartNosOrder();
 }
@@ -7023,7 +7050,7 @@ function applyRedeem()
 
         callAjax("applyRedeemPoints",params);
 	} else {
-		onsenAlert(  getTrans('invalid redeem points','invalid_redeem_points') );
+		onsenAlert(  getTrans('Invalid redeem points','invalid_redeem_points') );
 	}
 }
 
@@ -7059,7 +7086,7 @@ function hidepop()
 function exitKApp()
 {
 	ons.notification.confirm({
-	  message: getTrans('Are you sure to close the app?','close_app') ,
+	  message: getTrans('Do you want to exit?','close_app') ,
 	  title: dialog_title_default ,
 	  buttonLabels: [ getTrans('Yes','yes') ,  getTrans('No','no') ],
 	  animation: 'default', // or 'none'
@@ -7625,7 +7652,7 @@ function onMapInit()
 
 					   var data = [
 				          {
-				            'title': getTrans('You are here','you_are_here'),
+				            'title': getTrans('I am here','you_are_here'),
 				            'position': your_location ,
 				            'icon': {
 							    'url': getStorage("from_icon")
@@ -7768,7 +7795,7 @@ function checkIfhasOfferDiscount()
 	var has_discount = getStorage("has_discount");
 	if(!empty(has_discount)){
 		if(has_discount==1){
-		   onsenAlert(  getTrans('you request cannot be applied you have offer discount already','discount_offer') );
+		   onsenAlert(  getTrans('Discount is already applied','discount_offer') );
 		   return true;
 		}
 	}
@@ -7986,7 +8013,7 @@ function checkGPS_AddressMap()
 	cordova.plugins.locationAccuracy.canRequest(function(canRequest){
 	 	 if(!canRequest){
 	 	 	can_request=false;
-	 	 	var _message=getTrans('Your device has no access to location Would you like to switch to the Location Settings page and do this manually?','location_off')
+	 	 	var _message=getTrans('Your device has no access to location. Would you like to switch to the Location Settings page and do this manually?','location_off')
 		   	   ons.notification.confirm({
 				  message: _message,
 				  title: dialog_title_default ,
@@ -8311,7 +8338,7 @@ function MapInit_Track()
 	        	 map.addMarker({
 				  'position': driver_location ,
 				  'title': $(".driver_name").val(),
-				  'snippet': getTrans( "Driver name" ,'driver_name'),
+				  'snippet': getTrans( "Driver Name" ,'driver_name'),
 				  'icon': {
 				    'url': $(".driver_icon").val()
 				  }
@@ -8514,7 +8541,7 @@ function reInitTrackMap(data)
 		 {
 	        'title': $(".driver_name").val(),
 	        'position': driver_location ,
-	        'snippet': getTrans( "Driver name" ,'driver_name'),
+	        'snippet': getTrans( "Driver Name" ,'driver_name'),
 	        'icon': {
 		       'url': $(".driver_icon").val()
 		    }

@@ -3,7 +3,8 @@
     xmlns:gap = "http://phonegap.com/ns/1.0"
     xmlns:android = "http://schemas.android.com/apk/res/android"
     id        = "je.cuisine.je"
-    version   = "0.1">
+	versionCode = "104"
+    version   = "0.2">
     <name>Cuisine.je</name>
     <description>
         Online Table Booking and food ordering service in JERSEY,UK
