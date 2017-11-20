@@ -16,7 +16,7 @@ var drag_marker_bounce=1;
 var start="0";
 var limit="5";
 var menustart="0";
-var menulimit="5";
+var menulimit="10";
 document.addEventListener("deviceready", onDeviceReady,  false);
 
 
@@ -24,30 +24,30 @@ document.addEventListener("deviceready", onDeviceReady,  false);
 
 function onDeviceReady() {
 
-var permissions = cordova.plugins.permissions;
+// var permissions = cordova.plugins.permissions;
+//
+// 	navigator.splashscreen.hide();
+// 	var list = [
+//   permissions.ACCESS_COARSE_LOCATION
+// ];
+//
+// permissions.hasPermission(list, callback, null);
 
-	navigator.splashscreen.hide();
-	var list = [
-  permissions.ACCESS_COARSE_LOCATION
-];
-
-permissions.hasPermission(list, callback, null);
-
-function error() {
-  console.warn('Camera or Accounts permission is not turned on');
-}
-
-function success( status ) {
-  if( !status.hasPermission ) {
-
-    permissions.requestPermissions(
-      list,
-      function(status) {
-        if( !status.hasPermission ) error();
-      },
-      error);
-  }
-}
+// function error() {
+//   console.warn('Camera or Accounts permission is not turned on');
+// }
+//
+// function success( status ) {
+//   if( !status.hasPermission ) {
+//
+//     permissions.requestPermissions(
+//       list,
+//       function(status) {
+//         if( !status.hasPermission ) error();
+//       },
+//       error);
+//   }
+// }
 
 	if ( !empty(krms_config.pushNotificationSenderid)) {
 
@@ -104,20 +104,20 @@ function success( status ) {
 
 	}
 
-	checkConnection(); // Based on the connection, it sets the menu limit for performance loading of menus
+	//checkConnection(); // Based on the connection, it sets the menu limit for performance loading of menus
 }
-
-function checkConnection() {
-    var networkState = navigator.connection.type;
-   	console.log(networkState);
-	if(networkState == Connection.WIFI)
-		menulimit = 20;
-	else if(networkState == Connection.CELL_4G)
-		menulimit = 7;
-	else
-		menulimit = 4;
-
-}
+// 
+// function checkConnection() {
+//     var networkState = navigator.connection.type;
+//    	console.log(networkState);
+// 	if(networkState == Connection.WIFI)
+// 		menulimit = 20;
+// 	else if(networkState == Connection.CELL_4G)
+// 		menulimit = 7;
+// 	else
+// 		menulimit = 4;
+//
+// }
 
 /*document.addEventListener("offline", onOffline, false);
 function onOffline() {
@@ -801,7 +801,7 @@ function callAjax(action,params)
 				displayRestaurantResults(data.details.data ,'restaurant-results',1);
 				if(data.details.total > 1)
 				{
-				$(".result-msg").text(data.details.total+" "+getTrans("restaurants can deliver",'restaurant_found') );
+				$(".result-msg").text(data.details.total+" "+getTrans("restaurant(s) can deliver",'restaurant_found') );
 				}
 				else
 				{
@@ -813,7 +813,7 @@ function callAjax(action,params)
 					displayRestaurantResults(data.details.data ,'restaurant-results',1,data.details.total,'loadmore',data.code);
 					if(data.details.total > 1)
 					{
-					$(".result-msg").text(data.details.total+" "+getTrans("restaurants can deliver",'restaurant_found') );
+					$(".result-msg").text(data.details.total+" "+getTrans("restaurant(s) can deliver",'restaurant_found') );
 					}
 					else{
 						$(".result-msg").text(data.details.total+" "+getTrans("restaurant can deliver",'restaurant_found') );
@@ -1325,7 +1325,7 @@ function callAjax(action,params)
 				   displayRestaurantResults( data.details.data ,'browse-results',2,data.details.total,'loadmore',data.code,'browse');
 				   //$(".result-msg").text(data.details.total+" Restaurant found");
 					 	if(data.details.total > 1){
-				   		$(".result-msg").text(data.details.total+" "+ getTrans("restaurants can deliver",'restaurant_found')  );
+				   		$(".result-msg").text(data.details.total+" "+ getTrans("restaurant(s) can deliver",'restaurant_found')  );
 				 		}
 						else{
 							$(".result-msg").text(data.details.total+" "+ getTrans("restaurant can deliver",'restaurant_found')  );
@@ -1336,7 +1336,7 @@ function callAjax(action,params)
 			   	displayBookTableResults(data.details.data ,'restaurant-result',2);
 				//$(".result-msg").text(data.details.total+" Restaurant found");
 				if(data.details.total > 1){
-					$(".result-msg").text(data.details.total+" "+ getTrans("restaurants for book a table",'restaurant_found')  );
+					$(".result-msg").text(data.details.total+" "+ getTrans("restaurant(s) for book a table",'restaurant_found')  );
 				}
 				else{
 					$(".result-msg").text(data.details.total+" "+ getTrans("restaurant  for book a table",'restaurant_found')  );
@@ -1346,7 +1346,7 @@ function callAjax(action,params)
 				case "searchRestaurant":
 			    	displayRestaurantResults(data.details.data ,'browse-results',3);
 					if(data.details.total > 1){
-						$(".result-msg").text(data.details.total+" "+ getTrans("restaurants can deliver",'restaurant_found')  );
+						$(".result-msg").text(data.details.total+" "+ getTrans("restaurant(s) can deliver",'restaurant_found')  );
 					}
 					else{
 						$(".result-msg").text(data.details.total+" "+ getTrans("restaurant can deliver",'restaurant_found')  );
@@ -1919,7 +1919,7 @@ function callAjax(action,params)
 			{
 
 				case "search":
-				  //$(".result-msg").text("No Restaurant found");
+				  //$(".result-msg").text("No Restaurants found");
 				  $(".result-msg").text(data.msg);
 				  createElement('restaurant-results','');
 				  break;
@@ -5063,6 +5063,17 @@ function showMerchantInfo(data)
 		});
 		createElement('merchant-payment-list', p );
 	}
+
+	if (data.promo.enabled == "2"){
+		var p='';
+		p+='<ons-list-header class="center trn" data-trn-key="voucher_code">Vouchers</ons-list-header>';
+		 $.each( $(data.promo.voucher) , function( key, val ) {
+		   p+=tplPaymentListStatic(val.voucher_name);
+		});
+		createElement('merchant-voucher-list', p );
+	}
+
+
 
 	/*if (!empty(data.reviews)){
 		$(".latest-review").html( data.reviews.date_created +" - " + data.reviews.client_name);
