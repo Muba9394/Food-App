@@ -109,12 +109,12 @@ function success( status ) {
 
 function checkConnection() {
     var networkState = navigator.connection.type;
-   
+   	console.log(networkState);
 	if(networkState == Connection.WIFI)
 		menulimit = 20;
 	else if(networkState == Connection.CELL_4G)
 		menulimit = 7;
-	else	
+	else
 		menulimit = 4;
 
 }
@@ -2129,8 +2129,8 @@ function displayBookTableResults(data , target_id , display_type)
     	    htm+='<p class="concat-textx type">'+val.cuisine+'</p>';
 			var btn_txt = 'Book a Table';
 			htm+='<div class="booking-btn" onclick="table_booking_optn('+val.merchant_id+','+rest_logo+','+rest_name+')" > '+btn_txt+' </div>';
-						  
-					    	
+
+
     	htm+='</div>';
     	htm+='</ons-col>';
     	htm+='</ons-row>';
@@ -4829,7 +4829,7 @@ function initMobileScroller()
 	if ( $('.date_booking').exists()){
 		var now = new Date();
 		var until = new Date(now.getFullYear(), now.getMonth() +3,now.getDate);
-		
+
 		$('.date_booking').mobiscroll().date({
 			theme: 'android-holo',
 			mode: "scroller",
@@ -4842,7 +4842,7 @@ function initMobileScroller()
 		});
 	}
 
-	
+
 }
 	function __datetimeOnSelectDelegate(textDate, inst)
 	{
