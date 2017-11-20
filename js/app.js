@@ -104,20 +104,20 @@ function onDeviceReady() {
 
 	}
 
-	//checkConnection(); // Based on the connection, it sets the menu limit for performance loading of menus
+	checkConnection(); // Based on the connection, it sets the menu limit for performance loading of menus
 }
-// 
-// function checkConnection() {
-//     var networkState = navigator.connection.type;
-//    	console.log(networkState);
-// 	if(networkState == Connection.WIFI)
-// 		menulimit = 20;
-// 	else if(networkState == Connection.CELL_4G)
-// 		menulimit = 7;
-// 	else
-// 		menulimit = 4;
-//
-// }
+
+function checkConnection() {
+    var networkState = navigator.connection.type;
+   	console.log(networkState);
+	if(networkState == Connection.WIFI)
+		menulimit = 20;
+	else if(networkState == Connection.CELL_4G)
+		menulimit = 7;
+	else
+		menulimit = 4;
+
+}
 
 /*document.addEventListener("offline", onOffline, false);
 function onOffline() {
@@ -5068,7 +5068,7 @@ function showMerchantInfo(data)
 		var p='';
 		p+='<ons-list-header class="center trn" data-trn-key="voucher_code">Vouchers</ons-list-header>';
 		 $.each( $(data.promo.voucher) , function( key, val ) {
-		   p+=tplPaymentListStatic(val.voucher_name);
+		   p+=tplPaymentListStatic(val.voucher_name,val.voucher_name);
 		});
 		createElement('merchant-voucher-list', p );
 	}
