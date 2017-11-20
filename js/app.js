@@ -5068,9 +5068,19 @@ function showMerchantInfo(data)
 		var p='';
 		p+='<ons-list-header class="center trn" data-trn-key="voucher_code">Vouchers</ons-list-header>';
 		 $.each( $(data.promo.voucher) , function( key, val ) {
-		   p+=tplPaymentListStatic(val.voucher_name,val.voucher_name);
+		   p+=tplPaymentListStatic("Voucher Code",val.voucher_name);
 		});
 		createElement('merchant-voucher-list', p );
+	}
+
+
+	if (data.deals_list != null){
+		var p='';
+		p+='<ons-list-header class="center trn" data-trn-key="voucher_code">Deals</ons-list-header>';
+		 $.each( $(data.deals_list) , function( key, val ) {
+		   p+="<p>"+val.title+"</p>";
+		});
+		createElement('merchant-deals-list', p );
 	}
 
 
