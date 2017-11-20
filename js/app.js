@@ -26,7 +26,7 @@ function onDeviceReady() {
 
 // var permissions = cordova.plugins.permissions;
 //
-// 	navigator.splashscreen.hide();
+ 	navigator.splashscreen.hide();
 // 	var list = [
 //   permissions.ACCESS_COARSE_LOCATION
 // ];
