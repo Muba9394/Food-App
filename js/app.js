@@ -801,7 +801,7 @@ function callAjax(action,params)
 				displayRestaurantResults(data.details.data ,'restaurant-results',1);
 				if(data.details.total > 1)
 				{
-				$(".result-msg").text(data.details.total+" "+getTrans("restaurant(s) can deliver",'restaurant_found') );
+				$(".result-msg").text(data.details.total+" "+getTrans("restaurant can deliver",'restaurant_found') );
 				}
 				else
 				{
@@ -813,7 +813,7 @@ function callAjax(action,params)
 					displayRestaurantResults(data.details.data ,'restaurant-results',1,data.details.total,'loadmore',data.code);
 					if(data.details.total > 1)
 					{
-					$(".result-msg").text(data.details.total+" "+getTrans("restaurant(s) can deliver",'restaurant_found') );
+					$(".result-msg").text(data.details.total+" "+getTrans("restaurant can deliver",'restaurant_found') );
 					}
 					else{
 						$(".result-msg").text(data.details.total+" "+getTrans("restaurant can deliver",'restaurant_found') );
@@ -1325,7 +1325,7 @@ function callAjax(action,params)
 				   displayRestaurantResults( data.details.data ,'browse-results',2,data.details.total,'loadmore',data.code,'browse');
 				   //$(".result-msg").text(data.details.total+" Restaurant found");
 					 	if(data.details.total > 1){
-				   		$(".result-msg").text(data.details.total+" "+ getTrans("restaurant(s) can deliver",'restaurant_found')  );
+				   		$(".result-msg").text(data.details.total+" "+ getTrans("restaurant can deliver",'restaurant_found')  );
 				 		}
 						else{
 							$(".result-msg").text(data.details.total+" "+ getTrans("restaurant can deliver",'restaurant_found')  );
@@ -1336,7 +1336,7 @@ function callAjax(action,params)
 			   	displayBookTableResults(data.details.data ,'restaurant-result',2);
 				//$(".result-msg").text(data.details.total+" Restaurant found");
 				if(data.details.total > 1){
-					$(".result-msg").text(data.details.total+" "+ getTrans("restaurant(s) for book a table",'restaurant_found')  );
+					$(".result-msg").text(data.details.total+" "+ getTrans("restaurant for book a table",'restaurant_found')  );
 				}
 				else{
 					$(".result-msg").text(data.details.total+" "+ getTrans("restaurant  for book a table",'restaurant_found')  );
@@ -1346,7 +1346,7 @@ function callAjax(action,params)
 				case "searchRestaurant":
 			    	displayRestaurantResults(data.details.data ,'browse-results',3);
 					if(data.details.total > 1){
-						$(".result-msg").text(data.details.total+" "+ getTrans("restaurant(s) can deliver",'restaurant_found')  );
+						$(".result-msg").text(data.details.total+" "+ getTrans("restaurant can deliver",'restaurant_found')  );
 					}
 					else{
 						$(".result-msg").text(data.details.total+" "+ getTrans("restaurant can deliver",'restaurant_found')  );
