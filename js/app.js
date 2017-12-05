@@ -1091,6 +1091,7 @@ function callAjax(action,params)
 				case "getPaymentOptions":
 				/*	alert("Its triggering");
 					alert(data.details.toSource()); */
+
 				   $(".frm-paymentoption").show();
 			   	   $(".paypal_flag").val( data.details.paypal_flag );
 			   	   $(".paypal_mode").val( data.details.paypal_credentials.mode );
@@ -1965,7 +1966,11 @@ function callAjax(action,params)
 				  if ( data.details==3){
 				  	  onsenAlert(data.msg);
 				  	  sNavigator.popPage({cancelIfRunning: true});
-				  } else {
+				  }else if ( data.details==2){
+				  	  onsenAlert(data.msg);
+				  	  sNavigator.popPage({cancelIfRunning: true});
+				  }
+           else {
 					  $(".frm-paymentoption").hide();
 					  onsenAlert(data.msg);
 				  }
@@ -3558,8 +3563,11 @@ jQuery(document).ready(function() {
 		var address_split=address.split("|");
 		//dump(address_split);
 		if ( address_split.length>0){
+
 			//Disable the lookdown from lookup postal code
 			$(".lookupDropdown").hide();
+      $("#address_def").val(address_split[0]+','+address_split[1]+','+ address_split[2]+','+address_split[3]);
+
 			$(".street").val( address_split[0] );
 			$(".city").val( address_split[1] );
 			$(".state").val( address_split[2] );
@@ -4214,8 +4222,10 @@ function displayCart(data)
 		}
 
 		var xx=1;
+
 		$.each( data.cart.cart, function( key, val ) {
 			 if (val.discount>0){
+
 			 	 htm+=tplCartRowNoBorder(
 					 val.item_id,
 					 val.item_name,
@@ -4346,7 +4356,14 @@ function displayCart(data)
 		}
 
 		if (!empty(data.cart.grand_total)){
-			htm+=tplCartRow('<b class="trn" data-trn-key="total">Total</b>', data.cart.grand_total.amount_pretty );
+      if(data.cart.cart.deals)
+      {
+      htm+=tplCartRow('<b class="trn" data-trn-key="total">Total</b> (Deals applied)', data.cart.grand_total.amount_pretty );
+      }
+      else
+      {
+      htm+=tplCartRow('<b class="trn" data-trn-key="total">Total</b>', data.cart.grand_total.amount_pretty );
+    }
 		}
 
 	}
@@ -5118,9 +5135,9 @@ function showMerchantInfo(data)
 
 	if (data.deals_list != null){
 		var p='';
-		p+='<ons-list-header class="center trn" data-trn-key="voucher_code">Deals</ons-list-header>';
+		p+='<ons-list-header class="center  trn" data-trn-key="voucher_code">Deals</ons-list-header>';
 		 $.each( $(data.deals_list) , function( key, val ) {
-		   p+="<p>"+val.title+"</p>";
+		   p+="<div class='concat-text col ons-col-inner'><p class='p list__item '>"+val.title+"<br><span>"+val.description+"</span></p></div>";
 		});
 		createElement('merchant-deals-list', p );
 	}

@@ -1492,6 +1492,18 @@ textarea.text-input--underbar {
 	background-color: #f5f2f2;
     line-height: 14px;
 }
+.merchant-deals-list {
+    border: 0 none;
+    margin: 10px;
+}
+.p{
+font-size: 14px;
+color: #666;
+margin: 5px 0;
+font-style: normal;
+border-top: none !important;
+border-bottom: 1px solid #ddd !important;
+}
 .pyp {
     color: #dd2c33;
 }
