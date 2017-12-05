@@ -1,55 +1,79 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <widget xmlns = "http://www.w3.org/ns/widgets"
+    xmlns:cdv="http://cordova.apache.org/ns/1.0"
     xmlns:gap = "http://phonegap.com/ns/1.0"
     xmlns:android = "http://schemas.android.com/apk/res/android"
     id        = "je.cuisine.je"
-	  versionCode = "105"
-    version   = "0.2">
+	  versionCode = "109"
+    version   = "0.5">
     <name>Cuisine.je</name>
     <description>
         Online Table Booking and food ordering service in JERSEY,UK
     </description>
-    <author email="worldcuisine.je@gmail.com" href="http://www.cuisine.je/">
+    <author email="admin@cuisine.je" href="http://www.eshci.com/">
         ESH Solutions Limited
     </author>
-    <icon src="icon.png" />
+    
     <content src="index.html" />
 
     <preference name="loadUrlTimeoutValue" value="70000" />
-	<preference name="orientation" value="portrait" />
+	<platform name="ios" >
+  		<preference name="orientation" value="all" />
+	</platform>
+	<platform name="android" >
+  		<preference name="orientation" value="portrait" />
+	</platform>
 	<preference name="android-build-tool" value="gradle" />
 	<preference name="permissions" value="none"/>
+	<preference name="fullscreen" value="true" />
 	<preference name="ShowSplashScreenSpinner" value="false"/>
-	<gap:plugin name="cordova-plugin-whitelist" source="npm" />
+
+
+
+<plugin spec="https://github.com/rodrigo-martinezd/cordova-dialog-gps.git#f110314" />
+<plugin spec="https://github.com/cuisineje/cordova-plugin-dreams-inappbrowser.git#fafbc28" />
+<plugin spec="https://github.com/razorpay/razorpay-cordova.git#011f82b" />
+<plugin name="com.paypal.cordova.mobilesdk" spec="3.5.0" />
+<plugin name="cordova-plugin-android-permissions" spec="1.0.0" />
+<plugin name="cordova-plugin-device" spec="1.1.7" />
+<plugin name="cordova-plugin-geolocation" spec="2.4.3" /> <!-- Had issue with 3.0.0 as it required cordova 6.3.0 -->
+<plugin name="cordova-plugin-googlemaps" spec="2.1.1" />
+<plugin name="cordova-plugin-media" spec="3.0.0" />
+<plugin name="cordova-plugin-network-information" spec="1.3.4" />
+<plugin name="cordova-plugin-request-location-accuracy" spec="2.2.0" />
+<plugin name="cordova-plugin-splashscreen" spec="4.1.0" />
+<plugin name="cordova-plugin-whitelist" spec="1.3.3" />
+<plugin name="cordova-plugin-x-toast" spec="2.6.0" />
+<plugin name="cordova.plugins.diagnostic" spec="3.4.2" />
+<plugin name="phonegap-plugin-push" spec="1.5.3" />
+<plugin name="uk.co.workingedge.phonegap.plugin.launchnavigator" spec="4.1.0" />
+
+<!--
+	<plugin name="cordova-plugin-whitelist" source="npm" />
     <gap:plugin name="phonegap-plugin-push" source="npm" spec="1.5.3" />
     <gap:plugin name="com.paypal.cordova.mobilesdk" source="npm"  />
+
+
     <gap:plugin name="cordova-plugin-device" source="npm"/>
 	<gap:plugin name="cordova-plugin-splashscreen" source="npm"/>
 
 
-	<!--
-	<gap:plugin name="cordova-plugin-inappbrowser" source="npm"/>
-	<allow-navigation href="*://*.citypay.com/*" />
-	<allow-navigation href="*://*.cuisine.je/*" />
-	<allow-intent href="*://*.citypay.com/*" />
-	<allow-intent href="*://*.cuisine.je/*" />
-	<access origin="http://*.citypay.com" />
-	<gap:plugin name="cordova-plugin-whitelist" source="npm"/>
-	-->
-	<gap:plugin name="cordova-plugin-geolocation" source="npm"/>
-  <gap:plugin name="cordova-plugin-android-permissions" source="npm"/>
+
+	<gap:plugin name="cordova-plugin-geolocation" source="npm" spec="2.4.3"/>
+   <gap:plugin name="cordova-plugin-android-permissions" source="npm"/>
 	<gap:plugin name="cordova-plugin-network-information" source="npm" />
 	<gap:plugin name="cordova-plugin-request-location-accuracy" source="npm"  spec="2.2.0" />
 	<gap:plugin name="cordova-plugin-x-toast" source="npm" spec="2.6.0" />
 	<plugin name="uk.co.workingedge.phonegap.plugin.launchnavigator" source="npm" />
 
-	<!--<gap:plugin name="cordova-plugin-fastrde-checkgps" source="npm" spec="1.0.0"  />-->
+
 	<gap:plugin spec="https://github.com/rodrigo-martinezd/cordova-dialog-gps.git" source="git" />
-  <gap:plugin spec="https://github.com/cuisineje/cordova-plugin-dreams-inappbrowser.git" source="git" />
+    <gap:plugin spec="https://github.com/cuisineje/cordova-plugin-dreams-inappbrowser.git" source="git" />
 
 	<gap:plugin spec="https://github.com/razorpay/razorpay-cordova.git" source="git" />
 	<gap:plugin name="cordova-plugin-media" source="npm" spec="3.0.0" />
 	<gap:plugin name="cordova.plugins.diagnostic" source="npm" spec="3.4.2" />
+-->
 
 	<gap:plugin name="cordova-plugin-googlemaps"  source="npm" spec="2.1" >
        <param name="API_KEY_FOR_ANDROID" value="AIzaSyC25RhPHKmvQTz7OzprugQyzWssMlvWKHA" />
@@ -75,52 +99,52 @@
     </gap:config-file>
 
 
-	<icon src="icon.png" />
+	<icon platform="ios" height="60" width="60" src="res/icon/ios/icon-60.png" />
+	<icon platform="ios" height="120" width="120" src="res/icon/ios/Icon-60@2x.png" />
+	<icon platform="ios" height="180" width="180" src="res/icon/ios/Icon-60@3x.png" />
+	<icon platform="ios" height="76" width="76" src="res/icon/ios/icon-76.png" />
+	<icon platform="ios" height="152" width="152" src="res/icon/ios/icon-76-2x.png" />
+	<icon platform="ios" height="40" width="40" src="res/icon/ios/icon-40.png" />
+	<icon platform="ios" height="80" width="80" src="res/icon/ios/Icon-40@2x.png" />
+	<icon platform="ios" height="57" width="57" src="res/icon/ios/icon-57.png" />
+	<icon platform="ios" height="114" width="114" src="res/icon/ios/icon-57-2x.png" />
+	<icon platform="ios" height="72" width="72" src="res/icon/ios/icon-72.png" />
+	<icon platform="ios" height="144" width="144" src="res/icon/ios/icon-72-2x.png" />
+	<icon platform="ios" height="29" width="29" src="res/icon/ios/icon-small.png" />
+	<icon platform="ios" height="58" width="58" src="res/icon/ios/icon-small-2x.png" />
+	<icon platform="ios" height="87" width="87" src="res/icon/ios/Icon-small@3x.png" />
+	<icon platform="ios" height="50" width="50" src="res/icon/ios/icon-50.png" />
+	<icon platform="ios" height="100" width="100" src="res/icon/ios/icon-50-2x.png" />
+	<icon platform="ios" height="167" width="167" src="res/icon/ios/Icon-167.png" />
 
-	<icon gap:platform="ios" height="60" width="60" src="res/icon/ios/icon-60.png" />
-	<icon gap:platform="ios" height="120" width="120" src="res/icon/ios/Icon-60@2x.png" />
-	<icon gap:platform="ios" height="180" width="180" src="res/icon/ios/Icon-60@3x.png" />
-	<icon gap:platform="ios" height="76" width="76" src="res/icon/ios/icon-76.png" />
-	<icon gap:platform="ios" height="152" width="152" src="res/icon/ios/icon-76-2x.png" />
-	<icon gap:platform="ios" height="40" width="40" src="res/icon/ios/icon-40.png" />
-	<icon gap:platform="ios" height="80" width="80" src="res/icon/ios/Icon-40@2x.png" />
-	<icon gap:platform="ios" height="57" width="57" src="res/icon/ios/icon-57.png" />
-	<icon gap:platform="ios" height="114" width="114" src="res/icon/ios/icon-57-2x.png" />
-	<icon gap:platform="ios" height="72" width="72" src="res/icon/ios/icon-72.png" />
-	<icon gap:platform="ios" height="144" width="144" src="res/icon/ios/icon-72-2x.png" />
-	<icon gap:platform="ios" height="29" width="29" src="res/icon/ios/icon-small.png" />
-	<icon gap:platform="ios" height="58" width="58" src="res/icon/ios/icon-small-2x.png" />
-	<icon gap:platform="ios" height="87" width="87" src="res/icon/ios/Icon-small@3x.png" />
-	<icon gap:platform="ios" height="50" width="50" src="res/icon/ios/icon-50.png" />
-	<icon gap:platform="ios" height="100" width="100" src="res/icon/ios/icon-50-2x.png" />
-	<icon gap:platform="ios" height="167" width="167" src="res/icon/ios/Icon-167.png" />
+	<icon platform="android" qualifier="ldpi" src="res/icon/android/icon-36-ldpi.png" />
+	<icon platform="android" qualifier="mdpi" src="res/icon/android/icon-48-mdpi.png" />
+	<icon platform="android" qualifier="hdpi" src="res/icon/android/icon-72-hdpi.png" />
+	<icon platform="android" qualifier="xhdpi" src="res/icon/android/icon-96-xhdpi.png" />
+	<icon platform="android" qualifier="xxhdpi" src="res/icon/android/icon-152-xxhdpi.png" />
+	<icon platform="android" qualifier="xxxhdpi" src="res/icon/android/icon-192-xxxhdpi.png" />
 
-	<icon gap:platform="android" gap:qualifier="ldpi" src="res/icon/android/icon-36-ldpi.png" />
-	<icon gap:platform="android" gap:qualifier="mdpi" src="res/icon/android/icon-48-mdpi.png" />
-	<icon gap:platform="android" gap:qualifier="hdpi" src="res/icon/android/icon-72-hdpi.png" />
-	<icon gap:platform="android" gap:qualifier="xhdpi" src="res/icon/android/icon-96-xhdpi.png" />
-	<icon gap:platform="android" gap:qualifier="xxhdpi" src="res/icon/android/icon-152-xxhdpi.png" />
-	<icon gap:platform="android" gap:qualifier="xxxhdpi" src="res/icon/android/icon-192-xxxhdpi.png" />
+	<splash src="splash.png" platform="ios" />
 
 	<splash src="splash.png" />
 
-	<splash gap:platform="ios" height="480" width="320" src="res/screen/ios/Default~iphone.png" />
-	<splash gap:platform="ios" height="960" width="640" src="res/screen/ios/Default@2x~iphone_640x960.png" />
-	<splash gap:platform="ios" height="750" width="720" src="res/screen/ios/Default-750@2x~iphone6-landscape_1334x750.png" />
-	<splash gap:platform="ios" height="748" width="720" src="res/screen/ios/Default-Landscape~ipad_1024x748.png" />
-	<splash gap:platform="ios" height="1004" width="720" src="res/screen/ios/Default.png" />
-	<splash gap:platform="ios" height="1280" width="720" src="res/screen/ios/Default~ipad.png" />
-	<splash gap:platform="ios" height="1242" width="720" src="res/screen/ios/Default-1242@3x~iphone6s-landscape_2208x1242.png" />
-	<splash gap:platform="ios" height="1024" width="720" src="res/screen/ios/Default-Portrait~ipad_768x1024.png" />
-	<splash gap:platform="ios" height="1136" width="640" src="res/screen/ios/Default-568h@2x~iphone_640x1136.png" />
+	<splash platform="ios" height="480" width="320" src="res/screen/ios/Default~iphone.png" />
+	<splash platform="ios" height="960" width="640" src="res/screen/ios/Default@2x~iphone_640x960.png" />
+	<splash platform="ios" height="750" width="720" src="res/screen/ios/Default-750@2x~iphone6-landscape_1334x750.png" />
+	<splash platform="ios" height="748" width="720" src="res/screen/ios/Default-Landscape~ipad_1024x748.png" />
+	<splash platform="ios" height="1004" width="720" src="res/screen/ios/Default.png" />
+	<splash platform="ios" height="1280" width="720" src="res/screen/ios/Default~ipad.png" />
+	<splash platform="ios" height="1242" width="720" src="res/screen/ios/Default-1242@3x~iphone6s-landscape_2208x1242.png" />
+	<splash platform="ios" height="1024" width="720" src="res/screen/ios/Default-Portrait~ipad_768x1024.png" />
+	<splash platform="ios" height="1136" width="640" src="res/screen/ios/Default-568h@2x~iphone_640x1136.png" />
 
 
-	<splash gap:platform="android" gap:qualifier="land-hdpi" src="res/screen/android/screen-land-xhdpi.png" />
-	<splash gap:platform="android" gap:qualifier="land-ldpi" src="res/screen/android/screen-ldpi.png" />
-	<splash gap:platform="android" gap:qualifier="land-mdpi" src="res/screen/android/screen-mdpi-landscape.png" />
-	<splash gap:platform="android" gap:qualifier="land-xhdpi" src="res/screen/android/screen-ldpi.png" />
-	<splash gap:platform="android" gap:qualifier="port-hdpi" src="res/screen/android/screen-hdpi-portrait.png" />
-	<splash gap:platform="android" gap:qualifier="port-ldpi" src="res/screen/android/screen-ldpi-portrait.png" />
-	<splash gap:platform="android" gap:qualifier="port-mdpi" src="res/screen/android/screen-mdpi-portrait.png" />
-	<splash gap:platform="android" gap:qualifier="port-xhdpi" src="res/screen/android/screen-xhdpi-portrait.png" />
+	<splash platform="android" qualifier="land-hdpi" src="res/screen/android/screen-land-xhdpi.png" />
+	<splash platform="android" qualifier="land-ldpi" src="res/screen/android/screen-ldpi.png" />
+	<splash platform="android" qualifier="land-mdpi" src="res/screen/android/screen-mdpi-landscape.png" />
+	<splash platform="android" qualifier="land-xhdpi" src="res/screen/android/screen-ldpi.png" />
+	<splash platform="android" qualifier="port-hdpi" src="res/screen/android/screen-hdpi-portrait.png" />
+	<splash platform="android" qualifier="port-ldpi" src="res/screen/android/screen-ldpi-portrait.png" />
+	<splash platform="android" qualifier="port-mdpi" src="res/screen/android/screen-mdpi-portrait.png" />
+	<splash platform="android" qualifier="port-xhdpi" src="res/screen/android/screen-xhdpi-portrait.png" />
 </widget>

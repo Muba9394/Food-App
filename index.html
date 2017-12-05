@@ -734,7 +734,7 @@
       <p class="small-font-dim trn" data-trn-key="create_account_terms">
       By creating an account, you agree to receive sms from vendor.</p>
 
-      <div class="field-wrapper iagree-wrap">
+      <div class="field-wrapper iagree-wrap" >
          <ons-row>
            <ons-col width="40px">
 
@@ -812,7 +812,7 @@
 
    <div class="manual-address-input">
     <form id="frm-manual-address" class="frm-manual-address" method="post">
-
+    <div id="edit_div">
 		 <div class="wrapper" id="postcode_lookup">
 		 <ons-row class="row ons-row-inner">
 		 <div class="field-wrapper">
@@ -860,6 +860,24 @@
 	   </button>
      </div>
     -->
+    </div>
+    <div id="default_address_div">
+      <div class="wrapper">
+         <div class="field-wrapper">
+         <input type="text" name="address"  class="address text-input text-input--underbar has_validation"
+         placeholder="Address" value=""  data-validation="required" data-validation-error-msg="This field is required" id="address_def" >
+         </div>
+      </div>
+      <div class="wrapper">
+         <div class="field-wrapper">
+      <ons-toolbar-button modifier="modifier" onclick="showEdit();" class="ng-isolate-scope">
+        <span class="toolbar-button toolbar-button--modifier navigation-bar__line-height" ng-transclude="">
+        <ons-icon icon="fa-pencil-square-o" class="ng-scope ons-icon fa-pencil-square-o fa fa-lg">Edit</ons-icon>
+        </span>
+      </ons-toolbar-button>
+         </div>
+      </div>
+    </div>
      </form>
 
    </div>
@@ -893,13 +911,38 @@
       <input name="email_address" class="email_address text-input text-input--underbar has_validation" placeholder="Email address" value="" data-validation="email" data-validation-error-msg="You have not given a correct e-mail address!" id="email" type="email">
      </div>
      <input type="hidden" name="guest_checkout" id="guest_checkout" value=""/>
+
+
+    <div class="field-wrapper" id="guest_password" style="display:none">
+      <input type="password" name="password"  class="text-input text-input--underbar has_validation"
+      placeholder="Password" value="" data-validation="required" data-validation-error-msg="This field is required">
     </div>
 
       <div class="field-wrapper">
       <input type="text" name="contact_phone"  class="mobile_inputs contact_phone text-input text-input--underbar has_validation"
       placeholder="Contact phone" value="" data-validation="required" data-validation-error-msg="This field is required" onkeyup="this.value=this.value.replace(/[^0-9]/g, '')">
       </div>
+
+      <div class="field-wrapper iagree-wrap" id="save_member">
+         <ons-row>
+           <ons-col width="40px">
+
+           <label class="checkbox">
+        <input type="checkbox" name="save_as_member" class="guest_check"  value="2">
+        <div class="checkbox__checkmark"></div>
+        <span class="ons-checkbox-inner"></span>
+      </label>
+
+           </ons-col>
+           <ons-col >
+             <span class="trn small-font-dim top15 block" data-trn-key="terms_n_condition">Save as member</span>
+           </ons-col>
+         </ons-row>
+      </div>
+  </div>
    </div>
+
+
 
   <!-- <div class="wrapper">
       <div class="field-wrapper">
