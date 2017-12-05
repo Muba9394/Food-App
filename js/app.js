@@ -1092,7 +1092,7 @@ function callAjax(action,params)
 				/*	alert("Its triggering");
 					alert(data.details.toSource()); */
 
-				   $(".frm-paymentoption").show();
+				     $(".frm-paymentoption").show();
 			   	   $(".paypal_flag").val( data.details.paypal_flag );
 			   	   $(".paypal_mode").val( data.details.paypal_credentials.mode );
 			   	   $(".client_id_sandbox").val( data.details.paypal_credentials.client_id_sandbox );
@@ -1963,17 +1963,15 @@ function callAjax(action,params)
 					  break;
 
 				case "getPaymentOptions":
-				  if ( data.details==3){
+				  if (data.details == 3){
 				  	  onsenAlert(data.msg);
 				  	  sNavigator.popPage({cancelIfRunning: true});
-				  }else if ( data.details==2){
-				  	  onsenAlert(data.msg);
-				  	  sNavigator.popPage({cancelIfRunning: true});
-				  }
-           else {
+				       }
+           else{
 					  $(".frm-paymentoption").hide();
 					  onsenAlert(data.msg);
-				  }
+            sNavigator.popPage({cancelIfRunning: true});
+				      }
 				  break;
 
 				case "browseRestaurant":
@@ -3433,6 +3431,7 @@ jQuery(document).ready(function() {
 		var transaction_type=$(this).val();
 
 		if(transaction_type=="pickup"){
+      $("#page-shipping #search-text").html("PickUp Information");
 			$(".delivery_asap_wrap").hide();
 		} else {
 			$(".delivery_asap_wrap").show();
@@ -4629,6 +4628,11 @@ function checkOut()
 
 function clientRegistration()
 {
+  if(isLogin())
+  {
+    onsenAlert("You are already logged in");
+  }
+  else{
 	var pswd = $("#pswd").val();
 	var fname = $("#fname").val();
 	var lname = $("#lname").val();
@@ -4686,6 +4690,7 @@ function clientRegistration()
 	      return false;
 	    }
 	});
+}
 }
 }
 
@@ -5137,7 +5142,7 @@ function showMerchantInfo(data)
 		var p='';
 		p+='<ons-list-header class="center  trn" data-trn-key="voucher_code">Deals</ons-list-header>';
 		 $.each( $(data.deals_list) , function( key, val ) {
-		   p+="<div class='concat-text col ons-col-inner'><p class='p list__item '>"+val.title+"<br><span>"+val.description+"</span></p></div>";
+		   p+="<div class='concat-text col ons-col-inner'><p class='p list__item '><b>"+val.title+"</b></br><span>"+val.description+"</span></p></div>";
 		});
 		createElement('merchant-deals-list', p );
 	}
@@ -5496,7 +5501,14 @@ $(document).on('click', '.checkbox', function () {
 
 function guestcheckout()
 {
-
+  if(isLogin())
+  {
+    onsenAlert("You are already logged in");
+  }
+  else{
+  if(getStorage('transaction_type') == "pickup"){
+    $("#page-shipping #search-text").html("Pickup Information");
+  }
   $("#save_member").css("display","block");
 	$("#addressbook").hide();
 	$("#guest").show();
@@ -5510,6 +5522,7 @@ function guestcheckout()
 				}
 	};
 	sNavigator.pushPage("shipping.html", options);
+}
 }
 
 
@@ -5549,6 +5562,11 @@ function isLogin()
 
 function showLogin(next_steps)
 {
+  if(isLogin())
+  {
+    onsenAlert("You are already logged in");
+  }
+  else{
    var options = {
       animation: 'slide',
       onTransitionEnd: function() {
@@ -5562,6 +5580,7 @@ function showLogin(next_steps)
       }
     };
     sNavigator.pushPage("login.html", options);
+  }
 }
 
 function showForgotPass()
@@ -7960,7 +7979,7 @@ $(document).on('click', '#lookupButton', function () {
     chngeval = chngeval.split(',');
     $(".stree_1").val(chngeval[0]+chngeval[1]+chngeval[2]+chngeval[3]);
     $(".city_1").val(chngeval[4] + "," + chngeval[5]);
-    $(".state_1").val(chngeval[6]);
+    $(".state_1").val(chngeval[4] );
   });
 
 function setManualAddress()
