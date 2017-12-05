@@ -1406,7 +1406,15 @@ function callAjax(action,params)
 						      	  	 $(".select-addressbook").hide();
 						      	  }*/
 
-
+                      if(data.details.default_address.address)
+                      {
+                        $("#default_address_div").show();
+                        $("#edit_div").hide();
+                        $("#address_def").val(data.details.default_address.address);
+                        $(".stree_1").val(data.details.default_address.street);
+                        $(".city_1").val(data.details.default_address.city);
+                        $(".state_1").val(data.details.default_address.state);
+                      }
                                  if(!empty(data.details.contact_phone)){
 					      	  	     $(".contact_phone").val( data.details.contact_phone ) ;
 					      	     }
