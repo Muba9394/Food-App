@@ -27,6 +27,7 @@ function onDeviceReady() {
 // var permissions = cordova.plugins.permissions;
 //
  	navigator.splashscreen.hide();
+  window.plugins.uniqueDeviceID.get(success_id, fail_id);
 // 	var list = [
 //   permissions.ACCESS_COARSE_LOCATION
 // ];
@@ -48,7 +49,14 @@ function onDeviceReady() {
 //       error);
 //   }
 // }
-
+function success_id(uuid)
+{
+    setStorage("device_id", uuid);
+}
+function fail_id(uuid)
+{
+  console.log("Error");
+}
 	if ( !empty(krms_config.pushNotificationSenderid)) {
 
 	    var push = PushNotification.init({
@@ -4639,6 +4647,7 @@ function clientRegistration()
   if(isLogin())
   {
     onsenAlert("You are already logged in");
+    return false;
   }
   else{
 	var pswd = $("#pswd").val();
@@ -4705,14 +4714,13 @@ function clientRegistration()
 function clientShipping()
 {
   if($(".guest_check").is(":checked"))  {
-    var gues_pass=$("#guest_password_val").val();
-    if(gues_pass.length < 8)
-  	{
-  		onsenAlert("Password must be 8 characters or above");
+    var guest_pass=$("#guest_password_val").val();
+    if(guest_pass.length < 8)
+    {
+      onsenAlert("Password must be 8 characters or above");
   		return false;
-  	}
-  }
-  else{
+    }
+    else{
 	$(".street").val( $(".stree_1").val()  );
 	$(".city").val( $(".city_1").val()  );
 	$(".state").val( $(".state_1").val()  );
@@ -4760,6 +4768,56 @@ function clientShipping()
 	       return false;
 	    }
 	});
+}
+}
+else{
+$(".street").val( $(".stree_1").val()  );
+$(".city").val( $(".city_1").val()  );
+$(".state").val( $(".state_1").val()  );
+$(".zipcode").val( $(".zipcode_1").val()  );
+
+//if ( empty( $(".street").val() )){
+if (empty($(".city").val() )){
+
+onsenAlert(getTrans("Address is not complete.Try again",'delivery_address_required')  );
+// toastMsg( getTrans() );
+return;
+}
+
+$.validate({
+  form : '#frm-shipping',
+  borderColorOnError:"#FF0000",
+  onError : function() {
+  },
+  onSuccess : function() {
+     var params = $( "#frm-shipping").serialize();
+     setStorage('shipping_address',params);
+     dump(params);
+     var options = {
+      animation: 'slide',
+      onTransitionEnd: function() {
+          displayMerchantLogo2(
+             getStorage("merchant_logo") ,
+             getStorage("order_total") ,
+             'page-paymentoption'
+          );
+          var params="merchant_id="+ getStorage("merchant_id");
+          params+="&street="+$(".street").val();
+          params+="&city="+$(".city").val();
+          params+="&state="+$(".state").val();
+          params+="&zipcode="+$(".zipcode").val();
+          params+="&location_name="+$(".location_name").val();
+          params+="&save_address="+$('.save_address:checked').val();
+          params+="&transaction_type=" +  getStorage("transaction_type") ;
+          params+="&client_token="+ getStorage('client_token');
+
+          callAjax("getPaymentOptions",params);
+      }
+    };
+    sNavigator.pushPage("paymentOption.html", options);
+     return false;
+  }
+});
 }
 }
 function displayPaymentOptions(data)

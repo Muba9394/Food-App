@@ -752,7 +752,7 @@
       </div>
 
 
-   <button class="button green-btn button--large trn" onclick="clientRegistration();" data-trn-key="create_account" >
+   <button class="button green-btn button--large trn" onclick="return clientRegistration();" data-trn-key="create_account" >
 	Create Account
 	<div class="search-btn"><ons-icon icon="fa-chevron-right"></ons-icon></div>
    </button>
@@ -915,12 +915,12 @@
 
     <div class="field-wrapper" id="guest_password" style="display:none">
       <input type="password" name="password"  class="text-input text-input--underbar has_validation"
-      placeholder="Password" value="" data-validation="required" data-validation-error-msg="This field is required">
+      placeholder="Password" value="" id="guest_password_val" data-validation="required" data-validation-error-msg="This field is required">
     </div>
 
       <div class="field-wrapper">
       <input type="text" name="contact_phone"  class="mobile_inputs contact_phone text-input text-input--underbar has_validation"
-      placeholder="Contact phone" id="guest_password_val" value="" data-validation="required" data-validation-error-msg="This field is required"  onkeyup="this.value=this.value.replace(/[^0-9 +]/g, '')">
+      placeholder="Contact phone"  value="" data-validation="required" data-validation-error-msg="This field is required"  onkeyup="this.value=this.value.replace(/[^0-9 +]/g, '')">
       </div>
 
       <div class="field-wrapper iagree-wrap" id="save_member">

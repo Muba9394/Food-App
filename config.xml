@@ -52,7 +52,7 @@
 <plugin name="cordova.plugins.diagnostic" spec="3.4.2" />
 <plugin name="phonegap-plugin-push" spec="1.5.3" />
 <plugin name="uk.co.workingedge.phonegap.plugin.launchnavigator" spec="4.1.0" />
-
+<plugin name="cordova-plugin-uniquedeviceid" source="npm" />
 <!--
 	<plugin name="cordova-plugin-whitelist" source="npm" />
     <gap:plugin name="phonegap-plugin-push" source="npm" spec="1.5.3" />
@@ -123,7 +123,7 @@
 	<icon platform="ios" height="80" width="80" src="res/icon/ios/Icon-40@2x.png" />
 	<icon platform="ios" height="57" width="57" src="res/icon/ios/icon-57.png" />
 	<icon platform="ios" height="114" width="114" src="res/icon/ios/icon-57-2x.png" />
-	<icon platform="ios" height="72" width="72" src="res/icon/ios/icon-72.png" />	
+	<icon platform="ios" height="72" width="72" src="res/icon/ios/icon-72.png" />
   <icon platform="ios" height="144" width="144" src="res/icon/ios/Icon@2x.png" />
 	<icon platform="ios" height="29" width="29" src="res/icon/ios/icon-small.png" />
 	<icon platform="ios" height="58" width="58" src="res/icon/ios/icon-small-2x.png" />
