@@ -4,8 +4,8 @@
     xmlns:gap = "http://phonegap.com/ns/1.0"
     xmlns:android = "http://schemas.android.com/apk/res/android"
     id        = "je.cuisine.je"
-	  versionCode = "109"
-    version   = "0.5">
+	  versionCode = "111"
+    version   = "0.9">
     <name>Cuisine.je</name>
     <description>
         Online Table Booking and food ordering service in JERSEY,UK
@@ -13,12 +13,13 @@
     <author email="admin@cuisine.je" href="http://www.eshci.com/">
         ESH Solutions Limited
     </author>
-    
+
     <content src="index.html" />
 
     <preference name="loadUrlTimeoutValue" value="70000" />
 	<platform name="ios" >
   		<preference name="orientation" value="all" />
+		<preference name="ShowSplashScreenSpinner" value="true" />
 	</platform>
 	<platform name="android" >
   		<preference name="orientation" value="portrait" />
@@ -26,7 +27,11 @@
 	<preference name="android-build-tool" value="gradle" />
 	<preference name="permissions" value="none"/>
 	<preference name="fullscreen" value="true" />
-	<preference name="ShowSplashScreenSpinner" value="false"/>
+  <preference name="SplashScreen"               value="splash" />
+  <preference name="AutoHideSplashScreen"       value="true" />
+  <preference name="SplashScreenDelay"          value="1000" />
+  <preference name="SplashMaintainAspectRatio"  value="true" />
+  <preference name="FadeSplashScreen"           value="false"/>
 
 
 
@@ -41,7 +46,7 @@
 <plugin name="cordova-plugin-media" spec="3.0.0" />
 <plugin name="cordova-plugin-network-information" spec="1.3.4" />
 <plugin name="cordova-plugin-request-location-accuracy" spec="2.2.0" />
-<plugin name="cordova-plugin-splashscreen" spec="4.1.0" />
+<plugin name="cordova-plugin-splashscreen" spec="4.1.0" source="npm" />
 <plugin name="cordova-plugin-whitelist" spec="1.3.3" />
 <plugin name="cordova-plugin-x-toast" spec="2.6.0" />
 <plugin name="cordova.plugins.diagnostic" spec="3.4.2" />
@@ -84,10 +89,20 @@
         <param name="android-package" value="org.apache.cordova.GeoBroker" />
     </feature>
 
+    <feature name="SplashScreen">
+      <param name="ios-package" value="CDVSplashScreen" />
+    </feature>
+
 	<preference name="AutoHideSplashScreen" value="false" />
     <preference name="SplashScreenDelay" value="10000" />
     <preference name="fullscreen" value="false" />
     <preference name="android-minSdkVersion" value="16" />
+
+    <!-- ios preferences -->
+    <preference name="exit-on-suspend" value="false" />
+    <preference name="prerendered-icon" value="true" />
+    <preference name="target-device" value="universal" />
+    <preference name="detect-data-types" value="true" />
 
     <access origin="*" />
     <access origin="tel:*" launch-external="yes" />
@@ -124,19 +139,37 @@
 	<icon platform="android" qualifier="xxhdpi" src="res/icon/android/icon-152-xxhdpi.png" />
 	<icon platform="android" qualifier="xxxhdpi" src="res/icon/android/icon-192-xxxhdpi.png" />
 
-	<splash src="splash.png" platform="ios" />
+	<splash platform="ios" src="splash.png" />
 
 	<splash src="splash.png" />
 
-	<splash platform="ios" height="480" width="320" src="res/screen/ios/Default~iphone.png" />
-	<splash platform="ios" height="960" width="640" src="res/screen/ios/Default@2x~iphone_640x960.png" />
-	<splash platform="ios" height="750" width="720" src="res/screen/ios/Default-750@2x~iphone6-landscape_1334x750.png" />
-	<splash platform="ios" height="748" width="720" src="res/screen/ios/Default-Landscape~ipad_1024x748.png" />
-	<splash platform="ios" height="1004" width="720" src="res/screen/ios/Default.png" />
-	<splash platform="ios" height="1280" width="720" src="res/screen/ios/Default~ipad.png" />
-	<splash platform="ios" height="1242" width="720" src="res/screen/ios/Default-1242@3x~iphone6s-landscape_2208x1242.png" />
-	<splash platform="ios" height="1024" width="720" src="res/screen/ios/Default-Portrait~ipad_768x1024.png" />
-	<splash platform="ios" height="1136" width="640" src="res/screen/ios/Default-568h@2x~iphone_640x1136.png" />
+  <!-- iphone 3G+ (portrait) -->
+
+  <gap:splash gap:platform="ios"   height="480" width="320" src="res/screen/ios/Default~iphone.png" />
+  <gap:splash gap:platform="ios"  height="960" width="640" src="res/screen/ios/Default@2x~iphone_640x960.png" />
+  <gap:splash gap:platform="ios"  height="750" width="720" src="res/screen/ios/Default-750@2x~iphone6-landscape_1334x750.png" />
+  <gap:splash gap:platform="ios"  height="748" width="720" src="res/screen/ios/Default-Landscape~ipad_1024x748.png" />
+  <gap:splash gap:platform="ios"  height="1004" width="720" src="res/screen/ios/Default.png" />
+  <gap:splash gap:platform="ios"  height="1280" width="720" src="res/screen/ios/Default~ipad.png" />
+  <gap:splash gap:platform="ios"  height="1242" width="720" src="res/screen/ios/Default-1242@3x~iphone6s-landscape_2208x1242.png" />
+  <gap:splash gap:platform="ios"   height="1024" width="720" src="res/screen/ios/Default-Portrait~ipad_768x1024.png" />
+  <gap:splash gap:platform="ios"  height="1136" width="640" src="res/screen/ios/Default-568h@2x~iphone_640x1136.png" />
+
+  <!--Iphone End Here-->
+
+  <platform name="ios">
+    <splash  height="480" width="320" src="res/screen/ios/Default~iphone.png" />
+    <splash  height="960" width="640" src="res/screen/ios/Default@2x~iphone_640x960.png" />
+    <splash  height="750" width="720" src="res/screen/ios/Default-750@2x~iphone6-landscape_1334x750.png" />
+    <splash  height="748" width="720" src="res/screen/ios/Default-Landscape~ipad_1024x748.png" />
+    <splash  height="1004" width="720" src="res/screen/ios/Default.png" />
+    <splash  height="1280" width="720" src="res/screen/ios/Default~ipad.png" />
+    <splash  height="1242" width="720" src="res/screen/ios/Default-1242@3x~iphone6s-landscape_2208x1242.png" />
+    <splash  height="1024" width="720" src="res/screen/ios/Default-Portrait~ipad_768x1024.png" />
+    <splash  height="1136" width="640" src="res/screen/ios/Default-568h@2x~iphone_640x1136.png" />
+  </platform>
+
+
 
 
 	<splash platform="android" qualifier="land-hdpi" src="res/screen/android/screen-land-xhdpi.png" />

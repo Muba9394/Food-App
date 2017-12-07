@@ -2135,10 +2135,10 @@ function displayBookTableResults(data , target_id , display_type)
     	     htm+='<ons-col class="col-image border col ons-col-inner">';
     	     if(display_type==2)
     	           	   {
-    	          htm+='<div class="logo-wrap2" onclick="loadRestaurantCategory('+val.merchant_id+')" >';
+    	          htm+='<div class="logo-wrap2" onclick="table_booking_optn('+val.merchant_id+','+rest_logo+','+rest_name+')"; >';
     	      }else
     	      {
-    	      	  htm+='<div class="logo-wrap2" onclick="loadRestaurantCategory('+val.merchant_id+');" >';
+    	      	  htm+='<div class="logo-wrap2" onclick="table_booking_optn('+val.merchant_id+');" >';
     	      }
 			htm+='<div class="img_loaded" >';
 				htm+='<img src="'+val.logo+'" />';
@@ -2153,10 +2153,10 @@ function displayBookTableResults(data , target_id , display_type)
     	           htm+='<div>';
 
 			if(display_type==2)	{
-				htm+='<p class="restauran-title concat-text" onclick="loadRestaurantCategory('+val.merchant_id+','+rest_logo+','+rest_name+')" >'+val.restaurant_name+'</p>';
+				htm+='<p class="restauran-title concat-text" onclick="table_booking_optn('+val.merchant_id+','+rest_logo+','+rest_name+')" >'+val.restaurant_name+'</p>';
 			}
 			else {
-				htm+='<p class="restauran-title concat-text" onclick="loadRestaurantCategory('+val.merchant_id+');" >'+val.restaurant_name+'</p>';
+				htm+='<p class="restauran-title concat-text" onclick="table_booking_optn('+val.merchant_id+');" >'+val.restaurant_name+'</p>';
 			}
 
     	    htm+='<p class="concat-textx type">'+val.cuisine+'</p>';
