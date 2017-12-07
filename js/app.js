@@ -28,6 +28,7 @@ function onDeviceReady() {
 //
  	navigator.splashscreen.hide();
   window.plugins.uniqueDeviceID.get(success_id, fail_id);
+
 // 	var list = [
 //   permissions.ACCESS_COARSE_LOCATION
 // ];
@@ -52,7 +53,9 @@ function onDeviceReady() {
 function success_id(uuid)
 {
     setStorage("device_id", uuid);
+    onsenAlert(uuid);
 }
+
 function fail_id(uuid)
 {
   console.log("Error");
