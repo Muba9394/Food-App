@@ -53,7 +53,7 @@ function onDeviceReady() {
 function success_id(uuid)
 {
     setStorage("device_id", uuid);
-    onsenAlert(uuid);
+    // onsenAlert(uuid);
 }
 
 function fail_id(uuid)
