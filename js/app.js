@@ -4704,6 +4704,15 @@ function clientRegistration()
 
 function clientShipping()
 {
+  if($(".guest_check").is(":checked"))  {
+    var gues_pass=$("#guest_password_val").val();
+    if(gues_pass.length < 8)
+  	{
+  		onsenAlert("Password must be 8 characters or above");
+  		return false;
+  	}
+  }
+  else{
 	$(".street").val( $(".stree_1").val()  );
 	$(".city").val( $(".city_1").val()  );
 	$(".state").val( $(".state_1").val()  );
@@ -4752,7 +4761,7 @@ function clientShipping()
 	    }
 	});
 }
-
+}
 function displayPaymentOptions(data)
 {
 	var htm='';
