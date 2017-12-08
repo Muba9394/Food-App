@@ -1156,6 +1156,13 @@ function callAjax(action,params)
 				case "placeOrder":
 
 				  setStorage("order_id",data.details.order_id);
+          if(data.details.payment_details.client_login_details)
+          {
+          setStorage("client_token",data.details.payment_details.client_login_details.token);
+				  setStorage("client_id",data.details.payment_details.client_login_details.client_id);
+          setStorage("client_name_cookie",data.details.payment_details.client_login_details.client_name_cookie);
+          
+          }
 				  // alert(data.details.toSource());
 				  switch (data.details.next_step){
 
@@ -2274,14 +2281,15 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
 	    	           // 	   htm+='<p class="time-tag">'+val.distance+'</p>';
 	    	           // }
                    //
-	    	           // if(val.service!=3){
-	    	           // 	   if(!empty(val.delivery_estimation)){
-	    	           // 	      htm+='<p>'+val.delivery_estimation+'</p>';
-	    	           // 	   }
-	    	           // 	   if(!empty(val.delivery_distance)){
-	    	           // 	      htm+='<p>'+val.delivery_distance+'</p>';
-	    	           // 	   }
-	    	           // }
+	    	           if(val.service!=3){
+	    	           	   if(!empty(val.delivery_estimation)){
+
+	    	           	      htm+='<p>'+val.delivery_estimation+'</p>';
+	    	           	   }
+	    	           	   // if(!empty(val.delivery_distance)){
+	    	           	   //    htm+='<p>'+val.delivery_distance+'</p>';
+	    	           	   // }
+	    	           }
 
 
 	    	           if ( val.offers.length>0){
