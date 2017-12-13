@@ -956,6 +956,7 @@ function callAjax(action,params)
 									  $(".city").val( data.msg.address_book.city );
 									  $(".state").val( data.msg.address_book.state );
 									  $(".zipcode").val( data.msg.address_book.zipcode );
+                    $(".zipcode_1").val( data.msg.address_book.zipcode );
 									  $(".location_name").val( data.msg.address_book.location_name );
 
                      $("#edit_div").hide();
@@ -964,6 +965,7 @@ function callAjax(action,params)
                      $(".stree_1").val(data.msg.address_book.street);
                      $(".city_1").val(data.msg.address_book.city);
                      $(".state_1").val(data.msg.address_book.state);
+                     $(".zipcode").val(data.msg.address_book.zipcode);
 									  var complete_address = data.msg.address_book.street;
 									  complete_address+=" "+ data.msg.address_book.city;
 									  complete_address+=" "+ data.msg.address_book.state;
@@ -1123,7 +1125,16 @@ function callAjax(action,params)
 			   	   setStorage("citypay_fee", data.details.citypay_credentials.card_fee );
 
 			   	   setStorage("paypal_card_fee", data.details.paypal_credentials.card_fee );
+             if(data.details.parish_delivery_fee)
+             {
+               $("#has_delivery_fee").show();
+               $("#fee_delvry").html(data.details.parish_delivery_fee);
+               $("#frm-paymentoption #page-paymentoption").html('<input type="hidden" value="'+data.details.parish_delivery_fee+'" name="extra_delivery_fee">');
 
+               setStorage("delivery_fee_applicable",data.details.parish_delivery_fee);
+               $("#place_order_div").hide();
+               $("#place_order_div_if_delivery").show();
+             }
 			   	   if (data.details.voucher_enabled=="yes"){
 			   	   	   $(".voucher-wrap").show();
 			   	   	   $(".voucher_code").attr("placeholder", getTrans("Enter your voucher",'enter_voucher_here') );
@@ -1161,7 +1172,7 @@ function callAjax(action,params)
           setStorage("client_token",data.details.payment_details.client_login_details.token);
 				  setStorage("client_id",data.details.payment_details.client_login_details.client_id);
           setStorage("client_name_cookie",data.details.payment_details.client_login_details.client_name_cookie);
-          
+
           }
 				  // alert(data.details.toSource());
 				  switch (data.details.next_step){
@@ -1432,6 +1443,7 @@ function callAjax(action,params)
                         $(".stree_1").val(data.details.default_address.street);
                         $(".city_1").val(data.details.default_address.city);
                         $(".state_1").val(data.details.default_address.state);
+                        $(".zipcode_1").val(data.details.default_address.zipcode);
                       }
                                  if(!empty(data.details.contact_phone)){
 					      	  	     $(".contact_phone").val( data.details.contact_phone ) ;
@@ -1441,8 +1453,8 @@ function callAjax(action,params)
 					      	     }
 
 						      	 if ( !empty( getStorage("map_address_result_formatted_address") )){
-					      	  	     $(".delivery-address-text").html( getStorage("map_address_result_formatted_address") );
-					      	  	     $(".street").val( getStorage("map_address_result_address") );
+					      	 $(".delivery-address-text").html( getStorage("map_address_result_formatted_address") );
+					      	 $(".street").val( getStorage("map_address_result_address") );
 									 $(".city").val( getStorage("map_address_result_city") );
 									 $(".state").val( getStorage("map_address_result_state") );
 									 $(".zipcode").val( getStorage("map_address_result_zip") );
@@ -1453,15 +1465,15 @@ function callAjax(action,params)
 					      	  	 } else {
 					      	  	    if (data.details.has_addressbook==2){
 
-					      	  	       $(".delivery-address-text").html( data.details.default_address.address );
-					      	  	       $(".street").val (  data.details.default_address.street  );
+					      	   $(".delivery-address-text").html( data.details.default_address.address );
+					      	   $(".street").val (  data.details.default_address.street  );
 									   $(".city").val( data.details.default_address.city  );
 									   $(".state").val( data.details.default_address.state );
 									   $(".zipcode").val(  data.details.default_address.zipcode );
+                     $(".zipcode_1").val(  data.details.default_address.zipcode );
 									   $(".formatted_address").val( data.details.default_address.address );
-
-					      	  	    }
-					      	  	 }
+					      	      }
+					      	  }
 					      }
 					     };
 					     sNavigator.pushPage("shipping.html", options);
@@ -1503,6 +1515,7 @@ function callAjax(action,params)
 				  break;
 
 				case "getBookingHistory":
+          onsenAlert(data.msg);
 				  displayBookingHistory(data.details);
 				  break;
 
@@ -1966,7 +1979,9 @@ function callAjax(action,params)
 				  $(".result-msg").text(data.msg);
 				  createElement('restaurant-results','');
 				  break;
-
+        case "getBookingHistory":
+        onsenAlert(data.msg);
+        break;
 				case "getItemByCategory":
 				  onsenAlert(data.msg);
 				  displayMerchantInfo(data.details);
@@ -2146,7 +2161,8 @@ function displayBookTableResults(data , target_id , display_type)
     	 var rest_logo = '';
     	 rest_logo = "'"+val.logo+"'";
 		 	 var rest_name = "";
-    	 rest_name = "'"+val.restaurant_name+"'";
+       rest_name = "'"+val.restaurant_name.replace(/'/g, '')+"'";
+    	 //rest_name = "'"+val.restaurant_name+"'";
 
     	 htm+='<ons-list-item modifier="tappable" class="list-item-container product list list__item ons-list-item-inner list__item--tappable" >';
     	 htm+='<ons-row class="row product-list ons-row-inner">';
@@ -2284,7 +2300,7 @@ function displayRestaurantResults(data , target_id , display_type,counttotal,loa
 	    	           if(val.service!=3){
 	    	           	   if(!empty(val.delivery_estimation)){
 
-	    	           	      htm+='<p>'+val.delivery_estimation+'</p>';
+	    	           	      htm+='<p>'+val.delivery_estimation+'Mins</p>';
 	    	           	   }
 	    	           	   // if(!empty(val.delivery_distance)){
 	    	           	   //    htm+='<p>'+val.delivery_distance+'</p>';
@@ -3953,7 +3969,10 @@ function showCartNosOrder()
 	    $('.delivery_time').val(sHours + ":" + sMinutes);
 }
 
-
+function decline_back()
+{
+sNavigator.popPage({cancelIfRunning: true}); //back button
+}
 	function check_date_time()
 	{
 
@@ -4247,6 +4266,9 @@ function displayCart(data)
 		   $(".total-amount").html(data.cart.grand_total.amount_pretty);
 		}
 
+
+
+
 		var xx=1;
 
 		$.each( data.cart.cart, function( key, val ) {
@@ -4353,7 +4375,10 @@ function displayCart(data)
 			 htm+='<ons-list-item class="grey-border-top line-separator"></ons-list-item>';
 			 xx++;
 		});
-
+    $.each( data.free_item_list, function( key, val ) {
+      htm+='<ons-list-item class="price-normal list__item ons-list-item-inner"><ons-row class="row ons-row-inner"><ons-col class="concat-text col ons-col-inner" width="70%" style="-moz-box-flex: 0; flex: 0 0 70%; max-width: 70%;"><p class="description item-name concat-text">'+val.item_name+'</p></ons-col><ons-col class="text-right col ons-col-inner"><price>Free</price></ons-col></ons-row></ons-list-item>';
+        htm+='<ons-list-item class="grey-border-top line-separator"></ons-list-item>';
+    });
 		htm+='<ons-list-item class="line-separator"></ons-list-item>';
 
 		if (!empty(data.cart.discount)){
@@ -4617,8 +4642,12 @@ function checkOut()
 		onsenAlert(validation_msg);
 		return;
 	}
+
 	//var tr_type=getStorage("transaction_type");
 	var tr_type = $(".transaction_type:checked").val();
+  setStorage("transaction_type" , tr_type);
+  $("#page-shipping #search-text").html("");
+  $("#page-shipping #delivery_instruction").hide();
 	dump("tr_type=>"+tr_type);
 
 	if ( tr_type =="pickup"){
@@ -4662,6 +4691,7 @@ function clientRegistration()
   }
   else{
 	var pswd = $("#pswd").val();
+  var cfpswd = $("#cpswd").val();
 	var fname = $("#fname").val();
 	var lname = $("#lname").val();
 	var email=$("#email").val();
@@ -4670,10 +4700,19 @@ function clientRegistration()
 		var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
 		return pattern.test(email);
 	};
-	if($('#frm-signup input[type="text"]').val() =='')
+	if($('#frm-checkoutsignup input[type="text"]').val() =='')
 	{
 		onsenAlert("All fields are mandatory");
     }
+    else if(fname == ''){
+  			onsenAlert("First Name is mandatory");
+  	}
+    else if(fname.length < 4 ){
+        onsenAlert("First Name should be minimum 4 characters");
+    }
+    else if(lname == ''){
+  			onsenAlert("Last Name is mandatory");
+  	}
 	else if(email == ''){
 			onsenAlert("Email ID is mandatory");
 	}
@@ -4684,10 +4723,22 @@ function clientRegistration()
 	{
 		onsenAlert("Password field should not be empty.");
 	}
+  else if(cpswd == "")
+	{
+		onsenAlert("Password field should not be empty.");
+	}
 	else if(pswd.length < 8)
 	{
 		onsenAlert("Password must be 8 characters or above");
 	}
+  else if(cpswd.length < 8)
+	{
+		onsenAlert("Password must be 8 characters or above");
+	}
+  else if(pswd !== cpswd)
+  {
+    onsenAlert("Password and confirm password doesnot matches.");
+  }
 	else if(email=="")
 	{
 		onsenAlert("Email field should not be empty.");
@@ -4726,7 +4777,12 @@ function clientShipping()
 {
   if($(".guest_check").is(":checked"))  {
     var guest_pass=$("#guest_password_val").val();
-    if(guest_pass.length < 8)
+    if(guest_pass == "")
+    {
+      onsenAlert("Password should not be empty");
+      return false;
+    }
+    else if(guest_pass.length < 8)
     {
       onsenAlert("Password must be 8 characters or above");
   		return false;
@@ -5216,9 +5272,24 @@ function showMerchantInfo(data)
 
 	if (data.promo.enabled == "2"){
 		var p='';
+    var amount;
 		p+='<ons-list-header class="center trn" data-trn-key="voucher_code">Vouchers</ons-list-header>';
 		 $.each( $(data.promo.voucher) , function( key, val ) {
-		   p+=tplPaymentListStatic("Voucher Code",val.voucher_name);
+       console.log(key);
+       amount=val.amount;
+       if (val.voucher_type == "fixed amount")
+       {
+         amount = getStorage("currency_set") + amount+ " Discount";
+       }
+       else
+       {
+         amount =  getStorage("currency_set") + ((amount/100)*100 )+" % Discount";
+       }
+       console.log(amount);
+
+		   //p+=tplPaymentListStatic("Voucher Code",val.voucher_name,amount);
+       p+="<div class='concat-text col ons-col-inner'><p class='p list__item '><b>"+val.voucher_name+"</b></br><span>"+amount+"</span></p></div>";
+
 		});
 		createElement('merchant-voucher-list', p );
 	}
@@ -5228,7 +5299,7 @@ function showMerchantInfo(data)
 		var p='';
 		p+='<ons-list-header class="center  trn" data-trn-key="voucher_code">Deals</ons-list-header>';
 		 $.each( $(data.deals_list) , function( key, val ) {
-		   p+="<div class='concat-text col ons-col-inner'><p class='p list__item '><b>"+val.title+"</b></br><span>"+val.description+"</span></p></div>";
+		   p+="<div class='concat-text col ons-col-inner'><p class='p list__item '><b>"+val.title+"</b> - <span>"+val.description+"</span></p></div>";
 		});
 		createElement('merchant-deals-list', p );
 	}
@@ -5592,8 +5663,10 @@ function guestcheckout()
     onsenAlert("You are already logged in");
   }
   else{
+    console.log(getStorage('transaction_type'));
   if(getStorage('transaction_type') == "pickup"){
-    $("#page-shipping #search-text").html("Pickup Information");
+    $("#page-shipping #search-text").html("");
+    $("#delivery_instruction").hide();
   }
   $("#save_member").css("display","block");
 	$("#addressbook").hide();
@@ -5727,6 +5800,7 @@ function signup()
 {
 
 	var pswd = $("#pswd").val();
+  var cpswd = $("#cnfpswd").val();
 	var fname = $("#fname").val();
 	var lname = $("#lname").val();
 	var email=$("#email").val();
@@ -5739,16 +5813,43 @@ function signup()
 	{
 		onsenAlert("All fields are required");
     }
+  else if(fname == "")
+  {
+    	onsenAlert("First Name is required");
+  }
+  else if(fname.length < 4 ){
+      onsenAlert("First Name should be minimum 4 characters");
+  }
+  else if(lname == "")
+  {
+    	onsenAlert("Last Name is required");
+  }
 	else if(email == ''){
 			onsenAlert("Email ID is required");
 	}
 	else if( !isValidEmailAddress( email ) ) {
 		onsenAlert("Invalid Email format");
 	}
-	else if(pswd.length < 8)
+	else if(pswd == "")
+	{
+		onsenAlert("Password should not be empty");
+	}
+  else if(cpswd == "")
+	{
+		onsenAlert("Confirm Password should not be empty");
+	}
+  else if(pswd.length < 8)
 	{
 		onsenAlert("Password length should be 8 or above");
 	}
+  else if(cpswd.length < 8)
+  {
+    onsenAlert("Confirm Password length should be 8 or above");
+  }
+  else if(pswd !== cpswd)
+  {
+    onsenAlert("Password and confirm password doesnot matches.");
+  }
 	else if(email=="")
 	{
 		onsenAlert("Email is empty. Try again");

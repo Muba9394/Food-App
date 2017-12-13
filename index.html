@@ -678,7 +678,12 @@
 
    <div class="wrapper">
        <ons-row class="row">
-           <ons-col class="text-big concat-text trn" width="60%" data-trn-key="signup" >Signup</ons-col>
+        <ons-col class="text-left" >
+          <button class="button button--quiet green trn" onclick="guestcheckout();" data-trn-key="sign_in">
+          Continue as Guest
+          </button>
+          </ons-col>
+           <ons-col class="text-center text-big concat-text trn" width="60%" data-trn-key="signup" >Signup</ons-col>
            <ons-col class="text-right" >
               <button class="button button--quiet green trn" onclick="showLogin(1);" data-trn-key="sign_in">
               Sign in
@@ -686,11 +691,7 @@
            </ons-col>
        </ons-row>
        <ons-row class="row">
-       <ons-col class="text-center" >
-          <button class="button button--quiet green trn" onclick="guestcheckout();" data-trn-key="sign_in">
-          Continue as Guest
-          </button>
-       </ons-col>
+
        </ons-row>
    </div>
 
@@ -951,7 +952,7 @@
       </div>
    </div>
   -->
-   <div class="wrapper">
+   <div class="wrapper" id="delivery_instruction">
       <div class="field-wrapper">
       <input type="text" name="delivery_instruction"  class="delivery_instruction text-input text-input--underbar"
       placeholder="Delivery instructions" value="" >
@@ -1023,7 +1024,11 @@
         </ons-col>
       </ons-row>
    </div>
-
+   <div class="wrapper" id="has_delivery_fee" style="display:none">
+       <ons-row class="row">
+           <ons-col class="text-big trn" data-trn-key="fee" >For your selected parish the delivery fee will be £ <span id="fee_delvry"></span></ons-col>
+       </ons-row>
+   </div>
    <div class="wrapper">
        <ons-row class="row">
            <ons-col class="text-big trn" data-trn-key="how_you_like_pay" >How would you like to pay?</ons-col>
@@ -1120,11 +1125,24 @@
 
      </ons-list>
    </div>
-
+<div id="place_order_div">
    <button class="button green-btn button--large trn" onclick="placeOrder();" data-trn-key="place_order">
 	Place Order
 	<div class="search-btn"><ons-icon icon="fa-chevron-right"></ons-icon></div>
    </button>
+</div>
+<div id="place_order_div_if_delivery" style="display:none">
+<div style="display:flex">
+   <button class="button green-btn button--large trn" style="background:green"  onclick="placeOrder();" data-trn-key="place_order">
+	Accept
+	<div class="search-btn"><ons-icon icon="fa-chevron-right"></ons-icon></div>
+   </button>
+   <button class="button green-btn button--large trn" onclick="decline_back();" data-trn-key="place_order">
+	Decline
+	<div class="search-btn"></div>
+   </button>
+</div>
+</div>
    </form>
 
 </ons-page>
@@ -1872,7 +1890,7 @@
       </div>
 
       <div class="field-wrapper">
-      <input type="password" name="cpassword"  class="cpassword text-input text-input--underbar has_validation"
+      <input type="password" name="cpassword"  class="cpassword text-input text-input--underbar has_validation" id="cnfpswd"
       placeholder="Confirm Password" value="" data-validation="required" data-validation-error-msg="This field is required" >
       </div>
 
