@@ -3151,7 +3151,7 @@ function loadItemDetails(item_id,mtid,cat_id)
 {
   if(getStorage("merc_stats") == "Closed")
   {
-    onsenAlert( getTrans("Sorry, Merchant is closed",'restaurant_close') );
+    onsenAlert( getTrans("Sorry, Restaurant is closed at the moment",'restaurant_close') );
     return;
   }
   //   if ( $("#close_store").val()==2 || $("#merchant_open").val()==1 ){
@@ -4729,15 +4729,15 @@ function clientRegistration()
 	}
 	else if(pswd.length < 8)
 	{
-		onsenAlert("Password must be 8 characters or above");
+		onsenAlert("Password must be 8 characters or more");
 	}
   else if(cpswd.length < 8)
 	{
-		onsenAlert("Password must be 8 characters or above");
+		onsenAlert("Password must be 8 characters or more");
 	}
-  else if(pswd !== cpswd)
+  else if(pswd !== cfpswd)
   {
-    onsenAlert("Password and confirm password doesnot matches.");
+    onsenAlert("Password and confirm password does not match.");
   }
 	else if(email=="")
 	{
