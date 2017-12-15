@@ -4788,7 +4788,7 @@ function clientRegistration()
   if(isLogin())
   {
     onsenAlert("You are already logged in");
-    return false;
+    sNavigator.popPage({cancelIfRunning: true}); //back button
   }
   else{
 	var pswd = $("#pswd").val();
@@ -5762,6 +5762,7 @@ function guestcheckout()
   if(isLogin())
   {
     onsenAlert("You are already logged in");
+    sNavigator.popPage({cancelIfRunning: true}); //back button
   }
   else{
     console.log(getStorage('transaction_type'));
@@ -5825,6 +5826,7 @@ function showLogin(next_steps)
   if(isLogin())
   {
     onsenAlert("You are already logged in");
+    sNavigator.popPage({cancelIfRunning: true}); //back button
   }
   else{
    var options = {
