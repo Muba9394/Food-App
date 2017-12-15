@@ -1008,7 +1008,85 @@ function callAjax(action,params)
 					    };
 					    sNavigator.pushPage("enterContact.html", options);
 
-				    } else {
+				    }
+            else if(data.details == "checkoutSignup")
+            {
+              if(isLogin())
+              {
+                var options = {
+                  animation: 'slide',
+                  onTransitionEnd: function() {
+                      displayMerchantLogo2( getStorage("merchant_logo") ,
+                         getStorage("order_total") ,
+                         'page-shipping');
+
+                      /*if (data.msg.length>0){
+                          $(".select-addressbook").css({"display":"block"});
+                      } else $(".select-addressbook").hide();*/
+
+                      if(!empty(data.msg.profile)){
+                          $(".contact_phone").val( data.msg.profile.contact_phone ) ;
+                          $(".location_name").val( data.msg.profile.location_name ) ;
+                      }
+
+                      if ( !empty( getStorage("map_address_result_formatted_address") )){
+                            $(".delivery-address-text").html( getStorage("map_address_result_formatted_address") );
+                      $(".street").val( getStorage("map_address_result_address") );
+                      $(".city").val( getStorage("map_address_result_city") );
+                      $(".state").val( getStorage("map_address_result_state") );
+                      $(".zipcode").val( getStorage("map_address_result_zip") );
+                      $(".formatted_address").val( getStorage("map_address_result_formatted_address") );
+
+                      $(".google_lat").val( getStorage("google_lat") );
+                      $(".google_lng").val( getStorage("google_lng") );
+                      } else {
+                          if(!empty(data.msg.address_book)){
+                              $(".street").val( data.msg.address_book.street );
+                      $(".city").val( data.msg.address_book.city );
+                      $(".state").val( data.msg.address_book.state );
+                      $(".zipcode").val( data.msg.address_book.zipcode );
+                      $(".zipcode_1").val( data.msg.address_book.zipcode );
+                      $(".location_name").val( data.msg.address_book.location_name );
+
+                       $("#edit_div").hide();
+                       $("#default_address_div").show();
+                       $("#address_def").val(data.msg.address_book.address);
+                       $(".stree_1").val(data.msg.address_book.street);
+                       $(".city_1").val(data.msg.address_book.city);
+                       $(".state_1").val(data.msg.address_book.state);
+                       $(".zipcode").val(data.msg.address_book.zipcode);
+                      var complete_address = data.msg.address_book.street;
+                      complete_address+=" "+ data.msg.address_book.city;
+                      complete_address+=" "+ data.msg.address_book.state;
+                      complete_address+=" "+ data.msg.address_book.zipcode;
+
+                      $(".delivery-address-text").html( complete_address );
+                      $(".formatted_address").val( complete_address );
+                          }
+                      }
+
+                  } /*end transition*/
+                };
+                sNavigator.pushPage("shipping.html", options);
+              }
+              else{
+                var options = {
+                    animation: 'slide',
+                    onTransitionEnd: function() {
+                        dump( getStorage("merchant_logo") );
+                        dump( getStorage("order_total") );
+                        displayMerchantLogo2( getStorage("merchant_logo") ,
+                           getStorage("order_total") ,
+                           'page-checkoutsignup');
+
+                        callAjax("getCustomFields",'');
+                        initIntelInputs();
+                    }
+                  };
+                  sNavigator.pushPage("checkoutSignup.html", options);
+              }
+            }
+             else {
 						var options = {
 					      animation: 'slide',
 					      onTransitionEnd: function() {
@@ -1565,7 +1643,7 @@ function callAjax(action,params)
 			    case "reOrder":
 			       setStorage("merchant_id",data.details.merchant_id)
 			       cart=data.details.cart;
-			       showCart();
+			       showCart(data.details.order_id);
 			       break;
 
 			    /*case "registerUsingFb":
@@ -3898,14 +3976,37 @@ function addToCart()
 	}
 }
 
-function showCart()
+function showCart(order_id)
 {
+
 	dump('showCart');
 	var cartnum=$(".cart-num").html();
 	if(cartnum=="" || cartnum=="0"){
 		sNavigator.pushPage("cartempty.html", options);
 		//onsenAlert("Sorry no item found in cart.");
 	}
+  else if(order_id)
+  {
+    var options = {
+        animation: 'none',
+        onTransitionEnd: function() {
+
+        	  var cart_params=JSON.stringify(cart);
+        	  if (saveCartToDb()){
+        	  	  var cart_params='';
+        	  }
+
+        	  if ( empty(getStorage("tips_percentage")) ){
+        	  	   setStorage("tips_percentage",0);
+        	  }
+
+        	  callAjax("loadCart","merchant_id="+ getStorage('merchant_id')+"&search_address=" +
+        	  encodeURIComponent(getStorage("search_address")) + "&order_id="+order_id+"&reorder=true&cart="+cart_params +"&transaction_type=" +
+        	  getStorage("transaction_type") + "&device_id="+ getStorage("device_id") +"&tips_percentage=" + getStorage("tips_percentage") );
+        }
+     };
+     sNavigator.pushPage("cart.html", options);
+  }
 	else{
 	var options = {
       animation: 'none',
