@@ -4,7 +4,7 @@
     xmlns:gap = "http://phonegap.com/ns/1.0"
     xmlns:android = "http://schemas.android.com/apk/res/android"
     id        = "je.cuisine.je"
-	  versionCode = "115"
+	  versionCode = "116"
     version   = "2.0">
     <name>Cuisine.je</name>
     <description>

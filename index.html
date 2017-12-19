@@ -2102,27 +2102,47 @@
    <form id="frm-addressbook" class="frm-addressbook" method="post">
    <input type="hidden" id="id" name="id" class="id" value="">
    <input type="hidden" id="action" name="action" class="action" value="edit">
+   <div class="wrapper" id="postcode_lookup1">
+   <ons-row class="row ons-row-inner">
+   <div class="field-wrapper">
+      <input type="text" name="zipcode" id="lookupInput" class="zipcode text-input text-input--underbar" placeholder="Post Code" autocomplete="off" value="" onkeyup="this.value=this.value.replace(/[^a-z A-Z0-9]/g, '')" >
+      </div>
+         <ons-col class="text-right col ons-col-inner" >
+            <button  class="postcode-src button button--quiet green trn" data-trn-key="postcode_src"  id="lookupButton">Lookup</button>
+         </ons-col>
+     </ons-row>
+
+
+   </div>
    <div class="wrapper">
       <div class="field-wrapper">
-      <input type="text" name="street"  class="street text-input text-input--underbar has_validation"
+   <select class="form-control select-class has_validation selnew" name="location_name_drop" id="lookupDropdown" data-validation="required" data-validation-error-msg="This field is required">
+   <option value="" selected disabled><option>
+    </select>
+
+      </div>
+   </div>
+   <div class="wrapper">
+      <div class="field-wrapper">
+      <input type="text" name="street"  class="stree_1 street text-input text-input--underbar has_validation"
       placeholder="Street" value="" data-validation="required" data-validation-error-msg="This field is required" onkeyup="this.value=this.value.replace(/[^a-z A-Z0-9@!#$%^&*()]/g, '')">
       </div>
 
       <div class="field-wrapper">
-      <input type="text" name="city"  class="city text-input text-input--underbar has_validation"
+      <input type="text" name="city"  class="city_1 city text-input text-input--underbar has_validation"
       placeholder="City" value="" data-validation="required" data-validation-error-msg="This field is required" onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')">
       </div>
 
       <div class="field-wrapper">
-      <input type="text" name="state"  class="state text-input text-input--underbar has_validation"
+      <input type="text" name="state"  class="state_1 state text-input text-input--underbar has_validation"
       placeholder="State" value="" data-validation="required" data-validation-error-msg="This field is required" onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')">
       </div>
 
-      <div class="field-wrapper">
+  <!--    <div class="field-wrapper">
       <input type="text" name="zipcode"  class="zipcode text-input text-input--underbar has_validation"
       placeholder="Zipcode" value="" data-validation="required" data-validation-error-msg="This field is required" onkeyup="this.value=this.value.replace(/[^a-z A-Z0-9]/g, '')">
       </div>
-
+-->
       <!--<div class="field-wrapper">
       <input type="text" name="location_name"  class="location_name text-input text-input--underbar"
       placeholder="Location name" value="" onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')">
