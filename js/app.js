@@ -5545,7 +5545,7 @@ function showMerchantInfo(data)
 		var p='';
 		p+='<ons-list-header class="center  trn" data-trn-key="voucher_code">Deals</ons-list-header>';
 		 $.each( $(data.deals_list) , function( key, val ) {
-		   p+="<div class='concat-text col ons-col-inner'><p class='p list__item '><b>"+val.title+"</b> - <span>"+val.description+"</span></p></div>";
+		   p+="<div class='concat-text col ons-col-inner' style='white-space: normal;'><p class='p list__item '><b>"+val.title+"</b> - <span>"+val.description+"</span></p></div>";
 		});
 		createElement('merchant-deals-list', p );
 	}
