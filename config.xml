@@ -23,7 +23,9 @@
 	</platform>
 	<platform name="android" >
   		<preference name="orientation" value="portrait" />
+          <resource-file src="google-services.json" target="google-services.json" />
 	</platform>
+
 	<preference name="android-build-tool" value="gradle" />
 	<preference name="permissions" value="none"/>
 	<preference name="fullscreen" value="true" />

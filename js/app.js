@@ -4,6 +4,9 @@ var dialog_title_default= krms_config.DialogDefaultTitle;
 var search_address;
 var ajax_request;
 var cart=[];
+var discount_applied=[];
+var deal_cart = new Object();
+
 var networkState;
 
 var easy_category_list='';
@@ -16,7 +19,7 @@ var drag_marker_bounce=1;
 var start="0";
 var limit="5";
 var menustart="0";
-var menulimit="5";
+var menulimit="10";
 document.addEventListener("deviceready", onDeviceReady,  false);
 
 
@@ -52,7 +55,7 @@ function onDeviceReady() {
 // }
 function success_id(uuid)
 {
-    setStorage("device_id", uuid);
+  //  setStorage("device_id", uuid);
     // onsenAlert(uuid);
 }
 
@@ -122,11 +125,11 @@ function checkConnection() {
     var networkState = navigator.connection.type;
    	console.log(networkState);
 	if(networkState == Connection.WIFI)
-		menulimit = 20;
+		menulimit = 10;
 	else if(networkState == Connection.CELL_4G)
-		menulimit = 7;
+		menulimit = 5;
 	else
-		menulimit = 4;
+		menulimit = 3;
 
 }
 
@@ -302,6 +305,7 @@ function searchMerchant()
   removeStorage('cart_tax');
   removeStorage('map_address_result_formatted_address');
   removeStorage("customer_contact_number");
+  discnt_params="";
 
   //if(s!="")
   {
@@ -440,10 +444,20 @@ document.addEventListener("pageinit", function(e) {
 		break;
 
 		case "page-home":
-		if(isLogin())
+    if(!isLogin())
+    {
+      console.log("IF");
+      $("#welcome_msg").html("");
+    }
+		else if(isLogin())
 		{
+      console.log("IF else");
 			$("#welcome_msg").html( "Welcome back, "+ getStorage("client_name_cookie") );
 		}
+    else{
+      console.log("ELSE");
+        $("#welcome_msg").html("");
+    }
 			geoComplete();
 
 			search_address=getStorage("search_address");
@@ -1186,7 +1200,16 @@ function callAjax(action,params)
 				case "getPaymentOptions":
 				/*	alert("Its triggering");
 					alert(data.details.toSource()); */
-
+             if(getStorage("has_disc_price"))
+             {
+               var fees_deli=getStorage("has_disc_price");
+               $('<input>').attr({
+                   type: 'hidden',
+                   id: 'has_discount_applied',
+                   name: 'has_discount_applied',
+                   value: fees_deli
+               }).appendTo('#frm-paymentoption');
+             }
 				     $(".frm-paymentoption").show();
 			   	   $(".paypal_flag").val( data.details.paypal_flag );
 			   	   $(".paypal_mode").val( data.details.paypal_credentials.mode );
@@ -1229,8 +1252,14 @@ function callAjax(action,params)
              }
             }
 			   	   if (data.details.voucher_enabled=="yes"){
+               if(!isLogin())
+               {
+                 $(".voucher-wrap").hide();
+               }
+               else{
 			   	   	   $(".voucher-wrap").show();
 			   	   	   $(".voucher_code").attr("placeholder", getTrans("Enter your voucher",'enter_voucher_here') );
+               }
 			   	   } else {
 			   	   	   $(".voucher-wrap").hide();
 			   	   }
@@ -1375,6 +1404,9 @@ function callAjax(action,params)
 					    };
 					    sNavigator.pushPage("receipt.html", options);
 
+              removeStorage("has_disc_price");
+              discnt_params="";
+              $( "#frm-paymentoption #has_discount_applied" ).remove();
 				  	   break;
 				  }
 				  break;
@@ -1399,6 +1431,9 @@ function callAjax(action,params)
 					      }
 					    };
 					    sNavigator.pushPage("receipt.html", options);
+
+              removeStorage("has_disc_price");
+              $( "#frm-paymentoption #has_discount_applied" ).remove();
 				   break;
 
 				case "getMerchantInfo":
@@ -1865,7 +1900,7 @@ function callAjax(action,params)
 
 			       var marker_title='';
 			       marker_title+=data.details.result.formatted_address;
-
+             setStorage("map_address_result_address_full",data.details.result.formatted_address);
 			       setStorage("map_address_result_address",data.details.result.address);
 			       setStorage("map_address_result_city",data.details.result.city);
 			       setStorage("map_address_result_state",data.details.result.state);
@@ -2082,9 +2117,9 @@ function callAjax(action,params)
 				  break;
 
 				case "loadCart":
+          onsenAlert(data.msg);
+          sNavigator.popPage({cancelIfRunning: true}); //back button
 				  displayMerchantLogo(data.details,'page-cart');
-				  //onsenAlert(data.msg);
-				  toastMsg(data.msg);
 
 				  $("#page-cart .wrapper").hide();
 				  $("#page-cart .frm-cart").hide();
@@ -2107,10 +2142,7 @@ function callAjax(action,params)
             sNavigator.popPage({cancelIfRunning: true});
 				      }
 				  break;
-          case "loadCart":
-            onsenAlert(data.msg);
-            sNavigator.popPage({cancelIfRunning: true}); //back button
-          break;
+
 				case "browseRestaurant":
 			      createElement('browse-results','');
 			      $(".result-msg").text(data.msg);
@@ -2138,6 +2170,9 @@ function callAjax(action,params)
 
 			    case "getOrderHistory":
 			       if (data.code==3){
+                onsenAlert(data.msg);
+                removeStorage("client_name");
+                removeStorage("client_token");
 			           menu.setMainPage('prelogin.html', {closeMenu: true});
 			       } else {
 			       	   toastMsg(data.msg);
@@ -2258,6 +2293,7 @@ function displayBookTableResults(data , target_id , display_type)
     	 rest_logo = "'"+val.logo+"'";
 		 	 var rest_name = "";
        rest_name = "'"+val.restaurant_name.replace(/'/g, '')+"'";
+       console.log(rest_name);
     	 //rest_name = "'"+val.restaurant_name+"'";
 
     	 htm+='<ons-list-item modifier="tappable" class="list-item-container product list list__item ons-list-item-inner list__item--tappable" >';
@@ -3022,10 +3058,20 @@ function menuCategoryResult(data)
 			};
 			var itms=item_cnt.associate(all_cat);// load more working fine dont alter anything. This is ddone by Khan
 			$.each(itms, function(key, val) {
+        console.log(val);
+        if(menulimit == 10)
+        {
 						if(val > 10)
 						{
 							$("#scroll_div_" + key ).append('<button id="if'+key+'" class="button green-btn button--large trn" onclick="loadmore('+key+','+menulimit+');" data-trn-key="book_now">Load More</button>');
 						}
+       }
+       else{
+         if(val > 2)
+          {
+            $("#scroll_div_" + key ).append('<button id="if'+key+'" class="button green-btn button--large trn" onclick="loadmore('+key+','+menulimit+');" data-trn-key="book_now">Load More</button>');
+          }
+       }
 			});
 	}
 	imageLoaded('.img_loaded');
@@ -3103,12 +3149,13 @@ function displayMerchantLogo(data,page_id)
 		$("#"+ page_id +" .total-amount").html(data.cart_total);
 	}
 }
+
 function displayMerchantLogo2(logo,total,page_id)
 {
-
 	if(!empty(logo)){
 	    $("#"+ page_id +" .logo-wrap").html('<img src="'+logo+'" />')
 	}
+
 	if (!empty(total)){
 		$("#"+ page_id +" .total-amount").html(total);
 	}
@@ -3754,7 +3801,9 @@ jQuery(document).ready(function() {
 		}
 	});
 
-}); /*end ready*/
+});
+
+/*end ready*/
 
 function setCartValue()
 {
@@ -4069,16 +4118,17 @@ function showCartNosOrder()
 		//$(".cart-num").show();
 		$(".cart-num").css({ "display":"inline-block","position":"absolute","margin-left":"-10px" });
 		$(".cart-num").text(cart.length);
+    $("#flash_msg").show();
 		setTimeout(function(){$(".cart-num, .carticon").addClass('animate');	},100);
 	} else {
 		$(".cart-num").hide();
+    $("#flash_msg").hide();
 	}
 	//onsenAlert("Food Item Added to Cart");
-	$("#flash_msg").show();
+
 	setTimeout(function(){$(".cart-num, .carticon").removeClass('animate');	},500);
 	setTimeout(function(){$(".cart-num, .carticon").removeClass('animate');	},1000);
 	setTimeout(function(){$("#flash_msg").hide();$(".cart-num, .carticon").addClass('animate');	},2000);
-
 }
 
 
@@ -4513,10 +4563,22 @@ function displayCart(data)
 
 var cnts_deal=data.cart.deals_content;
 if(cnts_deal.length > 0){
+//deal_cart=[];
+//deal_cart=new object();
   console.log("inside");
     var xxy=1;
 
     $.each( data.cart.deals_content, function( key, val ) {
+      deal_cart[val.item_id]={
+         'item_id': val.item_id,
+         'item_name': val.item_name,
+         'size_words': "",
+         "qty":val.qty,
+         'normal_price': val.price ,
+         "discounted_price":val.discounted_price,
+         "free_type":"BOGO",
+      };
+      var deal_params=JSON.stringify(deal_cart);
        if (val.discount>0){
 
          htm+=tplCartRowNoBorderDeal(
@@ -4624,7 +4686,19 @@ if(cnts_deal.length > 0){
 }
 if(!empty(data.free_item_list))
 {
+
     $.each( data.free_item_list, function( key, val ) {
+      deal_cart[val.item_id]={
+         'item_id': val.item_id,
+         'item_name': val.item_name,
+         'size_words': "",
+         "qty":val.qty,
+         'normal_price': val.price ,
+         "discounted_price":val.discounted_price,
+         "free_type":val.free_type,
+      };
+      var deal_params=JSON.stringify(deal_cart);
+      console.log(deal_params);
       htm+='<ons-list-item class="price-normal list__item ons-list-item-inner"><ons-row class="row ons-row-inner"><ons-col class="concat-text col ons-col-inner" width="70%" style="-moz-box-flex: 0; flex: 0 0 70%; max-width: 70%;"><p class="description item-name concat-text">'+val.item_name+'</p></ons-col><ons-col class="text-right col ons-col-inner"><price>Free</price></ons-col></ons-row></ons-list-item>';
         htm+='<ons-list-item class="grey-border-top line-separator"></ons-list-item>';
     });
@@ -4635,8 +4709,22 @@ if(!empty(data.free_item_list))
 			htm+=tplCartRow( getTrans('Sub Total','sub_total') , data.cart.sub_total.amount_pretty ,'price-normal');
 		}
     if (!empty(data.cart.discount)){
+
+      var dicnt=data.cart.discount.display.replace(/[^0-9 .]/g, '');
+      console.log(dicnt);
+      discount_applied[discount_applied.length]={
+         'discount_percentage':dicnt,
+         'discount_price': data.cart.discount.amount,
+         'free_type': "discount",
+      };
+
+      var discnt_params=JSON.stringify(discount_applied);
+
+      setStorage("has_disc_price",data.cart.discount.amount);
+      console.log(data.cart.discount.amount);
 			htm+=tplCartRow(data.cart.discount.display, '('+data.cart.discount.amount_pretty+')' ,'price-normal' );
 		}
+
 		if (!empty(data.cart.delivery_charges)){
 			htm+=tplCartRow( getTrans('Delivery Fee','delivery_fee') , data.cart.delivery_charges.amount_pretty, 'price-normal');
 		}
@@ -5172,6 +5260,7 @@ function displayPaymentOptions(data)
 
 function placeOrder()
 {
+  console.log($(".frm-paymentoption").serialize());
 	if ( $('.payment_list:checked').length > 0){
 
 		var selected_payment=$('.payment_list:checked').val();
@@ -5204,11 +5293,15 @@ function placeOrder()
 			extra_params+="&delivery_time="+$(".delivery_time").val();
 		}
 
+    var deal_params=JSON.stringify(deal_cart);
+    console.log(deal_params);
+    var discnt_params=JSON.stringify(discount_applied);
 		extra_params+="&delivery_asap="+ $(".delivery_asap:checked").val();
 		extra_params+="&formatted_address="+ $(".formatted_address").val();
 		extra_params+="&google_lat="+ $(".google_lat").val();
 		extra_params+="&google_lng="+ $(".google_lng").val();
-
+    extra_params+="&deals_params="+deal_params;
+    extra_params+="&discount_details="+discnt_params;
 		//extra_params+="&payment_method="+ $(".payment_list:checked").val();
 		//extra_params+="&order_change="+ $(".order_change").val();
 		extra_params+="&"+getStorage("shipping_address") ;
@@ -5235,6 +5328,8 @@ function placeOrder()
 	    if ( selected_payment=="ocr"){
 	    	extra_params+="&cc_id="+ getStorage('cc_id');
 	    }
+console.log(cart_params);
+console.log(extra_params);
 
       	callAjax("placeOrder","merchant_id="+ getStorage('merchant_id') +
       	  "&cart="+ urlencode(cart_params) +
@@ -5255,6 +5350,7 @@ ons.ready(function() {
        	   dump('logon ok');
 
        	   var pts = getStorage("pts");
+           console.log(pts);
 	       dump("pts=>"+pts);
 	       if(pts!=2){
 	       	  $(".menu-pts").hide();
@@ -5273,10 +5369,17 @@ ons.ready(function() {
 	       	   $(".avatar-right").html( "Hi, "+ getStorage("client_name_cookie") );
 	       	   $(".avatar-wrap-menu div").addClass("img_loaded");
        	   }
+           else{
+                 $("#welcome_msg").html("");
+                 $(".logout-menu").hide();
+                  $(".menu-pts").hide();
+           }
+
        } else {
        	   dump('logon not');
        	   $(".logout-menu").hide();
        	   $(".profile-pic-wrap").hide();
+           $("#welcome_msg").hide();
        	   $(".menu-pts").hide();
        }
 
@@ -7883,7 +7986,8 @@ function payCityPay(fireurl) {
 	}
 		function iabLoadStop(event) {
 		//setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
-		setStorage("successurl","https://www.cuisine.je/store/paymentProcessing/id/"+getStorage('order_id')+"/citypay_success/true");
+		//setStorage("successurl","https://www.cuisine.je/store/paymentProcessing/id/"+getStorage('order_id')+"/citypay_success/true");
+    setStorage("successurl","http://dev.cuisine.je/store/paymentProcessing/id/"+getStorage('order_id')+"/citypay_success/true");
 		successurl= getStorage("successurl");
 		console.log(event.url);
 		console.log(successurl);
@@ -8732,8 +8836,8 @@ function useThisLocation()
 
 	switch (map_address_action){
 		case "mapaddress":
-
-		    $(".street").val( getStorage("map_address_result_address") );
+        $(".address").val(getStorgae(map_address_result_address_full));
+	     $(".street").val( getStorage("map_address_result_address") );
 			$(".city").val( getStorage("map_address_result_city") );
 			$(".state").val( getStorage("map_address_result_state") );
 			$(".zipcode").val( getStorage("map_address_result_zip") );
