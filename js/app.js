@@ -306,7 +306,7 @@ function searchMerchant()
   removeStorage('map_address_result_formatted_address');
   removeStorage("customer_contact_number");
   discnt_params="";
-
+console.log(discnt_params);
   //if(s!="")
   {
 	  var options = {parish:parish,cuisine:cuisine,closeMenu:true,animation: 'slide'};
@@ -1210,6 +1210,7 @@ function callAjax(action,params)
                    value: fees_deli
                }).appendTo('#frm-paymentoption');
              }
+
 				     $(".frm-paymentoption").show();
 			   	   $(".paypal_flag").val( data.details.paypal_flag );
 			   	   $(".paypal_mode").val( data.details.paypal_credentials.mode );
@@ -1230,8 +1231,10 @@ function callAjax(action,params)
 			   	   setStorage("citypay_fee", data.details.citypay_credentials.card_fee );
 
 			   	   setStorage("paypal_card_fee", data.details.paypal_credentials.card_fee );
-             if( parseInt(getStorage("total_amount_final")) < parseInt(data.details.minimum_order) )
+             console.log(getStorage("total_amount_final"));
+             if( parseInt(getStorage("total_amount_final")) < parseInt(data.details.minimum_order) || data.details.minimum_order == "0")
              {
+               console.log(getStorage("total_amount_final"));
                console.log(data.details.parish_delivery_fee);
              if(data.details.parish_delivery_fee)
              {
@@ -4711,6 +4714,7 @@ if(!empty(data.free_item_list))
     if (!empty(data.cart.discount)){
 
       var dicnt=data.cart.discount.display.replace(/[^0-9 .]/g, '');
+      discount_applied=[];
       console.log(dicnt);
       discount_applied[discount_applied.length]={
          'discount_percentage':dicnt,
@@ -4721,6 +4725,7 @@ if(!empty(data.free_item_list))
       var discnt_params=JSON.stringify(discount_applied);
 
       setStorage("has_disc_price",data.cart.discount.amount);
+
       console.log(data.cart.discount.amount);
 			htm+=tplCartRow(data.cart.discount.display, '('+data.cart.discount.amount_pretty+')' ,'price-normal' );
 		}
