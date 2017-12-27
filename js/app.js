@@ -858,7 +858,7 @@ function callAjax(action,params)
 				append_addons(data);
 				break;
 
-				case "MenuCategory":
+				case "MobileMenuNew":
 				/*save merchant logo*/
 				setStorage("merchant_logo",data.details.logo);
 				dump(data.details.restaurant_name);
@@ -872,7 +872,9 @@ function callAjax(action,params)
 
 				menuCategoryResult(data.details);
 				break;
-
+        case "NextMenu":
+          //menuCategoryResult(div,data.details);
+        break;
 				case "MobileLoadMore":
 				/*save merchant logo*/
 				//setStorage("merchant_logo",data.details.logo);
@@ -885,7 +887,7 @@ function callAjax(action,params)
 				//setStorage("merchant_longtitude",data.details.coordinates.longtitude);
 				//setStorage("merchant_address",data.details.address);
 
-				menuCategoryResult(data.details);
+				menu_cat_load(data.details);
 				break;
 
 				case "cuisineList":
@@ -2105,6 +2107,8 @@ function callAjax(action,params)
         case "saveProfile":
         onsenAlert(data.msg);
         break;
+        case "MobileLoadMore":
+        break;
 				case "search":
 				  //$(".result-msg").text("No Restaurants found");
 				  $(".result-msg").text(data.msg);
@@ -2579,7 +2583,7 @@ function loadRestaurantCategory(mtid)
   var options = {
       animation: 'slide',
       onTransitionEnd: function() {
-      	  callAjax("MenuCategory","start="+menustart+"&end="+menulimit+"&merchant_id="+mtid + "&device_id=" + getStorage("device_id")+"&current_day="+current_day  );
+      	  callAjax("MobileMenuNew","start="+menustart+"&end="+menulimit+"&merchant_id="+mtid + "&device_id=" + getStorage("device_id")+"&current_day="+current_day  );
       }
    };
    setStorage("merchant_id",mtid);
@@ -2748,6 +2752,7 @@ var menutotal;
 
 function menuCategoryResult(data)
 {
+
 	 menutotal=data.category_item_count;
 	 menutcame = Object.keys(data).length;
 	if(menustart == 0)
@@ -2794,6 +2799,7 @@ function menuCategoryResult(data)
 	var itemcount=[];
 	var itemcounts;
 	$.each(data.menu_category, function(key, val) {
+    //console.log(val.cat_id);
 			if (jQuery.inArray(val.total_count, itemcount) !== -1) {
 			} else {
 
@@ -2802,7 +2808,8 @@ function menuCategoryResult(data)
 					//itemcount[val.cat_id]=val.total_count;
 					//itemcount=array(val.cat_id => val.total_count );
 			}
-			console.log("Category ID "+val.cat_id+" Name:"+val.category_name+" Items:"+itemcounts);
+
+			//console.log("Category ID "+val.cat_id+" Name:"+val.category_name+" Items:"+itemcounts);
 	    all_cat_id.push(val.cat_id);
 	    var active_class = '';
 
@@ -2812,8 +2819,15 @@ function menuCategoryResult(data)
 	    // htm += '<ons-carousel-item ng-repeat="i in ['+count+']"><a href="javascript:;" class="menu-type" onclick="scroll_list('+val.cat_id+');" >'+val.category_name+'</a></ons-carousel-item>';
 	    if (count == 0) {
 	        active_class = 'active';
+          var id_menu=parseInt(val.cat_id);
+          oncliks = "show_hide("+id_menu +",this)";
 	    }
-	    htm += '<div class="swiper-slide ' + active_class + '"  ><a href="javascript:;" data-scroll="scroll_div_' + val.cat_id + '" onclick="scroll_list(' + val.cat_id + ',this)"  > ' + val.category_name + '</a></div>';
+      else{
+        var id_menu=parseInt(val.cat_id);
+          oncliks= "scroll_list( '"+id_menu +"' ,this)";
+      }
+	    htm += '<div class="swiper-slide ' + active_class + '"  ><a href="javascript:;" data-scroll="scroll_div_' + val.cat_id + ' " id="scroll_list_'+val.cat_id+'" onclick="'+oncliks+'" > ' + val.category_name + '</a></div>';
+
     	count = parseInt(count) + 1;
 			//console.log("this is slider"+count);
 	});
@@ -2844,29 +2858,31 @@ function menuCategoryResult(data)
 
 	if (menustart == 0) {
 
-	    html += '<ons-list class="restaurant-list ng-scope list ons-list-inner">';
+	    html += '<ons-list class="restaurant-lists ng-scope list ons-list-inner">';
+
+
 	    $.each(data.item, function(key, val) {
 				//console.log(Object.keys(data.item).length);
-	        var display_style = 'style = "display:none;"';
-	        if ($.inArray(val.category_id, all_cat) != -1) {}
-					else {
+        var display_style = 'style = "display:none;"';
+        if ($.inArray(val.category_id, all_cat) != -1) {}
+        else {
+            all_cat.push(val.category_id);
+            item_cnt.push(val.total_count);
+            if (count > 0) {
+                html += "</div>";
+            }
 
-	            all_cat.push(val.category_id);
-							item_cnt.push(val.total_count);
-							if (count > 0) {
-	                html += "</div>";
-	            }
 
+            if (display_count == 1) {
+                display_style = 'style = "display:block;"';
+            }
+            //html += '<div id = "scroll_div_'+val.category_id+'"  '+display_style+'   data-anchor="scroll_div_'+val.category_id+'" class="scrolling-div" >  <div class="category-heading" >'+ val.category_name +'</div>';
 
-	            if (display_count == 1) {
-	                display_style = 'style = "display:block;"';
-	            }
-	            //html += '<div id = "scroll_div_'+val.category_id+'"  '+display_style+'   data-anchor="scroll_div_'+val.category_id+'" class="scrolling-div" >  <div class="category-heading" >'+ val.category_name +'</div>';
-	            html += '<div id = "scroll_div_' + val.category_id + '"  ' + display_style + '   data-anchor="scroll_div_' + val.category_id + '" class="scrolling-div" > ';
-							html+='<input type="hidden" value="0" id="hidden'+val.category_id+'"/>';
-	            count = parseInt(count) + 1;
-	            display_count = parseInt(display_count) + 1;
-	        }
+            html += '<div id = "scroll_div_' + val.category_id+ '"  ' + display_style + '   data-anchor="scroll_div_' +val.category_id+ '" class="scrolling-div" > ';
+            html+='<input type="hidden" value="0" id="hidden'+val.category_id+'"/>';
+            count = parseInt(count) + 1;
+            display_count = parseInt(display_count) + 1;
+        }
 
 	        if (data.disabled_ordering == 2) {
 	            html += '<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(2)" >';
@@ -2908,8 +2924,10 @@ function menuCategoryResult(data)
 	        html += '<p class="restauran-titles concat-text">' + val.item_name + '</p>';
 	        html += '<p class="concat-text">' + val.item_description + '</p>';
 
+
 	        if (val.prices.length > 0) {
 	            $.each(val.prices, function(key_price, price) {
+                //console.log("Inside");
 	                var price_size = '';
 	                if (price.size != 'standard') {
 	                    price_size = price.size;
@@ -2937,6 +2955,7 @@ function menuCategoryResult(data)
 
 					items++;
 	    });
+      //console.log(item_cnt);
 	    html += '</ons-list>';
 	    createElement('menu-list', html);
 			Array.prototype.associate = function (keys) {
@@ -3051,6 +3070,7 @@ function menuCategoryResult(data)
 
 	    });
 			console.log(item_cnt);
+
 			Array.prototype.associate = function (keys) {
 				var result = {};
 
@@ -3079,6 +3099,250 @@ function menuCategoryResult(data)
 	}
 	imageLoaded('.img_loaded');
 	}
+
+  function menu_cat_load (data)
+  {
+    var html ='';
+  	var all_cat=[];
+  	var item_cnt=[];
+  	var count = 0;
+  	var display_count = 1;
+  	var items=0;
+  	var newcat=0;
+  	var n = 0;
+
+    if (menustart == 0) {
+      console.log("Inside this");
+
+        var idmenu;
+
+  	    $.each(data, function(key, val) {
+          idmenu=val.category_id
+  				console.log(Object.keys(data).length);
+  	        //var display_style = 'style = "display:none;"';
+  	        if ($.inArray(val.category_id, all_cat) != -1) {}
+  					else {
+
+  	            all_cat.push(val.category_id);
+  							item_cnt.push(val.total_count);
+  							if (count > 0) {
+  	                html += "</div>";
+  	            }
+  	            count = parseInt(count) + 1;
+  	            display_count = parseInt(display_count) + 1;
+  	        }
+
+  	        if (data.disabled_ordering == 2) {
+  	            html += '<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(2)" >';
+  	        } else {
+  	            if (val.not_available == 2) {
+  	                html += '<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(1)" >';
+  	            } else {
+  	                var single_add_item = getStorage("single_add_item");
+  	              //  dump("=>" + single_add_item);
+  	                if (val.single_item == 2 && single_add_item == 2) {
+  	                    item_auto_price = "0|";
+  	                    item_auto_discount = "0";
+  	                    if (val.prices.length > 0) {
+  	                        $.each(val.prices, function(key_price, price) {
+  	                            if (!empty(price.price_discount_pretty)) {
+  	                                item_auto_price = "'" + price.price + "|'";
+  	                                item_auto_discount = parseInt(price.price) - parseInt(price.price_discount)
+  	                            } else {
+  	                                item_auto_price = "'" + price.price + "|'";
+  	                            }
+  	                        });
+  	                    }
+  	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="autoAddToCart(' + val.item_id + ',' + item_auto_price + ',' + item_auto_discount + ');"  >';
+  	                } else {
+  	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="loadItemDetails(' + val.item_id + ',' + val.category_id + ');"  >';
+  	                }
+  	            }
+  	        }
+
+  	        html += '<ons-row class="row ons-row-inner">';
+  	        html += '<ons-col class="col-image food-img col ons-col-inner" width="35%">';
+  	        html += '<div class="logo-wrap2" >';
+  	        html += '<div class="img_loaded" >';
+  	        html += '<img src="' + val.photo + '" />';
+  	        html += '</div>';
+  	        html += '</div>';
+  	        html += '</ons-col>';
+  	        html += '<ons-col class="col-description food-desc col ons-col-inner" width="65%">';
+  	        html += '<p class="restauran-titles concat-text">' + val.item_name + '</p>';
+  	        html += '<p class="concat-text">' + val.item_description + '</p>';
+
+  	        if (val.prices.length > 0) {
+  	            $.each(val.prices, function(key_price, price) {
+  	                var price_size = '';
+  	                if (price.size != 'standard') {
+  	                    price_size = price.size;
+  	                }
+  	                if (!empty(price.price_discount_pretty)) {
+  	                    html += '<p class="p-small">' + price_size + ' <price class="discount">' + price.price_pretty + '</price>';
+  	                    html += '<price>' + price.price_discount_pretty + '</price>';
+  	                    html += '</p>';
+  	                } else {
+  	                    html += '<p class="p-small">' + price_size + ' <price>' + price.price_pretty + '</price></p>';
+  	                }
+  	            });
+  	        }
+
+  	        html += '<img height="20" src="' + val.category_img_url + '">';
+
+  	        if (val.not_available == 2) {
+  	            html += '<p>item not available</p>';
+  	        }
+
+  	        html += '</ons-col>';
+  	        html += '</ons-row>';
+  	        html += '</ons-list-item>';
+
+
+  					items++;
+  	    });
+        $("#scroll_div_"+idmenu).append(html);
+
+  			Array.prototype.associate = function (keys) {
+  				var result = {};
+
+  				this.forEach(function (el, i) {
+  					result[keys[i]] = el;
+  				});
+  				return result;
+  			};
+  			var itms=item_cnt.associate(all_cat);
+  			$.each(itms, function(key, val) {
+
+  						if(val > 10)
+  						{
+  							$("#scroll_div_" + key ).append('<button id="if'+key+'" class="button green-btn button--large trn" onclick="loadmore('+key+','+menulimit+');" data-trn-key="book_now">Load More</button>');
+  						}
+  				});
+  	} else {
+  	    var cid;
+  	    var categoryid = [];
+  			var buts;
+  	    $.each(data, function(key, val) {
+  	        var html='';
+  	        cid = val.category_id;
+  	        if (jQuery.inArray(val.category_id, categoryid) !== -1) {
+
+  	        } else {
+  	            categoryid.push(val.category_id);
+  	        }
+  	        var display_style = 'style = "display:none;"';
+  	        if ($.inArray(val.category_id, all_cat) != -1) {} else {
+  	            all_cat.push(	val.category_id);
+  							item_cnt.push(val.total_count);
+  	            if (count == 0) {
+  	                html += "</div>";
+  	            	}
+  	            if (display_count == 1) {
+  	                display_style = 'style = "display:block;"';
+  	            }
+
+  	            count = parseInt(count) + 1;
+  	            display_count = parseInt(display_count) + 1;
+  	        }
+
+  	        if (data.disabled_ordering == 2) {
+  	            html += '<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(2)" >';
+  	        } else {
+  	            if (val.not_available == 2) {
+  	                html += '<ons-list-item modifier="tappable" class="list-item-container" onclick="itemNotAvailable(1)" >';
+  	            } else {
+  	                var single_add_item = getStorage("single_add_item");
+  	               // dump("=>" + single_add_item);
+  	                if (val.single_item == 2 && single_add_item == 2) {
+  	                    item_auto_price = "0|";
+  	                    item_auto_discount = "0";
+  	                    if (val.prices.length > 0) {
+  	                        $.each(val.prices, function(key_price, price) {
+  	                            if (!empty(price.price_discount_pretty)) {
+  	                                item_auto_price = "'" + price.price + "|'";
+  	                                item_auto_discount = parseInt(price.price) - parseInt(price.price_discount)
+  	                            } else {
+  	                                item_auto_price = "'" + price.price + "|'";
+  	                            }
+  	                        });
+  	                    }
+  	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="autoAddToCart(' + val.item_id + ',' + item_auto_price + ',' + item_auto_discount + ');"  data="else">';
+  	                } else {
+  	                    html += '<ons-list-item modifier="tappable" class="list-item-container list__item ons-list-item-inner list__item--tappable" onclick="loadItemDetails(' + val.item_id + ',' + data.merchant_id + ',' + val.category_id + ');"  >';
+  	                }
+  	            }
+  	        }
+
+  	        html += '<ons-row class="row ons-row-inner">';
+  	        html += '<ons-col class="col-image food-img col ons-col-inner" width="35%">';
+  	        html += '<div class="logo-wrap2" >';
+  	        html += '<div class="img_loaded" >';
+  	        html += '<img src="' + val.photo + '" />';
+  	        html += '</div>';
+  	        html += '</div>';
+  	        html += '</ons-col>';
+  	        html += '<ons-col class="col-description food-desc col ons-col-inner" width="65%">';
+  	        html += '<p class="restauran-titles concat-text">' + val.item_name + '</p>';
+  	        html += '<p class="concat-text">' + val.item_description + '</p>';
+
+  	        if (val.prices.length > 0) {
+  	            $.each(val.prices, function(key_price, price) {
+  	                var price_size = '';
+  	                if (price.size != 'standard') {
+  	                    price_size = price.size;
+  	                }
+  	                if (!empty(price.price_discount_pretty)) {
+  	                    html += '<p class="p-small">' + price_size + ' <price class="discount">' + price.price_pretty + '</price>';
+  	                    html += '<price>' + price.price_discount_pretty + '</price>';
+  	                    html += '</p>';
+  	                } else {
+  	                    html += '<p class="p-small">' + price_size + ' <price>' + price.price_pretty + '</price></p>';
+  	                }
+  	            });
+  	        }
+
+  	        html += '<img height="20" src="' + val.category_img_url + '">';
+
+  	        if (val.not_available == 2) {
+  	            html += '<p>item not available</p>';
+  	        }
+
+  	        html += '</ons-col>';
+  	        html += '</ons-row>';
+  	        html += '</ons-list-item>';
+  	        $("#scroll_div_" + cid).append(html);
+
+  	    });
+  			console.log(item_cnt);
+  			Array.prototype.associate = function (keys) {
+  				var result = {};
+
+  				this.forEach(function (el, i) {
+  					result[keys[i]] = el;
+  				});
+  				return result;
+  			};
+  			var itms=item_cnt.associate(all_cat);// load more working fine dont alter anything. This is ddone by Khan
+  			$.each(itms, function(key, val) {
+          console.log(val);
+          if(menulimit == 10)
+          {
+  						if(val > 10)
+  						{
+  							$("#scroll_div_" + key ).append('<button id="if'+key+'" class="button green-btn button--large trn" onclick="loadmore('+key+','+menulimit+');" data-trn-key="book_now">Load More</button>');
+  						}
+         }
+         else{
+           if(val > 2)
+            {
+              $("#scroll_div_" + key ).append('<button id="if'+key+'" class="button green-btn button--large trn" onclick="loadmore('+key+','+menulimit+');" data-trn-key="book_now">Load More</button>');
+            }
+         }
+  			});
+  	}
+    imageLoaded('.img_loaded');
+  }
 
 	function loadmore(cid,mstart)
 	{
@@ -3122,14 +3386,64 @@ function scroll_list(id,ele)
 	$('.scrolling-div').css('display','none');
 
 	$('#scroll_div_'+id).css('display','block');
+  // if($('#scroll_div_'+id).length > 0)
+  // {
+  // }
+  // else{
+  //   console.log("Not-ok");
+      $(".restaurant-lists").append('<div id = "scroll_div_' + id+ '"  style="display:block"   data-anchor="scroll_div_' +id+ '" class="scrolling-div" ><input type="hidden" value="0" id="hidden'+id+'"/></div>');
+  // }
+  //$('#scroll_div_'+id).prop('onclick',null).off('click');
+
+  $('#scroll_list_'+id).removeAttr( "onclick" );
+
+
+  removeHandler(id);
 	/*
 	    $('html, body').animate({
         scrollTop: $('#'+id).offset().top
     }, 2000); */
-
     //   window.location.href="#"+id;
+}
 
+function removeHandler(id) {
+  mtid=getStorage("merchant_id");
+    menustart = 0;
+    menulimit = 10;
+    var d = new Date();
+      var weekday = new Array(7);
+      weekday[0] = "Sunday";
+      weekday[1] = "Monday";
+      weekday[2] = "Tuesday";
+      weekday[3] = "Wednesday";
+      weekday[4] = "Thursday";
+      weekday[5] = "Friday";
+      weekday[6] = "Saturday";
 
+      var n = weekday[d.getDay()];
+  	var current_day = n.substring(0, 3);
+  	var current_day = current_day.toLowerCase();
+  	setStorage("c_day",current_day);
+  	$('#mob_current_timing').val(current_day);
+    cart = [] ; /*clear cart variable*/
+    removeStorage("tips_percentage");
+    removeStorage("cc_id");
+
+    $('#scroll_list_'+id).removeAttr( "onclick" );
+    $('#scroll_list_'+id).attr("onclick", "show_hide("+id+", this)");
+    callAjax("MobileLoadMore","start=0&end=10&category_id="+id+"&merchant_id=" + mtid + "&device_id=" + getStorage("device_id") + "&current_day=" + current_day);
+    //callAjax("MobileLoadMore","start=0&end=10&merchant_id="+mtid +"&category_id ="+id+"&device_id=" + getStorage("device_id")+"&current_day="+current_day  );
+}
+
+function show_hide(id,ele)
+{
+  $(".swiper-slide").removeClass("active");
+
+  $(ele).parent().addClass('active');
+
+  $('.scrolling-div').css('display','none');
+
+  $('#scroll_div_'+id).css('display','block');
 }
 
 function displayMerchantInfo(data)
@@ -6380,9 +6694,19 @@ function displayOrderHistoryDetails(data)
 		});
 	} else {
 		htm+='<ons-list-item class="center">';
-		htm+='no item found';
+		htm+='No item found';
 		htm+='</ons-list-item>';
 	}
+if ( !empty( data.free_details)){
+    $.each( data.free_details, function( key, val ) {
+			  htm+='<ons-list-item class="center">'+val.item_name+'('+val.free_type+')'+'</ons-list-item> ';
+		});
+}
+if ( !empty( data.discount_details)){
+    $.each( data.discount_details, function( key, val ) {
+			  htm+='<ons-list-item class="center">Discount Applied('+val.discount_percentage+' %)'+'</ons-list-item> ';
+		});
+}
 	createElement('item-details', htm );
 
 	var htm='<ons-list-header class="center trn" data-trn-key="status_history">Status History</ons-list-header>';

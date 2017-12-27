@@ -230,6 +230,8 @@ display:block;
 }
 .restaurant-list .logo-wrap,
 .restaurant-list .logo-wrap2,
+.restaurant-lists .logo-wrap,
+.restaurant-lists .logo-wrap2,
 .logo-wrap
 {
 height: auto;
@@ -259,7 +261,8 @@ width:100%;
 padding-top:8px;
 padding-bottom:8px;
 }
-.restaurant-list p,
+.restaurant-list, p,
+.restaurant-lists, p,
 #page-itemdisplay p.description,
 .onsen-display p.description,
 .small-font-dim,
@@ -290,7 +293,9 @@ line-height:normal;
 }
 .restauran-title,
 .restaurant-list .restauran-title,
+.restaurant-lists .restauran-title,
 .restaurant-list .restauran-titles,
+.restaurant-lists .restauran-titles,
 .title,
 .total,
 .total_value,
@@ -319,7 +324,8 @@ font-weight:bold;
 }
 
 .p-small,
-.restaurant-list p.p-small
+.restaurant-list p.p-small,
+.restaurant-lists p.p-small
 {
 font-size:12px;
 }
@@ -880,7 +886,8 @@ color:#dd2c33;
 }
 
 .top10,
-.restaurant-list .top10
+.restaurant-list .top10,
+.restaurant-lists .top10
 {
 margin-top:10px;
 }
@@ -1254,7 +1261,7 @@ font-size:30px;
 }
 
 
-.restaurant-list {padding: 8px;background:transparent;border:0;}
+.restaurant-list,.restaurant-lists {padding: 8px;background:transparent;border:0;}
 .product-desc .type {
     color: #777;
     font-size: 12px;
@@ -1352,13 +1359,15 @@ ons-scroller {
 textarea.text-input--underbar {
     height: 70px;
 }
-#menu-list .restaurant-list .list__item {
+#menu-list .restaurant-list .list__item ,
+#menu-list .restaurant-lists .list__item {
     background-color: #fff;
     border-radius: 3px;
     margin-bottom: 5px;
     padding: 10px;
 }
-#menu-list .restaurant-list .list__item .col-image .p-small:last-child {
+#menu-list .restaurant-list .list__item .col-image .p-small:last-child,
+#menu-list .restaurant-lists .list__item .col-image .p-small:last-child {
     margin-bottom: 0;
 }
 /*
