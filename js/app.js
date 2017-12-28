@@ -1225,6 +1225,7 @@ function callAjax(action,params)
              // setStorage("discnt_prce" ,data.cart.discount.display);
              // setStorage("discnt_prce_pretty" ,data.cart.discount.amount_pretty);
              $(".tot_prce").html(getStorage("order_total"));
+             setStorage("final_total_amnt",getStorage("order_total"));
              $(".sub_tot_prce").html(getStorage("cart_sub_total_pretty"));
              if(getStorage("discnt_prce"))
              {
@@ -1266,6 +1267,7 @@ function callAjax(action,params)
                var final_amnt=parseFloat(getStorage("order_total_raw")) + parseFloat(data.details.parish_delivery_fee);
                $(".tot_prce").html(getStorage("cart_currency_symbol") + final_amnt);
                setStorage("order_total",final_amnt);
+               setStorage("final_total_amnt",final_amnt);
                //$(".frm-paymentoption").html('<input type="hidden" value="'+data.details.parish_delivery_fee+'" name="extra_delivery_fee">');
                $('<input>').attr({
                    type: 'hidden',
