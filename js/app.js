@@ -305,6 +305,7 @@ function searchMerchant()
   removeStorage('cart_tax');
   removeStorage('map_address_result_formatted_address');
   removeStorage("customer_contact_number");
+  removeStorage("final_total_amnt");
   discnt_params="";
   deal_params="";
   console.log(discnt_params);
@@ -6753,7 +6754,7 @@ function displayOrderHistoryDetails(data)
 	var htm='<ons-list-header class="center trn" data-trn-key="items" >Items</ons-list-header>';
 	if ( data.item.length>0){
 		$.each( data.item, function( key, val ) {
-			  htm+='<ons-list-item class="center">'+val.item_name+'</ons-list-item> ';
+			  htm+='<ons-list-item class="center">'+val.item_name+'('+ getStorage("currency_set") +  parseFloat(val.normal_price) + ')</ons-list-item> ';
 		});
 	} else {
 		htm+='<ons-list-item class="center">';
@@ -6762,7 +6763,7 @@ function displayOrderHistoryDetails(data)
 	}
 if ( !empty( data.free_details)){
     $.each( data.free_details, function( key, val ) {
-			  htm+='<ons-list-item class="center">'+val.item_name+'('+val.free_type+')'+'</ons-list-item> ';
+			  htm+='<ons-list-item class="center">'+val.item_name+'('+  val.free_type+')'+'</ons-list-item> ';
 		});
 }
 if ( !empty( data.discount_details)){
@@ -8403,7 +8404,7 @@ function payCityPay(fireurl) {
 			console.log("Equals");
 		var options = {
 			animation: 'slide',onTransitionEnd: function() {
-				displayMerchantLogo2(getStorage("merchant_logo") ,'' ,'page-booking-ty');
+				displayMerchantLogo2(getStorage("merchant_logo") ,getStorage("final_total_amnt") ,'page-booking-ty');
 		 $(".book-ty-msg").html(data.msg);
 		 }
 		};
