@@ -1097,6 +1097,56 @@
       </ons-list>
    </div>
 
+   <div class="wrapper total-wrap">
+
+      <ons-list id="voucher-wrap">
+       <ons-list-header class="center  trn" data-trn-key="voucher">Total</ons-list-header>
+       <ons-list-item class="">
+         <ons-row >
+            <ons-col class="concat-text" width="70%">
+             <p class="description item-name concat-text">Sub Total</p>
+            </ons-col>
+            <ons-col class="text-right" ><price class="sub_tot_prce"></price></ons-col>
+          </ons-row>
+       </ons-list-item>
+       <ons-list-item class="discunt_show" style="display:none">
+         <ons-row >
+            <ons-col class="concat-text" width="70%">
+             <p class="description item-name concat-text discnt_name"></p>
+            </ons-col>
+            <ons-col class="text-right" ><price class="discnt_price"></price></ons-col>
+          </ons-row>
+       </ons-list-item>
+       <ons-list-item class="delivery_show" style="display:none">
+         <ons-row >
+            <ons-col class="concat-text" width="70%">
+             <p class="description item-name concat-text">Delivery Fee</p>
+            </ons-col>
+            <ons-col class="text-right" ><price class="del_price"></price></ons-col>
+          </ons-row>
+       </ons-list-item>
+       <ons-list-item class="voucher_show" style="display:none">
+         <ons-row >
+            <ons-col class="concat-text" width="70%">
+             <p class="description item-name concat-text">Voucher Applied</p>
+            </ons-col>
+            <ons-col class="text-right" ><price class="vouchr_price"></price></ons-col>
+          </ons-row>
+       </ons-list-item>
+       <ons-list-item class="">
+         <ons-row >
+            <ons-col class="concat-text" width="70%">
+             <p class="description item-name concat-text bold">Total</p>
+            </ons-col>
+            <ons-col class="text-right" ><price class="tot_prce"></price></ons-col>
+          </ons-row>
+       </ons-list-item>
+
+
+
+      </ons-list>
+   </div>
+
    <div class="wrapper pts-apply-points-wrap">
      <ons-list >
        <ons-list-header class="center" >
@@ -1171,7 +1221,7 @@
            </div>
         </ons-col>
         <ons-col class="text-right" >
-			<div class="wrapper mer-detail" style="display:none">
+			<div class="wrapper mer-detail">
            <p class="restauran-title concat-text white">Total Paid</p>
            <p class="text-big white total-amount"></p>
 			</div>
