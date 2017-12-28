@@ -1424,7 +1424,7 @@ function callAjax(action,params)
 					      	                      getStorage("order_total") ,
 					      	                      'page-receipt');*/
 					      	  displayMerchantLogo2( getStorage("merchant_logo") ,
-					      	                      data.details.payment_details.total_w_tax_pretty ,
+					      	                      data.details.payment_details.bill_total_pretty ,
 					      	                      'page-receipt');
 					      	  $(".receipt-msg").html(data.msg);
 					      }
