@@ -134,6 +134,7 @@
 	                 <icon height="29" platform="ios" src="res/icons/ios/icon-small.png" width="29" />
 	                  <icon height="58" platform="ios" src="res/icons/ios/icon-small@2x.png" width="58" />
 	                   <icon height="87" platform="ios" src="res/icons/ios/icon-small@3x.png" width="87" />
+                      <icon height="167" platform="ios" src="res/icons/ios/icon-83.5@2x.png" width="167" />
     </platform>
 
 	<platform name="android">
