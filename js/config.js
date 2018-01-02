@@ -1,6 +1,6 @@
 
 var krms_config ={
-	'ApiUrl' : "http://dev.cuisine.je/mobileapp/api",
+	'ApiUrl' : "https://www.cuisine.je/mobileapp/api",
 	'cuisineUrl' :"https://www.cuisine.je",
 	'DialogDefaultTitle' : "Take Away",
 	'pushNotificationSenderid' : "306047836229",

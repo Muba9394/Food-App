@@ -1258,7 +1258,7 @@ function callAjax(action,params)
              {
                console.log(getStorage("total_amount_final"));
                console.log(data.details.parish_delivery_fee);
-             if(data.details.parish_delivery_fee)
+             if(data.details.parish_delivery_fee > 0)
              {
                $("#has_delivery_fee").show();
                $(".delivery_show").show();
@@ -8386,8 +8386,8 @@ function payCityPay(fireurl) {
 	}
 		function iabLoadStop(event) {
 		//setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
-		//setStorage("successurl","https://www.cuisine.je/store/paymentProcessing/id/"+getStorage('order_id')+"/citypay_success/true");
-    setStorage("successurl","http://dev.cuisine.je/store/paymentProcessing/id/"+getStorage('order_id')+"/citypay_success/true");
+		setStorage("successurl","https://www.cuisine.je/store/paymentProcessing/id/"+getStorage('order_id')+"/citypay_success/true");
+    //setStorage("successurl","http://dev.cuisine.je/store/paymentProcessing/id/"+getStorage('order_id')+"/citypay_success/true");
 		successurl= getStorage("successurl");
 		console.log(event.url);
 		console.log(successurl);
