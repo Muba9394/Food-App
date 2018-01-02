@@ -1258,14 +1258,15 @@ function callAjax(action,params)
              {
                console.log(getStorage("total_amount_final"));
                console.log(data.details.parish_delivery_fee);
+               $(".tot_prce").html(prettyPrice(data.details.parish_delivery_fee));
              if(data.details.parish_delivery_fee > 0)
              {
                $("#has_delivery_fee").show();
                $(".delivery_show").show();
                $("#fee_delvry").html(data.details.parish_delivery_fee);
-               $(".del_price").html(getStorage("cart_currency_symbol") + parseFloat(data.details.parish_delivery_fee));
+               $(".del_price").html(prettyPrice(parseFloat(data.details.parish_delivery_fee)));
                var final_amnt=parseFloat(getStorage("order_total_raw")) + parseFloat(data.details.parish_delivery_fee);
-               $(".tot_prce").html(getStorage("cart_currency_symbol") + final_amnt);
+               $(".tot_prce").html(prettyPrice(final_amnt));
                setStorage("order_total",final_amnt);
                setStorage("final_total_amnt",final_amnt);
                //$(".frm-paymentoption").html('<input type="hidden" value="'+data.details.parish_delivery_fee+'" name="extra_delivery_fee">');
@@ -1334,11 +1335,11 @@ function callAjax(action,params)
 				  	   setStorage("currency_code", data.details.payment_details.currency_code);
 				  	   setStorage("paymet_desc", data.details.payment_details.paymet_desc);
 				  	   setStorage("total_w_tax", data.details.payment_details.total_w_tax);
+
 				  	   app_paypal.initPaymentUI();
 				  	   break;
 
-				  	   case "cpy_init":
-
+				  	   case "cpy_init":               
 				  	   setStorage("currency_code", data.details.payment_details.currency_code);
 				  	   setStorage("paymet_desc", data.details.payment_details.paymet_desc);
 				  	   setStorage("total_w_tax", data.details.payment_details.total_w_tax);
@@ -1825,7 +1826,7 @@ function callAjax(action,params)
              $(".voucher_show").show();
              $(".vouchr_price").html(prettyPrice(data.details.less_amount));
              setStorage("order_total",data.details.new_total);
-             $(".tot_prce").html(getStorage("cart_currency_symbol") + data.details.new_total);
+             $(".tot_prce").html(prettyPrice(data.details.new_total));
              setStorage("final_total_amnt",data.details.new_total);
              setStorage("voucher_amnt",data.details.less_amount);
 			       break;
@@ -7714,7 +7715,7 @@ function removeVoucher()
     console.log(getStorage("order_total"));
     console.log(getStorage("voucher_amnt"));
     var amny=parseFloat(getStorage("order_total")) + parseFloat(getStorage("voucher_amnt"));
-    $(".tot_prce").html(getStorage("cart_currency_symbol") + amny);
+    $(".tot_prce").html(prettyPrice(amny));
     setStorage("final_total_amnt",amny);
     $(".voucher-header").html( getTrans("Voucher",'voucher') );
     $(".total-amount").html( prettyPrice(getStorage("order_total_raw")) );
@@ -7737,7 +7738,7 @@ function prettyPrice( price )
 
 	dump("decimal_place=>"+decimal_place);
 	dump("currency_symbol=>"+currency_symbol);
-	//dump("thousand_separator=>"+thousand_separator);
+	dump("thousand_separator=>"+thousand_separator);
 	dump("decimal_separator=>"+decimal_separator);
 	dump("currency_position=>"+currency_position);
 
