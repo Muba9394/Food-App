@@ -1825,7 +1825,7 @@ function callAjax(action,params)
              $(".voucher_show").show();
              $(".vouchr_price").html(prettyPrice(data.details.less_amount));
              setStorage("order_total",data.details.new_total);
-             $(".tot_prce").html(prettyPrice(data.details.new_total));
+             $(".tot_prce").html(getStorage("cart_currency_symbol") + data.details.new_total);
              setStorage("final_total_amnt",data.details.new_total);
              setStorage("voucher_amnt",data.details.less_amount);
 			       break;
@@ -7714,7 +7714,7 @@ function removeVoucher()
     console.log(getStorage("order_total"));
     console.log(getStorage("voucher_amnt"));
     var amny=parseFloat(getStorage("order_total")) + parseFloat(getStorage("voucher_amnt"));
-    $(".tot_prce").html(prettyPrice(amny));
+    $(".tot_prce").html(getStorage("cart_currency_symbol") + amny);
     setStorage("final_total_amnt",amny);
     $(".voucher-header").html( getTrans("Voucher",'voucher') );
     $(".total-amount").html( prettyPrice(getStorage("order_total_raw")) );
@@ -7737,7 +7737,7 @@ function prettyPrice( price )
 
 	dump("decimal_place=>"+decimal_place);
 	dump("currency_symbol=>"+currency_symbol);
-	dump("thousand_separator=>"+thousand_separator);
+	//dump("thousand_separator=>"+thousand_separator);
 	dump("decimal_separator=>"+decimal_separator);
 	dump("currency_position=>"+currency_position);
 
