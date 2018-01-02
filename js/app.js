@@ -7675,9 +7675,11 @@ function applyVoucher()
 	// if ( checkIfhasOfferDiscount() ){
 	// 	return false;
 	// }
-
+console.log(getStorage("order_total"));
 	voucher_code = $(".voucher_code").val();
 	if ( voucher_code!="" ){
+    var amnt=getStorage("order_total").replace(/[^0-9 .]/g, '');
+    console.log(amnt);
 		var params="voucher_code="+ voucher_code;
 		params+="&client_token="+getStorage("client_token");
 		params+="&merchant_id="+ getStorage("merchant_id");
@@ -7687,7 +7689,7 @@ function applyVoucher()
 		params+="&cart_packaging="+ getStorage("cart_packaging");
 		params+="&cart_tax="+ getStorage("cart_tax");
 		params+="&pts_redeem_amount="+ $(".pts_redeem_amount").val();
-    params+="&total="+getStorage("order_total");
+    params+="&total="+amnt;
 
 
 		if ( empty(getStorage("tips_percentage")) ){
@@ -9236,7 +9238,7 @@ function useThisLocation()
 
 	switch (map_address_action){
 		case "mapaddress":
-        $(".address").val(getStorgae(map_address_result_address_full));
+        $(".address").val(getStorgae("map_address_result_address_full"));
 	     $(".street").val( getStorage("map_address_result_address") );
 			$(".city").val( getStorage("map_address_result_city") );
 			$(".state").val( getStorage("map_address_result_state") );

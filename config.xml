@@ -4,8 +4,8 @@
     xmlns:gap = "http://phonegap.com/ns/1.0"
     xmlns:android = "http://schemas.android.com/apk/res/android"
     id        = "je.cuisine.je"
-	  versionCode = "116"
-    version   = "2.0">
+	  versionCode = "117"
+    version   = "2.1">
     <name>Cuisine.je</name>
     <description>
         Online Table Booking and food ordering service in JERSEY,UK
@@ -17,7 +17,7 @@
     <content src="index.html" />
 
     <preference name="loadUrlTimeoutValue" value="70000" />
-    <preference name="phonegap-version" value="cli-6.4.0" />
+    <!-- <preference name="phonegap-version" value="cli-6.4.0" /> -->
 	<platform name="ios" >
   		<preference name="orientation" value="all" />
 		<preference name="ShowSplashScreenSpinner" value="true" />
