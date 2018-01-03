@@ -555,7 +555,19 @@ document.addEventListener("pageinit", function(e) {
 		  break;
 
 		case "page-login":
+
+		  initFacebook();
+		  translatePage();
+		  translateValidationForm();
+
+		  $(".email_address").attr("placeholder",  getTrans('Email address','email_address') );
+		  $(".password").attr("placeholder",  getTrans('Password','password') );
+		  break;
+
 		case "page-prelogin":
+    var nxt=getStorage("transaction_type");
+    console.log(nxt);
+    $("#next_mens").attr("onclick", "showLogin('"+nxt+"')");
 		  initFacebook();
 		  translatePage();
 		  translateValidationForm();
@@ -760,6 +772,13 @@ function onsenAlert(message,dialog_title)
     });
 }
 
+function toast_new(message)
+{
+    ons.notification.toast({
+      message: message,
+      timeout: 2000
+    });
+}
 function hideAllModal()
 {
 	setTimeout('loaderSearch.hide()', 1);
@@ -1578,9 +1597,23 @@ function callAjax(action,params)
 				  setStorage("client_id",data.details.client_id);
 				  setStorage("avatar",data.details.avatar);
           setStorage("client_name_cookie",data.details.client_name_cookie);
-					onsenAlert("Logged in successfully");
+					toastMsg("Logged in successfully");
+          //ons.notification.toast({message: 'Logged in successfully', timeout: 2000});
 				  switch (data.details.next_steps)
 				  {
+            case "orders":
+            menu.setMainPage('orders.html', {closeMenu: true});
+            break;
+            case "profile":
+            menu.setMainPage('profile.html', {closeMenu: true});
+            break;
+            case "history":
+            menu.setMainPage('history.html', {closeMenu: true});
+            break;
+            case "address_book":
+            menu.setMainPage('addressBook.html', {closeMenu: true});
+            break;
+
 				  	 case "delivery":
 					  	 var options = {
 					      animation: 'slide',
@@ -1675,7 +1708,7 @@ function callAjax(action,params)
 				  break;
 
 				case "getBookingHistory":
-          onsenAlert(data.msg);
+          //onsenAlert(data.msg);
 				  displayBookingHistory(data.details);
 				  break;
 
@@ -2864,8 +2897,9 @@ function menuCategoryResult(data)
 			//console.log("this is slider"+count);
 	});
 	var maincatcnt=count;
-	// htm+='</ons-carousel></ons-list>';
+	 //htm+='</ons-carousel></ons-list>';
 	htm += '</div></div><div class="swiper-pagination"></div></ons-list>';
+//  htm+='<ons-carousel-cover>    <div class="cover-label">Swipe left or right</div>    </ons-carousel-cover>  ';
 	/*
 			alert(htm);
 			return; */
@@ -3733,9 +3767,14 @@ function displayItem(data)
 			x++;
 		});
 	}
-
-	htm+='<ons-list-header class="list-header">Click here to show Addons <button  class="button button--quiet get_addons"><ons-icon icon="fa-caret-square-o-down" class="icon-green ons-icon fa-caret-square-o-down fa fa-lg"></ons-icon></button> </ons-list-header>';
-	htm+='<ons-list id="append_addons">   </ons-list>';
+  console.log(data.addon_item);
+if(data.addon_item == false)
+{
+}
+else{
+  htm+='<ons-list-header class="list-header">Click here to show Addons <button  class="button button--quiet get_addons"><ons-icon icon="fa-caret-square-o-down" class="icon-green ons-icon fa-caret-square-o-down fa fa-lg"></ons-icon></button> </ons-list-header>';
+  htm+='<ons-list id="append_addons">   </ons-list>';
+}
 
 	if (!empty(data.cooking_ref)){
 		htm+='<ons-list-header class="list-header trn" data-trn-key="cooking_ref">Cooking Preference</ons-list-header>';
@@ -6326,6 +6365,7 @@ function showProfile()
 	if (isLogin()){
 		menu.setMainPage('profile.html', {closeMenu: true});
 	} else {
+    setStorage("transaction_type","profile");
 		menu.setMainPage('prelogin.html', {closeMenu: true});
 	}
 }
@@ -6481,6 +6521,7 @@ function showLogin(next_steps)
     sNavigator.popPage({cancelIfRunning: true}); //back button
   }
   else{
+    console.log(getStorage("transaction_type"));
    var options = {
       animation: 'slide',
       onTransitionEnd: function() {
@@ -6636,9 +6677,11 @@ function signup()
 
 function showOrders()
 {
+
 	if (isLogin()){
 		menu.setMainPage('orders.html', {closeMenu: true});
 	} else {
+    setStorage("transaction_type","orders");
 		menu.setMainPage('prelogin.html', {closeMenu: true});
 	}
 }
@@ -6648,6 +6691,7 @@ function showHistory()
 	if (isLogin()){
 		menu.setMainPage('history.html', {closeMenu: true});
 	} else {
+    setStorage("transaction_type","history");
 		menu.setMainPage('prelogin.html', {closeMenu: true});
 	}
 }
@@ -6663,6 +6707,7 @@ function showAddressBook()
   if (isLogin()){
 		menu.setMainPage('addressBook.html', {closeMenu: true});
 	} else {
+    setStorage("transaction_type","address_book");
 		menu.setMainPage('prelogin.html', {closeMenu: true});
 	}
 }
@@ -8232,21 +8277,21 @@ function toastMsg( message )
 		return ;
 	}
 
-   /* window.plugins.toast.showWithOptions(
+    window.plugins.toast.showWithOptions(
     {
       message: message ,
-      duration: "long",
+      duration: "short",
       position: "bottom",
       addPixelsY: -40
     },
       toastOnSuccess,
       toastOnError
-    );*/
+    );
 
-    /*window.plugins.toast.showWithOptions(
+    window.plugins.toast.showWithOptions(
       {
         message: message ,
-        duration: "long",
+        duration: "short",
         position: "bottom",
         addPixelsY: -40
       },
@@ -8256,7 +8301,7 @@ function toastMsg( message )
       function(error) {
       	onsenAlert( message );
       }
-    );*/
+    );
 }
 
 function isDebug()

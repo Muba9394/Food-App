@@ -1332,6 +1332,14 @@ ons-scroller {
 .page__content {
     overflow: auto;
 }
+.cover-label {
+  text-align: center;
+  position: absolute;
+  left: 0px;
+  width: 100%;
+  bottom: 10px;
+  color: white;
+}
 #recent-orders .list {
     background-color: transparent;
     border: 0 none;
