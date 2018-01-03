@@ -1855,7 +1855,7 @@ function callAjax(action,params)
 			       $(".voucher-header").html(data.details.less);
 
 			       var new_total= prettyPrice(data.details.new_total);
-			       $(".total-amount").html( prettyPrice(new_total) );
+			      // $(".total-amount").html( prettyPrice(new_total) );
              $(".voucher_show").show();
              $(".vouchr_price").html(prettyPrice(data.details.less_amount));
              setStorage("order_total",data.details.new_total);
