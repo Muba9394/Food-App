@@ -6823,6 +6823,24 @@ if ( !empty( data.discount_details)){
 			  htm+='<ons-list-item class="center">Discount Applied('+val.discount_percentage+' %)'+'</ons-list-item> ';
 		});
 }
+if ( !empty( data.voucher_code)){
+//    $.each( data.voucher_code, function( key, val ) {
+var amunt;
+if (data.voucher_type == "fixed amount")
+{
+  amunt = getStorage("currency_set") + data.voucher_amount+ " Discount";
+}
+else
+{
+  amunt =  getStorage("currency_set") + ((data.voucher_amount/100)*100 )+" % Discount";
+}
+			  htm+='<ons-list-item class="center">Voucher '+data.voucher_code +" Applied ("+ amunt +')</ons-list-item> ';
+		//});
+}
+if(!empty(data.order_from))
+{
+  htm+='<ons-list-item class="center">Payment Type '+data.order_from.payment_type +'</ons-list-item> ';
+}
 	createElement('item-details', htm );
 
 	var htm='<ons-list-header class="center trn" data-trn-key="status_history">Status History</ons-list-header>';
