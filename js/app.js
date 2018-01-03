@@ -1254,7 +1254,7 @@ function callAjax(action,params)
 
 			   	   setStorage("paypal_card_fee", data.details.paypal_credentials.card_fee );
              console.log(getStorage("total_amount_final"));
-             if( parseInt(getStorage("total_amount_final")) < parseInt(data.details.minimum_order) || data.details.minimum_order == "0")
+             if( parseInt(getStorage("total_amount_final")) < parseInt(data.details.minimum_order) || data.details.minimum_order == "0" || data.details.minimum_order == "")
              {
                console.log(getStorage("total_amount_final"));
                console.log(data.details.parish_delivery_fee);
@@ -1339,7 +1339,7 @@ function callAjax(action,params)
 				  	   app_paypal.initPaymentUI();
 				  	   break;
 
-				  	   case "cpy_init":               
+				  	   case "cpy_init":
 				  	   setStorage("currency_code", data.details.payment_details.currency_code);
 				  	   setStorage("paymet_desc", data.details.payment_details.paymet_desc);
 				  	   setStorage("total_w_tax", data.details.payment_details.total_w_tax);
@@ -3134,10 +3134,11 @@ function menuCategoryResult(data)
 
   function menu_cat_load (data)
   {
+    console.log(cart);
     var html ='';
   	var all_cat=[];
   	var item_cnt=[];
-  	var count = 0;
+  	var count =0;
   	var display_count = 1;
   	var items=0;
   	var newcat=0;
@@ -3457,7 +3458,7 @@ function removeHandler(id) {
   	var current_day = current_day.toLowerCase();
   	setStorage("c_day",current_day);
   	$('#mob_current_timing').val(current_day);
-    cart = [] ; /*clear cart variable*/
+    //cart = [] ; /*clear cart variable*/
     removeStorage("tips_percentage");
     removeStorage("cc_id");
 
@@ -4413,7 +4414,6 @@ function addToCart()
 
 function showCart(order_id)
 {
-
 	dump('showCart');
 	var cartnum=$(".cart-num").html();
 	if(cartnum=="" || cartnum=="0"){
@@ -4467,7 +4467,7 @@ function showCart(order_id)
 
 function showCartNosOrder()
 {
-	$(".cart-num, .carticon").removeClass('animate')
+	$(".cart-num, .carticon").removeClass('animate');
 	dump('showCartNosOrder');
 	dump(  cart.length );
 	if ( cart.length>0 ){
@@ -8023,7 +8023,6 @@ function autoAddToCart(item_id,price,discount)
 	  'discount':discount
 	};
 	dump(cart);
-
 	var cart_value={
 	  "item_id":item_id,
 	  "qty":1,
@@ -8034,7 +8033,7 @@ function autoAddToCart(item_id,price,discount)
 	  'order_notes': '',
 	  'discount':discount
 	};
-
+  dump(cart_value);
 
 	if(saveCartToDb()){
 		callAjax("addToCart", "cart="+ JSON.stringify(cart_value) + "&device_id=" + getStorage("device_id") );
