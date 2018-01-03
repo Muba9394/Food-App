@@ -150,7 +150,7 @@ document.addEventListener("offline", noNetConnection, false);
 
 function noNetConnection()
 {
-	toastMsg( getTrans("Internet connection lost.","net_connection_lost") );
+	onsenAlert( getTrans("Internet connection lost.","net_connection_lost") );
 }
 
 
@@ -792,7 +792,7 @@ function callAjax(action,params)
 
 	if ( !hasConnection() ){
 		if ( action!="registerMobile"){
-		    toastMsg(  getTrans("CONNECTION LOST",'connection_lost') );
+		    onsenAlert(  getTrans("CONNECTION LOST",'connection_lost') );
 		}
 		return;
 	}
@@ -1941,7 +1941,7 @@ function callAjax(action,params)
 
 			    case "addToCart":
 			    //onsenAlert(  getTrans("Item added to cart",'item_added_to_cart') );
-			    toastMsg( getTrans("Food added to cart",'item_added_to_cart') );
+			    //toastMsg( getTrans("Food added to cart",'item_added_to_cart') );
 			    break;
 
 
@@ -1960,7 +1960,7 @@ function callAjax(action,params)
 
 			    case "verifyAccount":
 			      setStorage("client_token", data.details.token ); // register token
-			      toastMsg( data.msg );
+			     // toastMsg( data.msg );
 			      menu.setMainPage('select_dining.html', {closeMenu: true});
 			    break;
 
@@ -2247,7 +2247,7 @@ function callAjax(action,params)
                 removeStorage("client_token");
 			           menu.setMainPage('prelogin.html', {closeMenu: true});
 			       } else {
-			       	   toastMsg(data.msg);
+			       	  // toastMsg(data.msg);
 			       }
 			       break;
 
@@ -2276,7 +2276,7 @@ function callAjax(action,params)
 			    break;
 
 			    case "getMerchantCClist":
-			       toastMsg(data.msg);
+			       //toastMsg(data.msg);
 			       $("#cc-list").html('');
 			    break;
 
@@ -2298,7 +2298,7 @@ function callAjax(action,params)
 
 		} else {
 			//onsenAlert( getTrans("Network error has occurred please try again!",'network_error') );
-			toastMsg( getTrans("Network error. Please try again!",'network_error') );
+			//toastMsg( getTrans("Network error. Please try again!",'network_error') );
 		}
 	}
    });
@@ -4446,7 +4446,7 @@ function addToCart()
 		} else {
 
 			sNavigator.popPage({cancelIfRunning: true}); //back button
-			toastMsg(  getTrans("Food added to cart",'item_added_to_cart') );
+			//toastMsg(  getTrans("Food added to cart",'item_added_to_cart') );
 		}
 
 		showCartNosOrder();
@@ -5288,6 +5288,8 @@ function editOrderInit()
 function cartempty()
 {
 	cart = [] ;
+  discnt_params="";
+  deal_params="";
 	var cartnum=$("#menucategory-page .cart-num").html("0");
 	callAjax("Clearcart","merchant_id="+ getStorage('merchant_id')+ "&clearcart=clear&device_id="+getStorage("device_id"));
 	//sNavigator.popPage({cancelIfRunning: true});
@@ -5940,7 +5942,7 @@ function search_table_timing()
 
 				  }
 				  else  {
-					toastMsg( getTrans("Please select a valid slot","invalid_slot") );
+					//toastMsg( getTrans("Please select a valid slot","invalid_slot") );
 				  }
 			  }
 	  })
@@ -7355,10 +7357,11 @@ function onRequestSuccess()
 function onRequestFailure(error){
 	//alert("Accuracy request failed: error code="+error.code+"; error message="+error.message);
     if(error.code == 4){
-    	toastMsg( getTrans("You chose not to turn on location accuracy",'turn_off_location') );
+    	//toastMsg( getTrans("You chose not to turn on location accuracy",'turn_off_location') );
     	getCurrentLocation();
     } else {
-    	toastMsg( error.message );
+    	//toastMsg( error.message );
+      onsenAlert(error.message);
     }
 }
 
@@ -7408,7 +7411,7 @@ function geolocationError(error)
 	hideAllModal();
 	/*onsenAlert('code: '    + error.code    + '\n' +
           'message: ' + error.message + '\n');*/
-	toastMsg( error.message );
+	//toastMsg( error.message );
 }
 
 function saveSettings()
@@ -7537,11 +7540,11 @@ function itemNotAvailable(options)
 	switch (options)
 	{
 		case 1:
-		toastMsg( getTrans("Item not available",'item_not_available') );
+	//	toastMsg( getTrans("Item not available",'item_not_available') );
 		break;
 
 		case 2:
-		toastMsg( getTrans("Ordering is disabled",'ordering_disabled') );
+		//toastMsg( getTrans("Ordering is disabled",'ordering_disabled') );
 		return;
 
 		break;
@@ -8708,10 +8711,10 @@ function onRequestSuccessMap(success){
 function onRequestFailureMap(error){
     //alert("Accuracy request failed: error code="+error.code+"; error message="+error.message);
     if(error.code == 4){
-    	toastMsg( getTrans("You have choosen not to turn on location accuracy",'turn_off_location') );
+    	onsenAlert( getTrans("You have choosen not to turn on location accuracy",'turn_off_location') );
     	checkGPS();
     } else {
-    	toastMsg( error.message );
+    	onsenAlert( error.message );
     }
 }
 
@@ -8822,7 +8825,7 @@ function onMapInit()  {
 
 	      }, function(error){
 	      	 hideAllModal();
-	    	 toastMsg( error.message );
+	    	 onsenAlert( error.message );
 	    	 // end position error
 	      },
           { timeout: 10000, enableHighAccuracy : getLocationAccuracy() }
@@ -8882,7 +8885,7 @@ function viewTaskDirection()
 
     	 // end position success
       }, function(error){
-    	 toastMsg( error.message );
+    	 onsenAlert( error.message );
     	 // end position error
       },
       { timeout: 10000, enableHighAccuracy : getLocationAccuracy() }
@@ -9193,7 +9196,7 @@ function checkGPS_AddressMap()
 		if(error.code == 4){
 	    	checkGPS_AddressMap();
 	    } else {
-	    	toastMsg( error.message );
+	    	onsenAlert( error.message );
 	    }
 
 	} , cordova.plugins.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
@@ -9284,7 +9287,7 @@ function MapInit_addressMap()
 
 	  }, function(error){
 	  	 hideAllModal();
-    	 toastMsg( error.message );
+    	 onsenAlert( error.message );
       },
       { timeout: 10000, enableHighAccuracy : getLocationAccuracy() }
     );
