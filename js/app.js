@@ -1277,7 +1277,7 @@ function callAjax(action,params)
              {
                console.log(getStorage("total_amount_final"));
                console.log(data.details.parish_delivery_fee);
-               $(".tot_prce").html(prettyPrice(data.details.parish_delivery_fee));
+               $(".tot_prce").html(prettyPrice(getStorage("order_total_raw")));
              if(data.details.parish_delivery_fee > 0)
              {
                $("#has_delivery_fee").show();
