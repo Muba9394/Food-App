@@ -3770,6 +3770,8 @@ function displayItem(data)
   console.log(data.addon_item);
 if(data.addon_item == false)
 {
+  htm+='<ons-list-header class="list-header" style="display:none">Click here to show Addons <button  class="button button--quiet get_addons"><ons-icon icon="fa-caret-square-o-down" class="icon-green ons-icon fa-caret-square-o-down fa fa-lg"></ons-icon></button> </ons-list-header>';
+  htm+='<ons-list id="append_addons" style="display:none">   </ons-list>';
 }
 else{
   htm+='<ons-list-header class="list-header">Click here to show Addons <button  class="button button--quiet get_addons"><ons-icon icon="fa-caret-square-o-down" class="icon-green ons-icon fa-caret-square-o-down fa fa-lg"></ons-icon></button> </ons-list-header>';
@@ -6498,7 +6500,9 @@ function logout(prof)
 	else{
 		removeStorage("client_token");
 		removeStorage("client_id");
-	onsenAlert(  getTrans("Logged out",'you_are_now_logout') );
+	//onsenAlert( getTrans("Logged out",'you_are_now_logout') );
+  toastMsg("Logged out");
+
 	menu.setMainPage('select_dining.html', {closeMenu: true});
 }
 }
@@ -8084,7 +8088,7 @@ function autoAddToCart(item_id,price,discount)
 		callAjax("addToCart", "cart="+ JSON.stringify(cart_value) + "&device_id=" + getStorage("device_id") );
 	} else {
 	    //sNavigator.popPage({cancelIfRunning: true}); //back button
-	    toastMsg(  getTrans("Food added to cart",'item_added_to_cart') );
+	    onsenAlert(  getTrans("Food added to cart",'item_added_to_cart') );
 	}
 	showCartNosOrder();
 }
