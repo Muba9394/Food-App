@@ -8284,8 +8284,14 @@ function toastMsg( message )
       position: "bottom",
       addPixelsY: -40
     },
-      toastOnSuccess,
-      toastOnError
+    //  toastOnSuccess,
+    //  toastOnError
+    function(args) {
+
+    },
+    function(error) {
+      onsenAlert( message );
+    }
     );
 
     window.plugins.toast.showWithOptions(
