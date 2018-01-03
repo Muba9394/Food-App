@@ -9311,7 +9311,7 @@ function useThisLocation()
 
 	switch (map_address_action){
 		case "mapaddress":
-        $(".address").val(getStorgae("map_address_result_address_full"));
+        $(".address").val(getStorage("map_address_result_address_full"));
 	     $(".street").val( getStorage("map_address_result_address") );
 			$(".city").val( getStorage("map_address_result_city") );
 			$(".state").val( getStorage("map_address_result_state") );
