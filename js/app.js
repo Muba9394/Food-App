@@ -2899,6 +2899,8 @@ function menuCategoryResult(data)
 	var maincatcnt=count;
 	 //htm+='</ons-carousel></ons-list>';
 	htm += '</div></div><div class="swiper-pagination"></div></ons-list>';
+  htm +='<div id="swipe_img" style="display:none"><img style="position: fixed;margin: auto;top: 0;right: 0;bottom: 0;left: 0;width: 250px;height: 100px;z-index: 100;" src="css/images/gif.gif"></div>';
+
 //  htm+='<ons-carousel-cover>    <div class="cover-label">Swipe left or right</div>    </ons-carousel-cover>  ';
 	/*
 			alert(htm);
@@ -3164,6 +3166,9 @@ function menuCategoryResult(data)
 			});
 	}
 	imageLoaded('.img_loaded');
+  setTimeout(function() {
+    $("#swipe_img").hide();
+  }, 2000);
 	}
 
   function menu_cat_load (data)
@@ -6808,7 +6813,8 @@ function displayOrderHistoryDetails(data)
 	var htm='<ons-list-header class="center trn" data-trn-key="items" >Items</ons-list-header>';
 	if ( data.item.length>0){
 		$.each( data.item, function( key, val ) {
-			  htm+='<ons-list-item class="center">'+val.item_name+'('+ getStorage("currency_set") +  parseFloat(val.normal_price) + ')</ons-list-item> ';
+			  //htm+='<ons-list-item class="center">'+val.item_name+'('+ getStorage("currency_set") +  parseFloat(val.normal_price) + ')</ons-list-item> ';
+        htm+='<ons-list-item class="row-no-border list__item ons-list-item-inner"><ons-row class="row ons-row-inner"><ons-col class="concat-text col ons-col-inner" width="60%" style="-moz-box-flex: 0; flex: 0 0 60%; max-width: 60%;"><p class="description item-name concat-text bold">'+val.item_name+'</p></ons-col><ons-col class="text-right col ons-col-inner"><price>'+ getStorage("currency_set") +  parseFloat(val.normal_price) + '</price></ons-col></ons-row></ons-list-item>';
 		});
 	} else {
 		htm+='<ons-list-item class="center">';
@@ -6817,12 +6823,15 @@ function displayOrderHistoryDetails(data)
 	}
 if ( !empty( data.free_details)){
     $.each( data.free_details, function( key, val ) {
-			  htm+='<ons-list-item class="center">'+val.item_name+'('+  val.free_type+')'+'</ons-list-item> ';
+			 // htm+='<ons-list-item class="center">'+val.item_name+'('+  val.free_type+')'+'</ons-list-item> ';
+        htm+='<ons-list-item class="row-no-border list__item ons-list-item-inner"><ons-row class="row ons-row-inner"><ons-col class="concat-text col ons-col-inner" width="60%" style="-moz-box-flex: 0; flex: 0 0 60%; max-width: 60%;"><p class="description item-name concat-text bold">'+val.item_name+'('+val.free_type+')</p></ons-col><ons-col class="text-right col ons-col-inner"><price>Free</price></ons-col></ons-row></ons-list-item>';
+        //html+='<ons-list-item class="grey-border-top line-separator list__item ons-list-item-inner"></ons-list-item>';
 		});
 }
 if ( !empty( data.discount_details)){
     $.each( data.discount_details, function( key, val ) {
-			  htm+='<ons-list-item class="center">Discount Applied('+val.discount_percentage+' %)'+'</ons-list-item> ';
+			  //htm+='<ons-list-item class="center">Discount Applied('+parseFloat(val.discount_percentage)+' %)'+'</ons-list-item> ';
+        htm+='<ons-list-item class="row-no-border list__item ons-list-item-inner"><ons-row class="row ons-row-inner"><ons-col class="concat-text col ons-col-inner" width="60%" style="-moz-box-flex: 0; flex: 0 0 60%; max-width: 60%;"><p class="description item-name concat-text bold">Discount Applied</p></ons-col><ons-col class="text-right col ons-col-inner"><price>'+parseFloat(val.discount_percentage)+' %</price></ons-col></ons-row></ons-list-item>';
 		});
 }
 if ( !empty( data.voucher_code)){
@@ -6836,13 +6845,38 @@ else
 {
   amunt =  getStorage("currency_set") + ((data.voucher_amount/100)*100 )+" % Discount";
 }
-			  htm+='<ons-list-item class="center">Voucher '+data.voucher_code +" Applied ("+ amunt +')</ons-list-item> ';
+			  //htm+='<ons-list-item class="center">Voucher '+data.voucher_code +" Applied ("+ amunt +')</ons-list-item> ';
+        htm+='<ons-list-item class="row-no-border list__item ons-list-item-inner"><ons-row class="row ons-row-inner"><ons-col class="concat-text col ons-col-inner" width="60%" style="-moz-box-flex: 0; flex: 0 0 60%; max-width: 60%;"><p class="description item-name concat-text bold">Voucher Applied'+data.voucher_code+'</p></ons-col><ons-col class="text-right col ons-col-inner"><price>'+amunt+' </price></ons-col></ons-row></ons-list-item>';
 		//});
 }
 if(!empty(data.order_from))
 {
-  htm+='<ons-list-item class="center">Payment Type '+data.order_from.payment_type +'</ons-list-item> ';
+  var type;
+  var trans_type_mb;
+  if(data.order_from.payment_type == "cash" || data.order_from.payment_type == "cod")
+  {
+     type="Cash";
+  }
+  else if(data.order_from.payment_type == "citypay")
+  {
+     type ="Citypay";
+  }
+  else if(data.order_from.payment_type == "payapl")
+  {
+    type="Paypal";
+  }
+  htm+='<ons-list-item class="center">Payment Type '+type +'</ons-list-item> ';
+  if(data.order_from.trans_type == "delivery")
+  {
+    trans_type_mb="Delivery";
+  }
+  else{
+    trans_type_mb="Pickup";
+  }
+  htm+='<ons-list-item class="center">Delivery Type '+trans_type_mb +'</ons-list-item> ';
 }
+
+
 	createElement('item-details', htm );
 
 	var htm='<ons-list-header class="center trn" data-trn-key="status_history">Status History</ons-list-header>';

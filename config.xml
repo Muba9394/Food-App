@@ -5,7 +5,7 @@
     xmlns:android = "http://schemas.android.com/apk/res/android"
     id        = "je.cuisine.je"
 	  versionCode = "117"
-    version   = "2.1.0">
+    version   = "2.2">
     <name>Cuisine.je</name>
     <description>
         Online Table Booking and food ordering service in JERSEY,UK
