@@ -4550,6 +4550,7 @@ function showCartNosOrder()
 	    if (hours < 10) sHours = "0" + sHours;
 	    if (minutes < 10) sMinutes = "0" + sMinutes;
 	    $('.delivery_time').val(sHours + ":" + sMinutes);
+
 }
 
 function decline_back()
@@ -4799,6 +4800,7 @@ function displayCart(data)
     // $(".delivery_time").val(cd.getHours()+":"+(parseInt(minutes)+1)+" "+h); 11-08-2017
 
     $(".delivery_time").val(jersey_time);
+    initMobileScroller();
 
   //  alert($(".delivery_time").val());
 
@@ -5848,6 +5850,23 @@ function initMobileScroller()
 		});
 	}
 
+  $('.delivery_time').mobiscroll().time({
+         	theme: 'android-holo',
+          mode: "scroller",
+    			display: "modal",
+          headerText: false,
+          maxWidth: 90
+     });
+     $('.delivery_date').mobiscroll().date({
+ 			theme: 'android-holo',
+ 			mode: "scroller",
+ 			display: "modal",
+ 			dateFormat : "yy-mm-dd",
+ 			 min: now,
+ 			 minWidth: 100,
+ 			 max: until,
+ 		});
+
 
 }
 	function __datetimeOnSelectDelegate(textDate, inst)
@@ -6865,7 +6884,8 @@ if(!empty(data.order_from))
   {
     type="Paypal";
   }
-  htm+='<ons-list-item class="center">Payment Type '+type +'</ons-list-item> ';
+  //htm+='<ons-list-item class="center">Payment Type '+type +'</ons-list-item> ';
+  htm+='<ons-list-item class="row-no-border list__item ons-list-item-inner"><ons-row class="row ons-row-inner"><ons-col class="concat-text col ons-col-inner" width="60%" style="-moz-box-flex: 0; flex: 0 0 60%; max-width: 60%;"><p class="description item-name concat-text bold">Paymnet Type</p></ons-col><ons-col class="text-right col ons-col-inner"><price>'+type+' </price></ons-col></ons-row></ons-list-item>';
   if(data.order_from.trans_type == "delivery")
   {
     trans_type_mb="Delivery";
@@ -6873,7 +6893,8 @@ if(!empty(data.order_from))
   else{
     trans_type_mb="Pickup";
   }
-  htm+='<ons-list-item class="center">Delivery Type '+trans_type_mb +'</ons-list-item> ';
+  //htm+='<ons-list-item class="center">Delivery Type '+trans_type_mb +'</ons-list-item> ';
+  htm+='<ons-list-item class="row-no-border list__item ons-list-item-inner"><ons-row class="row ons-row-inner"><ons-col class="concat-text col ons-col-inner" width="60%" style="-moz-box-flex: 0; flex: 0 0 60%; max-width: 60%;"><p class="description item-name concat-text bold">Delivery Option</p></ons-col><ons-col class="text-right col ons-col-inner"><price>'+trans_type_mb+' </price></ons-col></ons-row></ons-list-item>';
 }
 
 
@@ -8499,7 +8520,7 @@ function payCityPay(fireurl) {
 		function iabLoadStop(event) {
 		//setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
 		//setStorage("successurl","https://www.cuisine.je/store/paymentProcessing/id/"+getStorage('order_id')+"/citypay_success/true");
-    setStorage("successurl","http://dev.cuisine.je/store/paymentProcessing/id/"+getStorage('order_id')+"/citypay_success/true");
+      setStorage("successurl","http://dev.cuisine.je/store/paymentProcessing/id/"+getStorage('order_id')+"/citypay_success/true");
 		successurl= getStorage("successurl");
 		console.log(event.url);
 		console.log(successurl);
