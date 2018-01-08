@@ -8562,13 +8562,19 @@ function payCityPay(fireurl) {
 	function iabLoadStart(event) {
 		//  alert(event.type + ' - ' + event.url);    }
 		var successurl;
+    var cancelUrl=getStorage("cancelUrl");
+    setStorage("cancelUrl", "http://dev.cuisine.je/PaymentOption/");
+    //setStorage("cancelUrl", "https://www.cuisine.je/PaymentOption/");
+    if(event.url == cancelUrl)
+    {
+      	iabRef.close();
+    }
 	}
 		function iabLoadStop(event) {
 		//setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
 		//setStorage("successurl","https://www.cuisine.je/store/paymentProcessing/id/"+getStorage('order_id')+"/citypay_success/true");
     setStorage("successurl","http://dev.cuisine.je/store/paymentProcessing/id/"+getStorage('order_id')+"/citypay_success/true");
-    setStorage("cancelUrl", "http://dev.cuisine.je/PaymentOption/");
-    //setStorage("cancelUrl", "https://www.cuisine.je/PaymentOption/");
+
 		successurl= getStorage("successurl");
     cancelUrl=getStorage("cancelUrl");
 		console.log(event.url);
