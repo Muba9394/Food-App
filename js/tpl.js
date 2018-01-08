@@ -489,13 +489,12 @@ function tplReviews(rating, client_name, review, date_review)
    htm+='<ons-list class="review-list">';
 	  htm+='<ons-list-item modifier="tappable" class="list-item-container">';
 	     htm+='<ons-row class="row"> ';
-		     htm+='<ons-col class="col-image" width="90px">';
-			   htm+='<ons-icon icon="fa-user" class="icon-user"></ons-icon>';
+		     htm+='<ons-col class="col-image" width="150px">';
+			   htm+='<p class="restauran-title concat-text">'+client_name+'</p>';
 			 htm+='</ons-col>';
 
 			 htm+='<ons-col class="col-description">';
 			   htm+='<div class="rating-stars" data-score="'+rating+'"></div>';
-			   htm+='<p class="restauran-title concat-text">'+client_name+'</p>';
 			   htm+='<p class="small-font-dim small-font-dim-smaller">'+date_review+'</p> ';
 			   htm+='<p class="small-font-dim">'+review+'</p>';
 			 htm+='</ons-col>';

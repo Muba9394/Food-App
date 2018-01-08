@@ -1,8 +1,8 @@
-<!doctype html>
+<!Doctype html>
 
 <head>
   <meta charset="utf-8">
-
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, minimum-scale=1, width=device-width" />
   <link rel="stylesheet" href="lib/onsen/css/onsenui.css">
   <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.css">
   <link rel="stylesheet" href="lib/raty/jquery.raty.css">
@@ -907,17 +907,19 @@
      <div class="field-wrapper">
      <input name="stlast_name" class="last_name text-input text-input--underbar has_validation" id="lname" placeholder="Last Name" value="" data-validation="required" data-validation-error-msg="This field is required" onkeyup="this.value=this.value.replace(/[^a-z A-Z]/g, '')" type="text">
      </div>
-
-     <div class="field-wrapper">
+     <input type="hidden" name="guest_checkout" id="guest_checkout" value=""/>
+    <div id="guest_password" style="display:none">
+     <div class="field-wrapper" >
       <input name="email_address" class="email_address text-input text-input--underbar has_validation" placeholder="Email address" value="" data-validation="email" data-validation-error-msg="You have not given a correct e-mail address!" id="email" type="email">
      </div>
-     <input type="hidden" name="guest_checkout" id="guest_checkout" value=""/>
 
 
-    <div class="field-wrapper" id="guest_password" style="display:none">
+
+    <div class="field-wrapper"  >
       <input type="password" name="password"  class="text-input text-input--underbar has_validation"
       placeholder="Password" value="" id="guest_password_val" data-validation="required" data-validation-error-msg="This field is required">
     </div>
+  </div>
 
       <div class="field-wrapper">
       <input type="text" name="contact_phone"  class="mobile_inputs contact_phone text-input text-input--underbar has_validation"
