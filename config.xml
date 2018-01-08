@@ -3,10 +3,10 @@
     xmlns:cdv="http://cordova.apache.org/ns/1.0"
     xmlns:gap = "http://phonegap.com/ns/1.0"
     xmlns:android = "http://schemas.android.com/apk/res/android"
-    id        = "je.cuisine.je"
+    id        = "je.cuisine.je_dev"
 	  versionCode = "118"
     version   = "2.5">
-    <name>Cuisine.je</name>
+    <name>Cuisine.je_Dev</name>
     <description>
         Online Table Booking and food ordering service in JERSEY,UK
     </description>
