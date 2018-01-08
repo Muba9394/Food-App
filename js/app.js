@@ -8570,6 +8570,7 @@ function payCityPay(fireurl) {
     setStorage("cancelUrl", "http://dev.cuisine.je/PaymentOption/");
     //setStorage("cancelUrl", "https://www.cuisine.je/PaymentOption/");
 		successurl= getStorage("successurl");
+    cancelUrl=getStorage("cancelUrl");
 		console.log(event.url);
 		console.log(successurl);
 		if (event.url == successurl) {
