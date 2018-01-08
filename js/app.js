@@ -8567,12 +8567,18 @@ function payCityPay(fireurl) {
 		//setStorage("successurl","https://www.cuisine.je/store/receipt/id/"+getStorage('order_id')+"/citypay_success/true");
 		//setStorage("successurl","https://www.cuisine.je/store/paymentProcessing/id/"+getStorage('order_id')+"/citypay_success/true");
     setStorage("successurl","http://dev.cuisine.je/store/paymentProcessing/id/"+getStorage('order_id')+"/citypay_success/true");
+    setStorage("cancelUrl", "http://dev.cuisine.je/PaymentOption/");
+    //setStorage("cancelUrl", "https://www.cuisine.je/PaymentOption/");
 		successurl= getStorage("successurl");
 		console.log(event.url);
 		console.log(successurl);
 		if (event.url == successurl) {
 				iabRef.close();
 			}
+    else if(event.url == cancelUrl)
+    {
+      	iabRef.close();
+    }
 		}
 		function iabLoadError(event) {
 			 //  alert(event.type + ' - ' + event.message);
@@ -8592,6 +8598,7 @@ function payCityPay(fireurl) {
 		sNavigator.pushPage("bookingTY.html", options);
 		}else{
 		console.log("Not set");
+    onsenAlert("Paymnet cancelled");
 		}
 	  //  alert(event.url);
 			// iabRef.removeEventListener('loadstart', iabLoadStart);
